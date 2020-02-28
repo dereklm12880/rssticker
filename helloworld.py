@@ -5,7 +5,7 @@ from tkinter import ttk
 root = Tk()
 
 # Sets the minimum size of the root window
-root.minsize(300,30) 
+root.minsize(300,20) 
 
 root.title("RSSticker")
 myLabel = Label(root, text="Accio, hello world!")
