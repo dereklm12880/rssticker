@@ -1,9 +1,18 @@
-dist: trusty
+dist: 
+
 language: python
-python:
-  - "3.4"
-  - "3.5"
-  - "3.6"
+
+matrix:
+  include:
+    python: 3.6
+    dist: xenial
+    env: python=python3
+    python: 3.7
+    dist: xenial
+    env: python=python3
+    python: 3.8
+    dist: trusty
+    env: python=python3
 
 addons:
   sonarcloud:
