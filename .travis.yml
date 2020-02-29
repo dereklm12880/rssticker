@@ -1,0 +1,9 @@
+dist: trusty
+
+addons:
+  sonarcloud:
+    organization: "dereklm12880"
+    token: $SONAR_TOKEN
+
+script:
+    - sonar-scanner
