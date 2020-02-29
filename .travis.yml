@@ -1,0 +1,14 @@
+dist: trusty
+language: python
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+addons:
+  sonarcloud:
+    organization: "dereklm12880"
+    token: $SONAR_TOKEN
+
+script:
+    - sonar-scanner
