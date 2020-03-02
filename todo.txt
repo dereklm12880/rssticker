@@ -2,3 +2,14 @@ march 2, 2020
 
 I cloned the repository first : https://github.com/dereklm12880/rssticker.git
 Then I created a branch under dev called featured/anayeli
+
+Product backlog
+As an end-user, I want a low-impact RSS ticker that has behavior similar to JRSST. 
+As a maintainer, I don't want the solution to be a migration of JRSST as that code is ancient.
+As a developer, I want a complete CI/CD pipeline for static and dynamic testing.
+As a developer, I want the GUI to use tkinter Ttk widgets so that it will run on multiple platforms and look good.
+As a developer, I want 95% test code coverage.
+As an end-user, I want the product to also read ATOM news feeds.
+As a developer, I want the structure of the project to use a standard https://docs.python-guide.org/writing/structure/
+As an end-user, I want to be able to supply command-line arguments for flexibility of specifying feeds 
+As an end-user, I want to list feeds in a flat file so that I can have a long list of feeds.
