@@ -1,0 +1,4 @@
+march 2, 2020
+
+I cloned the repository first : https://github.com/dereklm12880/rssticker.git
+Then I created a branch under dev called featured/anayeli
