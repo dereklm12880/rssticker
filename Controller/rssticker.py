@@ -3,5 +3,5 @@ import Model.rssticker as rssModel
 
 
 def execute():
-    content = rssModel.getRssFeeds()
+    content = rssModel.get_rss_feeds()
     rssView.render(content)

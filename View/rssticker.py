@@ -10,11 +10,12 @@ def callback(url):
 
 def render(content):
 
-    current_title = content.get("entries")[0].get("title")
+    feedTitle = content['feed']['title']
     summary = content.get("entries")[0].get("summary")
     link = content.get("entries")[0].get("link")
 
     root = Tk()
+    root.title(feedTitle)
     link = ttk.Label(root, text=summary, foreground="blue", cursor="hand2")
     link.pack()
     link.bind("<Button-1>", lambda e: callback(link))
