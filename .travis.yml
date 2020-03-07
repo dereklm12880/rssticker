@@ -1,9 +1,12 @@
-dist: trusty
+dist: xenial
+# dist: trusty works only up to 3.6
+
 language: python
+
 python:
-  - "3.4"
-  - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 
 addons:
   sonarcloud:
