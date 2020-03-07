@@ -1,8 +1,8 @@
-import Controller.rssticker as rss
+from Controller.rssticker import RssController
 
 
 def main():
-    rss.execute()
+    RssController.execute()
 
 
 if __name__ == '__main__':
