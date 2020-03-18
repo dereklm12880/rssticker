@@ -1,1 +1,0 @@
-# determines library path
