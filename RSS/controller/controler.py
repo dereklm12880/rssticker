@@ -20,8 +20,6 @@ class RssController:
             reader = csv.reader(f) # this CSV is in the controller folder
             list_urls = list(reader)
             self.list_urls = list(reader)
-            # list_urls = list(reader)
-            # return list_urls
 
     def next_url(self):
         return next(self.list_iterator)
@@ -39,13 +37,20 @@ class RssController:
                 _newsreel = self._rss_model.get_current()
                 # pass newsreel into the view here
                 # sleep x number of seconds?
+                # do an infinite loop here
                 _newsreel = self._rssmodel.get_next()
+                # pass newsreel to the view
+                # sleep x number of seconds
+                # end infinite loop here. (no code needed)
 
         except Exception as e:
+            # this needs to get the next url???
+            RssController.next_url()
             pass
+        # end first infinite loop (no code needed)
 
-        def next_url_fail(self):
-            pass
+    def next_url_fail(self):
+        pass
 
     def load_file_fail(self):
         pass
