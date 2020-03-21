@@ -11,7 +11,6 @@ class RssController:
     rss_view = None
 
     def __init__(self):
-        self.list_iterator = iter(list)
         self.rss_model = RssModel
         # self.rss_view = RssView
 
@@ -20,6 +19,7 @@ class RssController:
             reader = csv.reader(f) # this CSV is in the controller folder
             list_urls = list(reader)
             self.list_urls = list(reader)
+            self.list_iterator = iter(self.list_urls)
 
     def next_url(self):
         return next(self.list_iterator)
@@ -45,7 +45,7 @@ class RssController:
 
         except Exception as e:
             # this needs to get the next url???
-            RssController.next_url()
+            RssController.next_url(self)
             pass
         # end first infinite loop (no code needed)
 

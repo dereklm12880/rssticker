@@ -1,7 +1,7 @@
 # https://ongspxm.github.io/blog/2016/11/assertraises-testing-for-errors-in-unittest/
 import unittest
 from unittest.mock import patch, Mock
-from Rss.controller.rssmanager import RssController
+from RSS.controller.controler import RssController
 
 
 class TestRssModel(unittest.TestCase):
@@ -9,9 +9,9 @@ class TestRssModel(unittest.TestCase):
     def setUp(self):
         self.rss=Mock()
         self.view=Mock()
-        self.ctr=RssController()
+        self.ctr = RssController()
         self.rss_url_list=None
-        self.loaded_urls=['http://fake.com', 'http://anotherfake.com']
+        self.loaded_urls =['http://fake.com', 'http://anotherfake.com']
         pass
 
     def test_next_url(self):
