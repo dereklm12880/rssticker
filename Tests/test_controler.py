@@ -7,11 +7,11 @@ from RSS.controller.controler import RssController
 class TestRssModel(unittest.TestCase):
 
     def setUp(self):
-        self.rss=Mock()
-        self.view=Mock()
+        self.rss = Mock()
+        self.view = Mock()
         self.ctr = RssController()
-        self.rss_url_list=None
-        self.loaded_urls =['http://fake.com', 'http://anotherfake.com']
+        self.rss_url_list = None
+        self.loaded_urls = ['http://fake.com', 'http://anotherfake.com']
         pass
 
     def test_next_url(self):
