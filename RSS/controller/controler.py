@@ -22,19 +22,17 @@ class RssController:
             self.list_urls = list(reader)
             self.list_iterator = iter(self.list_urls)
             list_urls = list(self.list_iterator)
-            print(list_urls)
             return list_urls
 
     def next_url(self):
         return next(self.list_iterator)
 
     def main(self):
-        self.load_urls()
-
+        self.load_urls()  # this is the loaded list of URLS
         try:
             _url = self.next_url()
 
-        except StopIteration: 
+        except StopIteration:
             _url = None
             pass
         try:
