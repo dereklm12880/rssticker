@@ -15,22 +15,22 @@ class TestRssModel(unittest.TestCase):
         pass
 
     def test_next_url(self):
-        ctr.urls = self.loaded_urls
-        _url = ctr.next_url()
+        self.ctr.urls = self.loaded_urls
+        _url = self.ctr.next_url()
         assert _url == 'http://fake.com'
-        _url = ctr.next_url()
+        _url = self.ctr.next_url()
         assert _url == 'http://anotherfake.com'
-        with self.assertRaises(Exception): ctr.next_url()
+        with self.assertRaises(Exception): self.ctr.next_url()
 
     def test_next_url_fail(self):
-        ctr.urls = []
-        with self.assertRaises(Exception): ctr.next_url()
+        self.ctr.urls = []
+        with self.assertRaises(Exception): self.ctr.next_url()
 
     """This exception should be passed to the view, the view then should display the exception in a user friendly 
     manner. """
     def test_load_file_fail(self):
-        ctr.filename='NotRealFile.txt'
-        with self.assertRaises(Exception): ctr.load_file()
+        self.ctr.filename='NotRealFile.txt'
+        with self.assertRaises(Exception): self.ctr.load_file()
 
 
 

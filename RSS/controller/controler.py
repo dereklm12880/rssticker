@@ -1,4 +1,3 @@
-
 from RSS.model.rssfeed import RssModel
 # from RSS.view.rssticker import RssView ##This RssView is still unwritten as of now
 import csv
@@ -6,34 +5,49 @@ import time
 
 
 class RssController:
-
     list_urls = []
     list_iterator = None
     rss_model = None
     rss_view = None
+    url_index_pos = 0
 
     def __init__(self):
         self.rss_model = RssModel
         # self.rss_view = RssView
 
     def load_urls(self):
+
         with open('list_urls.csv', newline='') as f:
             reader = csv.reader(f)  # this CSV is in the controller folder
             self.list_urls = list(reader)
             self.list_iterator = iter(self.list_urls)
-            list_urls = list(self.list_iterator)
-            return list_urls
+            return self.list_urls
 
     def next_url(self):
-        return next(self.list_iterator)
+        urls = self.list_urls  # returns list of urls
+        try:
+            next_url = urls[self.url_index_pos]
+            self.url_index_pos = self.url_index_pos + 1
+            return next_url
+        except IndexError:
+            raise Exception("there are no more URL's!")
 
     def main(self):
-        self.load_urls()  # this is the loaded list of URLS
+
+        dummy = ["fakey", "faker"]
+        self.list_urls = self.load_urls()  # load urls into list of urls
+
+        if len(self.list_urls) == 0:
+            raise Exception(self.load_file_fail())
+
         try:
-            _url = self.next_url()
+            if self.url_index_pos == 0:
+                _url = self.list_urls[0]
+            else:
+                _url = self.next_url()
 
         except StopIteration:
-            _url = None
+            raise Exception(self.next_url_fail())
             pass
         try:
             if self.rss_model._newsreel_index_pos == 0:
@@ -55,7 +69,7 @@ class RssController:
 
         except Exception as e:
             # this needs to get the next url???
-            #RssController.next_url(self)
+            _url = self.next_url()
             pass
         # end first infinite loop (no code needed)
 
