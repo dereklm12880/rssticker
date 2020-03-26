@@ -24,19 +24,13 @@ class RssController:
             return self.list_urls
 
     def next_url(self):
-        urls = self.list_urls  # returns list of urls
-        try:
-            next_url = urls[self.url_index_pos]
-            self.url_index_pos = self.url_index_pos + 1
-            return next_url
-        except IndexError:
-            raise Exception("there are no more URL's!")
+        next_url = self.list_urls[self.url_index_pos]
+        self.url_index_pos = self.url_index_pos + 1
+        return next_url
 
     def main(self):
 
-        dummy = ["fakey", "faker"]
         self.list_urls = self.load_urls()  # load urls into list of urls
-
         if len(self.list_urls) == 0:
             raise Exception(self.load_file_fail())
 
