@@ -15,7 +15,7 @@ class TestRssModel(unittest.TestCase):
         pass
 
     def test_next_url(self):
-        self.ctr.list_urls = self.loaded_urls # changed urls to list_urls
+        self.ctr.list_urls = self.loaded_urls
         _url = self.ctr.next_url()
         assert _url == 'http://fake.com'
         _url = self.ctr.next_url()

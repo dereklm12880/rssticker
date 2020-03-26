@@ -1,5 +1,5 @@
 from RSS.model.rssfeed import RssModel
-# from RSS.view.rssticker import RssView ##This RssView is still unwritten as of now
+# from RSS.view.rssticker import RssView # # This RssView is still unwritten as of now
 import csv
 import time
 
@@ -26,11 +26,15 @@ class RssController:
     def next_url(self):
         next_url = self.list_urls[self.url_index_pos]
         self.url_index_pos = self.url_index_pos + 1
-        return next_url
+        try:
+            return next_url
+        except IndexError:
+            raise Exception("There are no more URL's!")
 
     def main(self):
 
-        self.list_urls = self.load_urls()  # load urls into list of urls
+        self.list_urls = self.load_urls()
+
         if len(self.list_urls) == 0:
             raise Exception(self.load_file_fail())
 
@@ -48,7 +52,6 @@ class RssController:
                 _rss_model = self.rss_model.parse(_url)
                 _newsreel = self._rss_model.get_current()
                 # # pass newsreel into the view here
-                # self.rss_view(_newsreel)
                 # # sleep x number of seconds?
                 time.sleep(5)
                 # # do an infinite loop here
