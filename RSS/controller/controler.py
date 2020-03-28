@@ -49,7 +49,7 @@ class RssController:
             pass
         try:
             if self.rss_model._newsreel_index_pos == 0:
-                _rss_model = self.rss_model.parse(_url)
+                _rss_model = self.rss_model.parse(self.rss_model,_url)  # main is working fine until here; does not parse URL
                 _newsreel = self._rss_model.get_current()
                 # # pass newsreel into the view here
                 # # sleep x number of seconds?
