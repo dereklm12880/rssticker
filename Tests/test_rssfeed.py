@@ -1,6 +1,6 @@
 # https://ongspxm.github.io/blog/2016/11/assertraises-testing-for-errors-in-unittest/
 import unittest
-from unittest.mock import patch
+from mock import patch
 from RSS.model.rssfeed import RssModel
 import feedparser
 
