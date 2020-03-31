@@ -24,12 +24,11 @@ class RssController:
             return self.list_urls
 
     def next_url(self):
-        next_url = self.list_urls[self.url_index_pos]
-        self.url_index_pos = self.url_index_pos + 1
-        try:
-            return next_url[self.url_index_pos]
-        except IndexError:
-            raise Exception("There are no more URL's!")
+            self.url_index_pos = self.url_index_pos + 1
+            try:
+                return self.list_urls[self.url_index_pos]
+            except IndexError:
+                raise Exception("There are no more URL's!")
 
     def main(self):
 
@@ -37,6 +36,7 @@ class RssController:
 
         if len(self.list_urls) == 0:
             raise Exception("No URL's given")
+
         try:
             if self.url_index_pos == 0:
                 _url = self.list_urls[0]
@@ -48,7 +48,7 @@ class RssController:
             pass
         try:
             if self.rss_model._newsreel_index_pos == 0:
-                # _rss_model = self.rss_model.parse(_url)  # main is working fine until here; does not parse URL
+                _rss_model = self.rss_model.parse(_url)  # main is working fine until here; does not parse URL
                 _newsreel = self._rss_model.get_current()
                 # # pass newsreel into the view here
                 # # sleep x number of seconds?
