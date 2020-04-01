@@ -10,25 +10,34 @@ class RssController:
     rss_model = None
     rss_view = None
     url_index_pos = 0
+    filename = ''
 
     def __init__(self):
         self.rss_model = RssModel
         # self.rss_view = RssView
+        self.filename = 'list_urls.csv'
 
     def load_urls(self):
-
-        with open('list_urls.csv', newline='') as f:
-            reader = csv.reader(f)  # this CSV is in the controller folder
-            self.list_urls = list(reader)
-            self.list_iterator = iter(self.list_urls)
-            return self.list_urls
+        try:
+            with open(self.filename, newline='') as f:
+                reader = csv.reader(f)  # this CSV is in the controller folder
+                self.list_urls = list(reader)
+                self.list_iterator = iter(self.list_urls)
+                return self.list_urls
+        except FileNotFoundError:
+            raise Exception("There is no file named " + self.filename + " in this directory")
 
     def next_url(self):
+
+        if self.url_index_pos == 0:
             self.url_index_pos = self.url_index_pos + 1
-            try:
-                return self.list_urls[self.url_index_pos]
-            except IndexError:
-                raise Exception("There are no more URL's!")
+            return self.list_urls[0]
+        try:
+            current_index = self.url_index_pos
+            self.url_index_pos = self.url_index_pos + 1
+            return self.list_urls[current_index]
+        except IndexError:
+            raise Exception("There are no more URL's!")
 
     def main(self):
 
@@ -38,10 +47,7 @@ class RssController:
             raise Exception("No URL's given")
 
         try:
-            if self.url_index_pos == 0:
-                _url = self.list_urls[0]
-            else:
-                _url = self.next_url()
+            _url = self.next_url()
 
         except StopIteration:
             raise Exception()
@@ -72,8 +78,3 @@ class RssController:
 
 if __name__ == "__main__":
     RssController().main()
-
-    # list_urls = load_urls(self=list_urls)
-    # next_url = next_url(list_urls)
-    # print(list_urls)
-    # print(next_url)

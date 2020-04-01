@@ -28,10 +28,7 @@ class TestRssModel(unittest.TestCase):
 
     """This exception should be passed to the view, the view then should display the exception in a user friendly 
     manner. """
+
     def test_load_file_fail(self):
-        self.ctr.filename='NotRealFile.txt'
+        self.ctr.filename = 'NotRealFile.txt'
         with self.assertRaises(Exception): self.ctr.load_file()
-
-
-
-
