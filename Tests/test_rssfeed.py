@@ -131,3 +131,7 @@ class TestRssModel(unittest.TestCase):
             self.rss.parse('http://fakeurl.com')
             self.rss._newsreel_index_pos = 42
             with self.assertRaises(Exception): self.rss.get_current()
+
+    def test_parse_fail_not_string(self):
+        with patch.object(feedparser, 'parse', return_value={}) as mock_method:
+            with self.assertRaises(Exception): self.rss.parse({'http://givemeanexception.com'})

@@ -13,7 +13,7 @@ class RssController:
     filename = ''
 
     def __init__(self):
-        self.rss_model = RssModel
+        self.rss_model = RssModel()
         # self.rss_view = RssView
         self.filename = 'list_urls.csv'
 
@@ -47,14 +47,14 @@ class RssController:
             raise Exception("No URL's given")
 
         try:
-            _url = self.next_url()
+            _url = self.next_url()  # This gets the first url
 
         except StopIteration:
             raise Exception()
             pass
         try:
             if self.rss_model._newsreel_index_pos == 0:
-                _rss_model = self.rss_model.parse(_url)  # main is working fine until here; does not parse URL
+                _rss_model = self.rss_model.parse(_url[self.url_index_pos-1])
                 _newsreel = self._rss_model.get_current()
                 # # pass newsreel into the view here
                 # # sleep x number of seconds?
