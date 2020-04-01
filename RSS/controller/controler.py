@@ -11,6 +11,7 @@ class RssController:
     rss_view = None
     url_index_pos = 0
     filename = ''
+    cycle_time = 5
 
     def __init__(self):
         self.rss_model = RssModel()
@@ -53,20 +54,24 @@ class RssController:
             raise Exception()
             pass
         try:
-            if self.rss_model._newsreel_index_pos == 0:
-                _rss_model = self.rss_model.parse(_url[self.url_index_pos-1])
-                _newsreel = self._rss_model.get_current()
+
+            while self.url_index_pos <= 3 : # This condition is a place holder for the condition that will be passed
+                # from view (window closed)
+
+                if self.rss_model._newsreel_index_pos == 0:
+                    _rss_model = self.rss_model.parse(_url[self.url_index_pos - 1])
+                    _newsreel = _rss_model.get_current()
                 # # pass newsreel into the view here
                 # # sleep x number of seconds?
-                time.sleep(5)
+                    time.sleep(self.cycle_time)
+                    _newsreel = _rss_model.get_next()
                 # # do an infinite loop here
-            else:
-                _newsreel = self._rssmodel.get_next()
+                else:
                 # # pass newsreel to the view
-                # self.rss_view(_newsreel)
                 # sleep x number of seconds
-                time.sleep(5)
-                return _newsreel
+                    time.sleep(self.cycle_time)
+                _newsreel = _rss_model.get_next()
+                    # return _newsreel
                 # end infinite loop here. (no code needed)
 
         except Exception as e:

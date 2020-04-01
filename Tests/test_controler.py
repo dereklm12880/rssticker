@@ -22,6 +22,10 @@ class TestRssModel(unittest.TestCase):
         assert _url == 'http://anotherfake.com'
         with self.assertRaises(Exception): self.ctr.next_url()
 
+    def test_main(self):
+        self.ctr.list_urls = self.loaded_urls
+
+
     def test_next_url_fail(self):
         self.ctr.urls = []
         with self.assertRaises(Exception): self.ctr.next_url()
