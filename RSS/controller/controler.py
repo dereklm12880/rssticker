@@ -11,7 +11,7 @@ class RssController:
     rss_view = None
     url_index_pos = 0
     filename = ''
-    cycle_time = 5
+    cycle_time = 1
 
     def __init__(self):
         self.rss_model = RssModel()
@@ -41,8 +41,8 @@ class RssController:
             raise Exception("There are no more URL's!")
 
     def main(self):
-
-        self.list_urls = self.load_urls()
+        if not self.list_urls:
+            self.list_urls = self.load_urls()
 
         if len(self.list_urls) == 0:
             raise Exception("No URL's given")
@@ -52,31 +52,32 @@ class RssController:
 
         except StopIteration:
             raise Exception()
-            pass
-        try:
 
-            while self.url_index_pos <= 3 : # This condition is a place holder for the condition that will be passed
+        try:
+            while self.rss_model._newsreel_index_pos <= len(
+                    self.rss_model.newsreel):  # This condition is a place holder for the condition that will be passed
                 # from view (window closed)
 
                 if self.rss_model._newsreel_index_pos == 0:
                     _rss_model = self.rss_model.parse(_url[self.url_index_pos - 1])
                     _newsreel = _rss_model.get_current()
-                # # pass newsreel into the view here
-                # # sleep x number of seconds?
+                    # # pass newsreel into the view here
+                    print(_newsreel)
+                    # # sleep x number of seconds?
                     time.sleep(self.cycle_time)
                     _newsreel = _rss_model.get_next()
                 # # do an infinite loop here
                 else:
-                # # pass newsreel to the view
-                # sleep x number of seconds
+                    # # pass newsreel to the view
+                    print(_newsreel)
+                    # sleep x number of seconds
                     time.sleep(self.cycle_time)
                 _newsreel = _rss_model.get_next()
-                    # return _newsreel
+                # return _newsreel
                 # end infinite loop here. (no code needed)
-
         except Exception as e:
             # this needs to get the next url???
-            _url = self.next_url()
+            # _url = self.next_url()
             pass
         # end first infinite loop (no code needed)
 
