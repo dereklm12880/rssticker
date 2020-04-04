@@ -27,6 +27,7 @@ class TestRssModel(unittest.TestCase):
         with self.assertRaises(Exception): self.ctr.next_url()
 
     def test_feed(self):
+        self.ctr.filename = '../RSS/controller/list_urls.csv'
         self.ctr.list_urls = self.load_feed_url
         _url = self.load_feed_url
         _rss_model = self.ctr.rss_model.parse(_url[0])
