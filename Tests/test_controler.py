@@ -26,17 +26,17 @@ class TestRssModel(unittest.TestCase):
         assert _url == 'http://anotherfake.com'
         with self.assertRaises(Exception): self.ctr.next_url()
 
-    # def test_feed_cycle(self):
-    #     self.ctr.list_urls = self.load_feed_url
-    #     _url = self.load_feed_url
-    #     _rss_model = self.ctr.rss_model.parse(_url[0])
-    #     _newsreel = _rss_model.get_current()
-    #     assert _newsreel == self.ctr.main()
+    def test_feed(self):
+        self.ctr.list_urls = self.load_feed_url
+        _url = self.load_feed_url
+        _rss_model = self.ctr.rss_model.parse(_url[0])
+        _newsreel = _rss_model.get_current()
+        self.assertTrue(_newsreel, self.ctr.main())
 
     def test_next_url_fail(self):
-        self.ctr.urls = []
+        self.ctr.list_urls = []
         with self.assertRaises(Exception): self.ctr.next_url()
-
+        with self.assertRaises(Exception):self.ctr.main()
     """This exception should be passed to the view, the view then should display the exception in a user friendly 
     manner. """
 
@@ -45,6 +45,6 @@ class TestRssModel(unittest.TestCase):
         with self.assertRaises(Exception): self.ctr.load_urls()
 
     def test_load_urls(self):
-        self.ctr.filename = 'testing_urls.csv'
+        self.ctr.filename = '../RSS/controller/testing_urls.csv'
         list_urls = self.ctr.load_urls()
         self.assertIs(type(list_urls), list)
