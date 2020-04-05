@@ -1,13 +1,13 @@
 import unittest
-from RSS.view import userinterface
+from unittest.mock import patch, MagicMock
+import webbrowser
+import os
+from RSS.view.userinterface import RSSticker
 
-class RSSWindow(unittest.TestCase):
+class TestPopup(unittest.TestCase):
+    def setUp(self):
+        self.view = RSSticker()
+
     def test_loop(self):
-        pass
-    def test_style(self):
-        pass
-    def test_build(self):
-        pass
-    def test_refresh(self):
-        pass
-        
+        with patch.object(RSSticker,'method') as mock_method:
+            view = self.view.loop("""root.update() or root.mainloop()?""")
