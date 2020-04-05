@@ -37,13 +37,14 @@ class TestRssModel(unittest.TestCase):
     def test_next_url_fail(self):
         self.ctr.list_urls = []
         with self.assertRaises(Exception): self.ctr.next_url()
-        with self.assertRaises(Exception):self.ctr.main()
     """This exception should be passed to the view, the view then should display the exception in a user friendly 
     manner. """
 
     def test_load_file_fail(self):
         self.ctr.filename = 'NotRealFile.txt'
         with self.assertRaises(Exception): self.ctr.load_urls()
+        self.ctr.filename = '../RSS/controller/testing_urls.csv'
+        with self.assertRaises(Exception): self.ctr.main()
 
     def test_load_urls(self):
         self.ctr.filename = '../RSS/controller/testing_urls.csv'

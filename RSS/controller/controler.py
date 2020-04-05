@@ -41,26 +41,23 @@ class RssController:
             raise Exception("There are no more URL's!")
 
     def main(self):
-
         self.list_urls = self.load_urls()
         if len(self.list_urls) == 0:
             raise Exception("No URL's given")
         try:
             _url = self.next_url()  # This gets the first url
-        except StopIteration:
-            raise Exception()
-        try:
+
             while self.rss_model._newsreel_index_pos <= len(
                     self.rss_model.newsreel):  # This condition is a place holder for the condition that will be passed
                 # from view (window closed)
                 if self.rss_model._newsreel_index_pos == 0:
-                        _rss_model = self.rss_model.parse(_url[self.url_index_pos - 1])
-                        _newsreel = _rss_model.get_current()
+                    _rss_model = self.rss_model.parse(_url[self.url_index_pos - 1])
+                    _newsreel = _rss_model.get_current()
                     # # pass newsreel into the view here
-                        print(_newsreel)
+                    print(_newsreel)
                     # # sleep x number of seconds?
-                        time.sleep(self.cycle_time)
-                        _newsreel = _rss_model.get_next()
+                    time.sleep(self.cycle_time)
+                    _newsreel = _rss_model.get_next()
                 # # do an infinite loop here
                 else:
                     # # pass newsreel to the view
