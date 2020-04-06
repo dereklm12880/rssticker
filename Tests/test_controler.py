@@ -1,6 +1,7 @@
 # https://ongspxm.github.io/blog/2016/11/assertraises-testing-for-errors-in-unittest/
 import unittest
-from unittest.mock import patch, Mock
+from mock import MagicMock
+
 from RSS.controller.controler import RssController
 from RSS.model.rssfeed import RssModel
 
@@ -37,6 +38,7 @@ class TestRssModel(unittest.TestCase):
     def test_next_url_fail(self):
         self.ctr.list_urls = []
         with self.assertRaises(Exception): self.ctr.next_url()
+
     """This exception should be passed to the view, the view then should display the exception in a user friendly 
     manner. """
 
