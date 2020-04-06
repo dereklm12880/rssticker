@@ -6,14 +6,22 @@ import tkinter as tk
 from tkinter import ttk
 
 class RSSticker(tk.Frame):
-    root = tkinter.Tk()
-    label = ttk.Label(root)
-    cancel = ttk.Button(root)
-    feed = []
 
-    def __init__(self):
-        self.loop()
+    def __init__(self,master=None):
+        super().__init__(master)
+        self.master = master
+        self.style()
     
-    def loop(self):
-        self.root.mainloop()
-    
+    #def size(self):
+        #size = ttk.Frame(self.master, width=500, height=500)
+        #size.pack()
+
+    def style(self):
+        style = ttk.Label(self.master, text = "oh man idk what i'm doing", foreground = "black", background = "white")
+        style.pack()
+
+if __name__ == "__main__":
+    root = tkinter.Tk()
+    root.title("RSSticker")
+    app = RSSticker(master=root)
+    app.mainloop()
