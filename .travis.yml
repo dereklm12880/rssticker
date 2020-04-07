@@ -1,0 +1,28 @@
+dist: xenial
+language: python
+
+python:
+  - 3.6
+  - 3.7
+  - 3.8
+
+install:
+  - pip3 install xenon 
+  - pip3 install -r requirements.txt
+  - pip3 install radon
+
+addons:
+  sonarcloud:
+    organization: "dereklm12880"
+    token: $SONAR_TOKEN
+
+script:
+    - sonar-scanner
+    - radon cc --average --show-complexity --order ALPHA RSS/
+    - radon mi --multi --show RSS/
+    - radon raw --summary RSS/
+    - radon hal RSS/
+    - xenon xenon -bB -mA -aA -e "./cyclomatic"
+  
+after_success:
+  - coveralls
