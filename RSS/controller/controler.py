@@ -2,6 +2,7 @@ from RSS.model.rssfeed import RssModel
 # from RSS.view.rssticker import RssView # # This RssView is still unwritten as of now
 import csv
 import time
+import concurrent.futures
 
 
 class RssController:
@@ -67,9 +68,10 @@ class RssController:
         if len(self.list_urls) == 0:
             raise Exception("No URL's given")
         for _ in self.list_urls:
-                self.rss_model._newsreel_index_pos = 0
-                _url = self.next_url()  # This gets the first url
-                self.next_feed(_url)
+            self.rss_model._newsreel_index_pos = 0
+            _url = self.next_url()  # This gets the first url
+            self.next_feed(_url)
+
 
 if __name__ == "__main__":
     RssController().main()
