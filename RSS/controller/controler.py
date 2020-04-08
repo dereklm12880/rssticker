@@ -54,7 +54,7 @@ class RssController:
                 time.sleep(self.cycle_time)
                 self.rss_model._newsreel_index_pos = self.rss_model._newsreel_index_pos + 1
             else:
-                _newsreel = _rss_model.get_next()
+                _newsreel = _rss_model.get_current()
                 self.rss_model._newsreel_index_pos = self.rss_model._newsreel_index_pos + 1
                 # pass newsreel to the view
                 print(_newsreel)
