@@ -42,10 +42,10 @@ class TestRssModel(unittest.TestCase):
     def test_load_file_fail(self):
         self.ctr.filename = 'NotRealFile.txt'
         with self.assertRaises(Exception): self.ctr.load_urls()
-    #     self.ctr.filename = '../testing_urls.csv'
-    #     with self.assertRaises(Exception): self.ctr.main()
-    #
-    # def test_load_urls(self):
-    #     self.ctr.filename = '../list_urls.csv'
-    #     list_urls = self.ctr.load_urls()
-    #     self.assertIs(type(list_urls), list)
+        self.ctr.filename = '../testing_urls.csv'
+        with self.assertRaises(Exception): self.ctr.main()
+
+    def test_load_urls(self):
+         self.ctr.filename = '../testing_urls.csv'
+         list_urls = self.ctr.load_urls()
+         self.assertIs(type(list_urls), list)
