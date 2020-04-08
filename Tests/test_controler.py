@@ -26,13 +26,11 @@ class TestRssModel(unittest.TestCase):
         assert _url == 'http://anotherfake.com'
         with self.assertRaises(Exception): self.ctr.next_url()
 
-    # def test_feed(self):
-    #     self.ctr.filename = '../list_urls.csv'
-    #     self.ctr.list_urls = self.load_feed_url
-    #     _url = self.load_feed_url
-    #     _rss_model = self.ctr.rss_model.parse(_url[0])
-    #     _newsreel = _rss_model.get_current()
-    #     self.assertTrue(_newsreel, self.ctr.main())
+    def test_feed(self):
+        _url = self.load_feed_url
+        _rss_model = self.ctr.rss_model.parse(_url[0])
+        _newsreel = _rss_model.get_current()
+        self.assertTrue(_newsreel, self.ctr.next_feed(_url))
 
     def test_next_url_fail(self):
         self.ctr.list_urls = []

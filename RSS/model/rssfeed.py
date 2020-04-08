@@ -32,7 +32,6 @@ class RssModel:
             raise Exception("There is no news loaded! Try parsing a new RSS feed.")
 
     def get_next(self):
-        self._newsreel_index_pos = self._newsreel_index_pos + 1;
         try:
             return self.newsreel[self._newsreel_index_pos]
         except IndexError:
