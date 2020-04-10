@@ -17,7 +17,7 @@ class RSSticker(tk.Frame):
         self.popup_window = ttk.Label(self.master)
         self.pack()
     
-    def build_window(self, url):
+    def build_window(self):
         self.popup_window["test"] = self.entry_headline
         self.popup_window.pack(side="top")
         self.popup_window.bind("<Button-1>", lambda e, popup_window=self.entry_url:
