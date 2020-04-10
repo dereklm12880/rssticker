@@ -32,6 +32,12 @@ class TestRssModel(unittest.TestCase):
         _newsreel = _rss_model.get_current()
         self.assertTrue(_newsreel, self.ctr.next_feed(_url))
 
+    def test_main(self):
+        self.ctr.filename = "../list_urls.csv"
+        _url = self.load_feed_url
+        _feed = self.ctr.next_feed(_url)
+        self.assertTrue(_feed, self.ctr.main())
+
     def test_next_url_fail(self):
         self.ctr.list_urls = []
         with self.assertRaises(Exception): self.ctr.next_url()
@@ -46,6 +52,6 @@ class TestRssModel(unittest.TestCase):
         with self.assertRaises(Exception): self.ctr.main()
 
     def test_load_urls(self):
-         self.ctr.filename = '../testing_urls.csv'
-         list_urls = self.ctr.load_urls()
-         self.assertIs(type(list_urls), list)
+        self.ctr.filename = '../testing_urls.csv'
+        list_urls = self.ctr.load_urls()
+        self.assertIs(type(list_urls), list)

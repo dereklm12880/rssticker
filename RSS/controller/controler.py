@@ -42,36 +42,45 @@ class RssController:
             raise Exception("There are no more URL's!")
 
     def next_feed(self, _url):
-
+        list_feeds = []
         _rss_model = self.rss_model.parse(_url[0])
 
         while self.rss_model._newsreel_index_pos < len(self.rss_model.newsreel):
             if self.rss_model._newsreel_index_pos == 0:
                 _newsreel = _rss_model.get_current()
                 # pass newsreel into the view here
-                print(_newsreel)
+                list_feeds.append(_newsreel)
+                # print(_newsreel)
                 # sleep x number of seconds?
                 time.sleep(self.cycle_time)
                 self.rss_model._newsreel_index_pos = self.rss_model._newsreel_index_pos + 1
             else:
                 _newsreel = _rss_model.get_current()
                 self.rss_model._newsreel_index_pos = self.rss_model._newsreel_index_pos + 1
+                list_feeds.append(_newsreel)
                 # pass newsreel to the view
-                print(_newsreel)
+                # print(_newsreel)
                 # sleep x number of seconds
                 time.sleep(self.cycle_time)
 
-        # return _newsreel
+        return list_feeds
 
     def main(self):
+        _feeds = []
         self.list_urls = self.load_urls()
         if len(self.list_urls) == 0:
             raise Exception("No URL's given")
         for _ in self.list_urls:
             self.rss_model._newsreel_index_pos = 0
             _url = self.next_url()  # This gets the first url
-            self.next_feed(_url)
+            if not _feeds:
+                _feeds = self.next_feed(_url)
+            else:
+                _feeds = _feeds + self.next_feed(_url)
 
+                # Thread attempt where print is a stand in for the views method
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            executor.submit(print, _feeds)
 
 if __name__ == "__main__":
     RssController().main()
