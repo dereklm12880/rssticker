@@ -13,27 +13,30 @@ class RSSticker(tk.Frame):
     def __init__(self,master=None):
         super().__init__(master)
         self.master = master
-        self.build_window()
-        self.start()
-
-    def start(self):
-        self.master.update()
-    
-    def build_window(self):
-        self.master["test"] = self.entry_headline
-        self.master.bind("<Button-1>", lambda e,
-                        master=self.entry_url:
-                        self.open_article(self.entry_url))
+        #self.build_window()
+        self.popup_window = ttk.Label(self.master)
         self.pack()
     
+    def build_window(self, url):
+        self.popup_window["test"] = self.entry_headline
+        self.popup_window.pack(side="top")
+        self.popup_window.bind("<Button-1>", lambda e, popup_window=self.entry_url:
+                                self.open_article(self.entry_url))
+        self.pack()
+
+
     #def refresh(self):
         # will show the cycled headlines
 
-    #def open_article(self):
-        # will open the entry_url in another tab in a webbrowser
+    #def open_article(self, url):
+        #popup_window = webbrowser.open_new(url)
+        #self.popup_window.update()
+
+    #def style(self):
+        # will show styled window
 
 if __name__ == "__main__":
-    root = tkinter.Tk()
+    root = tk.Tk()
     root.title("RSSticker")
     app = RSSticker(master=root)
     app.mainloop()
