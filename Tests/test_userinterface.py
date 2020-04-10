@@ -11,7 +11,7 @@ from RSS.view import userinterface as ui
 class TestUI(unittest.TestCase):
     
     def test_build_window(self):
-        with patch('RSS.view.ttk.Label', new_callable=PropertyMock) as mock_window:
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = tk.Tk()
             app = ui.RSSticker(master=root)
             app.build_window()
@@ -20,3 +20,4 @@ class TestUI(unittest.TestCase):
                 call().__setitem__('test', '[insert headline here]'),
                 call().pack(side='top'),
             ], any_order=True)
+
