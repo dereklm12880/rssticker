@@ -19,5 +19,5 @@ class TestPopup(unittest.TestCase):
 
             mock_window.assert_has_calls([
                 call().__setitem__('test', '[insert headline here]'),
-                call().pack(side="top"),
+                call().pack(side='top'),
             ], any_order=True)
