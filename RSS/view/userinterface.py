@@ -16,7 +16,6 @@ class RSSticker(tk.Frame):
         self.pack()
     
     def build_window(self):
-        self.popup_window["test"] = self.headline
         self.popup_window.pack(side="top")
         self.pack()
 
@@ -24,7 +23,6 @@ class RSSticker(tk.Frame):
         self.popup_window.configure(text=headline)
         self.popup_window.configure("<Button-1>", lambda e: webbrowser.open_new(link))
     
-
     #def style(self):
         # will show styled window
 
