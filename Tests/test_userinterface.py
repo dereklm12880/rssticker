@@ -29,6 +29,6 @@ class TestUI(unittest.TestCase):
             headline = 'Google'
             link = 'www.google.com'
             app.refresh(headline, link)
-            mock_window.assert_has_calls(mock_window.configure('test headline'),
+            mock_window.assert_has_calls(mock_window.configure('Google'),
                 mock_window.bind("<Button-1", lambda e: webbrowser.open_new('www.google.com')))
 
