@@ -1,5 +1,5 @@
 from RSS.model.rssfeed import RssModel
-# from RSS.view.rssticker import RssView # # This RssView is still unwritten as of now
+from RSS.view.userinterface import RSSticker
 import csv
 import time
 import concurrent.futures
