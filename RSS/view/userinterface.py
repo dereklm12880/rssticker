@@ -14,16 +14,19 @@ class RSSticker(tk.Frame):
         self.master = master
         self.popup_window = ttk.Label(self.master)
         self.pack()
+        self.build_window()
     
+    def start(self):
+        self.master.mainloop()
+
     def build_window(self):
         self.popup_window.pack(side="top")
-        self.pack()
 
     def refresh(self, headline, link):
         self.popup_window.configure(text=headline)
         self.popup_window.configure("<Button-1>", lambda e: webbrowser.open_new(link))
-    
-    #def style(self):
+
+    #def fonts(self):
         # will show styled window
 
 if __name__ == "__main__":

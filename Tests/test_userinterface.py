@@ -8,6 +8,15 @@ sys.path.append("../")
 from RSS.view import userinterface as ui
 
 class TestUI(unittest.TestCase):
+
+
+    def test_start(self):
+        """Checks functionality of .mainloop()"""
+        with patch('RSS.view.userinterface.tk.Tk') as mock_window:
+            root = tk.Tk()
+            app = ui.RSSticker(master=root)
+            app.start()
+            mock_window.assert_has_calls(mock_window.mainloop())
     
     #https://github.com/drsjb80/MockingPython/blob/master/mocktk.py
     def test_build_window(self):
