@@ -1,10 +1,12 @@
 #https://stackoverflow.com/questions/7206807/whats-the-recommended-way-to-unittest-python-gui-applications
 #http://unpythonic.blogspot.com/2007/03/unit-testing-pygtk.html
+
 import unittest
 import time
 import gtk
 from unittest.mock import MagicMock
 from unittest.mock import patch
+sys.path.append("../")
 from Rss.view import viewfile
 
 
