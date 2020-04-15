@@ -1,9 +1,7 @@
 from RSS.model.rssfeed import RssModel
 from RSS.view.userinterface import RSSticker
-import csv
 import time
-import concurrent.futures
-from pathlib import Path
+from RSS.model.settings import SettingsModel
 
 
 class RssController:
@@ -12,19 +10,14 @@ class RssController:
     url_index_pos = 0
     filename = ''
     cycle_time = 0
-
-    def __init__(self):
-        self.filename = str(Path(__file__).parents[2]) + '/list_urls.csv'
+    settings_model = None
 
     def load_urls(self):
         try:
-            with open(self.filename, newline='') as f:
-                reader = csv.reader(f)  # this CSV is in the controller folder
-                self.list_urls = list(reader)
-                self.list_iterator = iter(self.list_urls)
-                return self.list_urls
-        except FileNotFoundError:
-            raise Exception("There is no file named " + self.filename + " in this directory")
+            self.settings_model = SettingsModel()
+            return self.settings_model.load_settings().settings['feeds']
+        except Exception as e:
+            raise Exception("Unable to load our settings: {}".format(e))
 
     def next_url(self):
         try:
@@ -41,7 +34,7 @@ class RssController:
             _newsreel = _rss_model_object.get_next()
             # TODO get the correct method to call
             # _rss_view_object.build_window()
-            print(_newsreel.title,':', _newsreel.link)
+            print(_newsreel.title, ':', _newsreel.link)
             time.sleep(self.cycle_time)
 
         return True
@@ -54,9 +47,13 @@ class RssController:
 
     def main(self):
         _feeds = []
-        self.list_urls = self.load_urls()
+        try:
+            self.list_urls = self.load_urls()
+        except Exception:
+            self.list_urls = None
 
-        if len(self.list_urls) == 0:
+        if not self.list_urls or len(self.list_urls) == 0:
+            # FIXME send a message to the view that we have no Feeds to display NOT an exception.
             raise Exception("No URL's given")
 
         # for _url in self.list_urls:
@@ -69,7 +66,7 @@ class RssController:
             # print(self.list_urls[self.url_index_pos])
             # print(len(self.list_urls))
             try:
-                self.next_feed(self.list_urls[self.url_index_pos][0])
+                self.next_feed(self.list_urls[self.url_index_pos])
             except Exception as e:
                 print(e)
             finally:
@@ -77,6 +74,7 @@ class RssController:
 
         # with concurrent.futures.ThreadPoolExecutor() as executor:
         #     executor.submit(print, _feeds)
+
 
 if __name__ == "__main__":
     RssController().main()
