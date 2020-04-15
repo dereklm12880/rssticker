@@ -3,7 +3,8 @@ from RSS.view.userinterface import RSSticker
 import csv
 import time
 import concurrent.futures
-
+from pathlib import Path
+from threading import Thread
 
 class RssController:
     list_urls = []
@@ -12,12 +13,12 @@ class RssController:
     rss_view = None
     url_index_pos = 0
     filename = ''
-    cycle_time = 0
+    cycle_time = 1
 
     def __init__(self):
         self.rss_model = RssModel()
         # self.rss_view = RssView
-        self.filename = '../../list_urls.csv'
+        self.filename = str(Path(__file__).parents[2]) + '/list_urls.csv'
 
     def load_urls(self):
         try:
@@ -46,21 +47,10 @@ class RssController:
         _rss_model = self.rss_model.parse(_url[0])
 
         while self.rss_model._newsreel_index_pos < len(self.rss_model.newsreel):
-            if self.rss_model._newsreel_index_pos == 0:
-                _newsreel = _rss_model.get_current()
-                # pass newsreel into the view here
+                _newsreel = _rss_model.get_next()
                 list_feeds.append(_newsreel)
-                # print(_newsreel)
-                # sleep x number of seconds?
-                time.sleep(self.cycle_time)
-                self.rss_model._newsreel_index_pos = self.rss_model._newsreel_index_pos + 1
-            else:
-                _newsreel = _rss_model.get_current()
-                self.rss_model._newsreel_index_pos = self.rss_model._newsreel_index_pos + 1
-                list_feeds.append(_newsreel)
-                # pass newsreel to the view
-                # print(_newsreel)
-                # sleep x number of seconds
+                # TODO pass newsreel to the view
+                print(_newsreel)
                 time.sleep(self.cycle_time)
 
         return list_feeds
@@ -68,16 +58,17 @@ class RssController:
     def main(self):
         _feeds = []
         self.list_urls = self.load_urls()
+
         if len(self.list_urls) == 0:
             raise Exception("No URL's given")
+
         for _ in self.list_urls:
-            self.rss_model._newsreel_index_pos = 0
+            # self.rss_model._newsreel_index_pos = 0
             _url = self.next_url()  # This gets the first url
             if not _feeds:
                 _feeds = self.next_feed(_url)
             else:
                 _feeds = _feeds + self.next_feed(_url)
-
                 # Thread attempt where print is a stand in for the views method
         with concurrent.futures.ThreadPoolExecutor() as executor:
             executor.submit(print, _feeds)

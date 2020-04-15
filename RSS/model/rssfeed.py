@@ -3,7 +3,7 @@ import feedparser
 
 
 class RssModel:
-    _newsreel_index_pos = 0
+    _newsreel_index_pos = -1
     _raw_feed = ''
 
     given_url = ''
@@ -18,6 +18,8 @@ class RssModel:
         self._raw_feed = feedparser.parse(feed_url)
         if len(self._raw_feed) == 0:
             raise Exception("No feed with the url {} found.".format(feed_url))
+        if self._raw_feed['bozo'] == 1:
+            raise Exception("An unexpected issue occurred: {}".format(self._raw_feed['bozo_exception']))
         self.given_url = feed_url
         self.title = self._raw_feed['feed']['title']
         self.subtitle = self._raw_feed['feed']['subtitle']
