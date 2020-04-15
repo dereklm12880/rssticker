@@ -7,7 +7,7 @@ from RSS.model.settings import SettingsModel
 import builtins
 
 
-class TestRssModel(unittest.TestCase):
+class TestRssSettings(unittest.TestCase):
     _return_value = {"feeds": ["http://fakefeed.com", "http://anotherfakefeed.com"]}
     _mock_open = mock.mock_open(read_data='')
 
@@ -40,3 +40,4 @@ class TestRssModel(unittest.TestCase):
         _settings.save_settings()
         assert _settings.load_settings().settings['feeds'] == self._return_value['feeds']
         os.remove(_settings.filename)
+

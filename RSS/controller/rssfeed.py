@@ -8,16 +8,16 @@ class RssController:
     list_urls = []
     list_iterator = None
     url_index_pos = 0
-    filename = ''
-    cycle_time = 0
+    cycle_time = 3
     settings_model = None
 
+    def __init__(self):
+        self.settings_model = SettingsModel().load_settings()
+        self.cycle_time = self.settings_model.settings['cycle_time'][0] if self.settings_model.settings[
+            'cycle_time'] else self.cycle_time
+
     def load_urls(self):
-        try:
-            self.settings_model = SettingsModel()
-            return self.settings_model.load_settings().settings['feeds']
-        except Exception as e:
-            raise Exception("Unable to load our settings: {}".format(e))
+        return self.settings_model.load_settings().settings['feeds']
 
     def next_url(self):
         try:
@@ -45,17 +45,7 @@ class RssController:
     def next_index(self):
         self.url_index_pos = self.url_index_pos + 1
 
-    def main(self):
-        _feeds = []
-        try:
-            self.list_urls = self.load_urls()
-        except Exception:
-            self.list_urls = None
-
-        if not self.list_urls or len(self.list_urls) == 0:
-            # FIXME send a message to the view that we have no Feeds to display NOT an exception.
-            raise Exception("No URL's given")
-
+    def run(self):
         # for _url in self.list_urls:
         # while True:
         # TODO make custom exceptions, one for the feed model _out of news_ and another for the view
@@ -72,8 +62,17 @@ class RssController:
             finally:
                 self.next_index()
 
-        # with concurrent.futures.ThreadPoolExecutor() as executor:
-        #     executor.submit(print, _feeds)
+    def main(self):
+        try:
+            self.list_urls = self.load_urls()
+        except Exception:
+            self.list_urls = None
+
+        if not self.list_urls or len(self.list_urls) == 0:
+            # FIXME send a message to the view that we have no Feeds to display NOT an exception.
+            raise Exception("No URL's given")
+        else:
+            self.run()  # We can leverage the loop here and code coverage might get better.
 
 
 if __name__ == "__main__":
