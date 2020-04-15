@@ -1,4 +1,12 @@
 feeds:
-- https://www.techrepublic.com/rssfeeds/articles/
-- https://xkcd.com/rss.xml
-- http://newsrss.bbc.co.uk/rss/newsonline_world_edition/americas/rss.xml
+  - https://www.techrepublic.com/rssfeeds/articles/
+  - https://xkcd.com/rss.xml
+  - http://newsrss.bbc.co.uk/rss/newsonline_world_edition/americas/rss.xml
+cycle_time:
+  - 0
+font_color:
+  - '#FFFFFF'
+font_size:
+  - '12pt'
+background_color:
+  - '#000000'
