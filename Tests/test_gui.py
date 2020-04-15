@@ -7,7 +7,7 @@ import gtk
 from unittest.mock import MagicMock
 from unittest.mock import patch
 sys.path.append("../")
-from Rss.view import viewfile
+from RSS.view.userinterface import RSSticker
 
 
 class test_Gui(unittest.TestCase):
