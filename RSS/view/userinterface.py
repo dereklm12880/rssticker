@@ -7,14 +7,13 @@ from tkinter import ttk
 
 class RSSticker(tk.Frame):
 
-    headline = "[insert headline here]"
-
     def __init__(self,master=None):
         super().__init__(master)
         self.master = master
-        self.popup_window = ttk.Label(self.master)
-        self.pack()
+        self.popup_window = ttk.Label(master)
+    
         self.build_window()
+        self.pack()
     
     def start(self):
         self.master.mainloop()
@@ -23,14 +22,6 @@ class RSSticker(tk.Frame):
         self.popup_window.pack(side="top")
 
     def refresh(self, headline, link):
+        print("headline:", headline, "\nlink:", link)
         self.popup_window.configure(text=headline)
         self.popup_window.configure("<Button-1>", lambda e: webbrowser.open_new(link))
-
-    #def fonts(self):
-        # will show styled window
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("RSSticker")
-    app = RSSticker(master=root)
-    app.mainloop()

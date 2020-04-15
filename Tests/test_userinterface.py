@@ -41,3 +41,6 @@ class TestUI(unittest.TestCase):
             mock_window.assert_has_calls(mock_window.configure('Google'),
                 mock_window.bind("<Button-1", lambda e: webbrowser.open_new('www.google.com')))
 
+    #def test_background(self):
+        #"""Customization of the popup window background"""
+        #with patch('RSS.view.userinterface.tk.Label', new_callable=PropertyMock) as mock_window:
