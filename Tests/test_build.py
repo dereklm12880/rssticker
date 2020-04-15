@@ -1,11 +1,12 @@
 #https://github.com/int-thumbWar-1-2-3-4/Python-RSS-ticker/blob/development/tests/test_main_view.py
-
+import sys
 import unittest
 import time
 from unittest.mock import MagicMock
+import tkinter as tk
 from unittest.mock import patch
 sys.path.append("../")
-from Rss.view import viewfile
+from RSS.view.userinterface import RSSticker
 
 
 def test_build_window_winfo_toplevel(self):

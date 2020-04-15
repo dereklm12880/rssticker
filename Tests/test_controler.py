@@ -9,7 +9,7 @@ import feedparser
 
 class TestRssModel(unittest.TestCase):
     def setUp(self):
-          self.rss=Mock()
+        self.rss=Mock()
         self.view=Mock()
         self.ctr=RssController()
         self.rss_url_list=None
