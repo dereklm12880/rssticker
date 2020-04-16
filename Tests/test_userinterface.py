@@ -44,3 +44,10 @@ class TestUI(unittest.TestCase):
     #def test_background(self):
         #"""Customization of the popup window background"""
         #with patch('RSS.view.userinterface.tk.Label', new_callable=PropertyMock) as mock_window:
+
+    def test_backgroundcolor(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = tk.Tk()
+            app = ui.RSSticker(master=root)
+            arg0 = "red"
+            mock_window.assert_has_calls(mock_window.config(background=arg0))
