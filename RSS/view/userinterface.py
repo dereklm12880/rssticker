@@ -13,7 +13,7 @@ class RSSticker(tk.Frame):
         self.popup_window = ttk.Label(master)
 
         self.build_window()
-        self.build_menu
+        self.build_menu()
         self.pack()
     
     def start(self):
