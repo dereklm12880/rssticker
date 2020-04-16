@@ -13,7 +13,7 @@ class RSSticker(tk.Frame):
         super().__init__(master)
         self.master = master
         self.popup_window = ttk.Label(self.master)
-        # self.build_menu()
+        self.build_menu()
         self.pack()
 
     def build_window(self):
@@ -27,7 +27,7 @@ class RSSticker(tk.Frame):
     # def style(self):
     # will show styled window
 
-    def build_menu():
+    def build_menu(self):
         menu_bar = tk.Menu(root)
         dropdown_menu = tk.Menu(menu_bar)
         color_menu = tk.Menu(dropdown_menu)
@@ -45,7 +45,7 @@ class RSSticker(tk.Frame):
 
     def cycle_time():
         pass
-    
+
     def window_placment():
         pass
 
@@ -53,5 +53,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.title("RSSticker")
     app = RSSticker(master=root)
-    RSSticker.build_menu()
     app.mainloop()
