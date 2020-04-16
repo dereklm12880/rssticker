@@ -48,13 +48,3 @@ class RSSticker(tk.Frame):
 
     def cycle_time():
         pass
-    
-    def window_placment():
-        pass
-
-#if __name__ == "__main__":
-    #root = tk.Tk()
-    #root.title("RSSticker")
-    #app = RSSticker(master=root)
-    #RSSticker.build_menu()
-   # app.mainloop()
