@@ -18,5 +18,8 @@ class SettingsModel:
     def save_settings(self, settings=None):
         _settings = settings if settings else self.settings
 
+        if not isinstance(_settings, dict):
+            raise Exception("Not in the correct format to save settings, requires Dict")
+
         with open(self.filename, 'w') as f:
             return yaml.dump(_settings, f)

@@ -10,11 +10,14 @@ class RssController:
     url_index_pos = 0
     filename = ''
     cycle_time = 0
-    settings_model = None
+    settings_model=None
+    config=None
+
+    def __init__(self):
+        self.settings_model = SettingsModel()
 
     def load_urls(self):
         try:
-            self.settings_model = SettingsModel()
             return self.settings_model.load_settings().settings['feeds']
         except Exception as e:
             raise Exception("Unable to load our settings: {}".format(e))
@@ -45,8 +48,13 @@ class RssController:
     def next_index(self):
         self.url_index_pos = self.url_index_pos + 1
 
+    def save_settings(self, settings):
+        self.config.update(settings)
+        self.settings_model.save_settings(self.config)
+
     def main(self):
         _feeds = []
+        self.config=self.settings_model.load_settings().settings
         try:
             self.list_urls = self.load_urls()
         except Exception:

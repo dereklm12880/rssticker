@@ -40,3 +40,17 @@ class TestRssModel(unittest.TestCase):
         _settings.save_settings()
         assert _settings.load_settings().settings['feeds'] == self._return_value['feeds']
         os.remove(_settings.filename)
+
+    def test_save_settings_fail_set_via_settings_class_member(self):
+        _settings = SettingsModel()
+        _settings.filename = 'dummy_.yaml'
+        _settings.settings = 'Bob dole was here'
+        with self.assertRaises(Exception):
+            _settings.save_settings()
+
+    def test_save_settings_fail_set_via_argument(self):
+        _settings = SettingsModel()
+        _settings.filename = 'dummy_.yaml'
+        with self.assertRaises(Exception):
+            _settings.save_settings(12345)
+
