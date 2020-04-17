@@ -17,7 +17,7 @@ class TestUI(unittest.TestCase):
             app = ui.RSSticker(master=root)
             app.start()
             mock_window.assert_has_calls(mock_window.mainloop())
-    
+
     #https://github.com/drsjb80/MockingPython/blob/master/mocktk.py
     def test_build_window(self):
         """Builds the window on the top left"""
@@ -29,7 +29,7 @@ class TestUI(unittest.TestCase):
             mock_window.assert_has_calls([
                 call().pack(side='top'),
             ], any_order=True)
-    
+
     def test_refresh(self):
         """Refreshes the cycled headlines and URLs, and opens in a new browser window"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
@@ -46,8 +46,6 @@ class TestUI(unittest.TestCase):
         #with patch('RSS.view.userinterface.tk.Label', new_callable=PropertyMock) as mock_window:
 
     def test_backgroundcolor(self):
+        arg0 = "red"
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-            root = tk.Tk()
-            app = ui.RSSticker(master=root)
-            arg0 = "red"
-            mock_window.assert_has_calls(mock_window.config(background=arg0))
+            mock_window.assert_has_calls(mock_window.config(arg0))
