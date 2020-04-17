@@ -6,7 +6,7 @@ import feedparser
 
 
 class TestRssModel(unittest.TestCase):
-    _return_value = {}
+    _return_value_null = {}
 
     def setUp(self):
         self.rss = RssModel()
@@ -68,7 +68,7 @@ class TestRssModel(unittest.TestCase):
         }
         _list.append(_feed_one)
         _list.append(_feed_two)
-        self._return_value = {'entries': _list, 'feed': {
+        self._return_value_null = {'entries': _list, 'feed': {
             'title': 'BBC',
             'subtitle': 'BBC News - Home',
             'link': 'https://www.bbc.co.uk/news/'
@@ -76,7 +76,7 @@ class TestRssModel(unittest.TestCase):
         pass
 
     def test_parse(self):
-        with patch.object(feedparser, 'parse', return_value=self._return_value) as mock_method:
+        with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             rss = self.rss.parse('http://fakeurl.com')
             assert rss.title == 'BBC'
             assert rss.subtitle == 'BBC News - Home'
@@ -86,10 +86,10 @@ class TestRssModel(unittest.TestCase):
             assert rss.newsreel[1]['title'] is not None
 
     def test_get_current(self):
-        with patch.object(feedparser, 'parse', return_value=self._return_value) as mock_method:
+        with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             self.rss.parse('http://fakeurl.com')
             value = self.rss.get_current()
-            assert self.rss._newsreel_index_pos == 0
+            assert self.rss._newsreel_index_pos == -1
             assert len(value) > 0
             assert value['title'] == 'Coronavirus: UK deaths double in 24 hours'
             assert value[
@@ -97,8 +97,9 @@ class TestRssModel(unittest.TestCase):
             assert value['link'] == 'https://www.bbc.co.uk/news/uk-51889957'
 
     def test_get_next(self):
-        with patch.object(feedparser, 'parse', return_value=self._return_value) as mock_method:
+        with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             self.rss.parse('http://fakeurl.com')
+            self.rss._newsreel_index_pos = 0
             value = self.rss.get_next()
             assert self.rss._newsreel_index_pos == 1
             assert len(value) > 0
@@ -121,13 +122,13 @@ class TestRssModel(unittest.TestCase):
             with self.assertRaises(Exception): self.rss.get_next()
 
     def test_get_current_no_newsreel_fail(self):
-        with patch.object(feedparser, 'parse', return_value=self._return_value) as mock_method:
+        with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             self.rss.parse('http://fakeurl.com')
             self.rss.newsreel = []
             with self.assertRaises(Exception): self.rss.get_current()
 
     def test_get_next_out_of_bounds_fail(self):
-        with patch.object(feedparser, 'parse', return_value=self._return_value) as mock_method:
+        with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             self.rss.parse('http://fakeurl.com')
             self.rss._newsreel_index_pos = 42
             with self.assertRaises(Exception): self.rss.get_current()

@@ -16,7 +16,8 @@ class RssModel:
         if not isinstance(feed_url, str): raise Exception('Expects string {} given'.format(type(feed_url)))
         self._raw_feed = feedparser.parse(feed_url)
         if len(self._raw_feed) == 0: raise Exception("No feed with the url {} found.".format(feed_url))
-        if self._raw_feed['bozo'] == 1: raise Exception("An unexpected issue occurred: {}".format(self._raw_feed['bozo_exception']))
+        if 'bozo' in self._raw_feed and self._raw_feed['bozo'] == 1:
+            raise Exception("An unexpected issue occurred: {}".format(self._raw_feed['bozo_exception']))
         self.given_url = feed_url
         self.title = self._raw_feed['feed']['title']
         self.subtitle = self._raw_feed['feed']['subtitle']
@@ -26,6 +27,9 @@ class RssModel:
 
     def get_current(self):
         try:
+            if self._newsreel_index_pos < 0 or self._newsreel_index_pos > len(self.newsreel):
+                return self.newsreel[0]
+
             return self.newsreel[self._newsreel_index_pos]
         except IndexError: raise Exception("There is no news loaded! Try parsing a new RSS feed.")
 

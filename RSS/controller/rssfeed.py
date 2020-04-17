@@ -51,19 +51,8 @@ class RssController:
     def save_settings(self, settings):
         self.config.update(settings)
         self.settings_model.save_settings(self.config)
-
-    def main(self):
-        _feeds = []
-        self.config=self.settings_model.load_settings().settings
-        try:
-            self.list_urls = self.load_urls()
-        except Exception:
-            self.list_urls = None
-
-        if not self.list_urls or len(self.list_urls) == 0:
-            # FIXME send a message to the view that we have no Feeds to display NOT an exception.
-            raise Exception("No URL's given")
-
+    
+    def run(self):
         # for _url in self.list_urls:
         # while True:
         # TODO make custom exceptions, one for the feed model _out of news_ and another for the view
@@ -80,8 +69,17 @@ class RssController:
             finally:
                 self.next_index()
 
-        # with concurrent.futures.ThreadPoolExecutor() as executor:
-        #     executor.submit(print, _feeds)
+    def main(self):
+        try:
+            self.list_urls = self.load_urls()
+        except Exception:
+            self.list_urls = None
+
+        if not self.list_urls or len(self.list_urls) == 0:
+            # FIXME send a message to the view that we have no Feeds to display NOT an exception.
+            raise Exception("No URL's given")
+        else:
+            self.run()  # We can leverage the loop here and code coverage might get better.
 
 
 if __name__ == "__main__":
