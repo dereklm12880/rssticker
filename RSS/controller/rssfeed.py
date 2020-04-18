@@ -1,77 +1,86 @@
 from RSS.model.rssfeed import RssModel
 from RSS.view.userinterface import RSSticker
-import csv
 import time
-import concurrent.futures
-from pathlib import Path
-from threading import Thread
+from RSS.model.settings import SettingsModel
+
 
 class RssController:
     list_urls = []
     list_iterator = None
-    rss_model = None
-    rss_view = None
     url_index_pos = 0
     filename = ''
-    cycle_time = 1
+    cycle_time = 0
+    settings_model = None
+    config = None
 
     def __init__(self):
-        self.rss_model = RssModel()
-        # self.rss_view = RssView
-        self.filename = str(Path(__file__).parents[2]) + '/list_urls.csv'
+        self.settings_model = SettingsModel()
 
     def load_urls(self):
         try:
-            with open(self.filename, newline='') as f:
-                reader = csv.reader(f)  # this CSV is in the controller folder
-                self.list_urls = list(reader)
-                self.list_iterator = iter(self.list_urls)
-                return self.list_urls
-        except FileNotFoundError:
-            raise Exception("There is no file named " + self.filename + " in this directory")
+            return self.settings_model.load_settings().settings['feeds']
+        except Exception as e:
+            raise Exception("Unable to load our settings: {}".format(e))
 
     def next_url(self):
-
-        if self.url_index_pos == 0:
-            self.url_index_pos = self.url_index_pos + 1
-            return self.list_urls[0]
         try:
-            current_index = self.url_index_pos
             self.url_index_pos = self.url_index_pos + 1
-            return self.list_urls[current_index]
+            return self.list_urls[self.url_index_pos]
         except IndexError:
             raise Exception("There are no more URL's!")
 
     def next_feed(self, _url):
-        list_feeds = []
-        _rss_model = self.rss_model.parse(_url[0])
+        _rss_view_object = RSSticker()
+        _rss_model_object = RssModel().parse(_url)
 
-        while self.rss_model._newsreel_index_pos < len(self.rss_model.newsreel):
-                _newsreel = _rss_model.get_next()
-                list_feeds.append(_newsreel)
-                # TODO pass newsreel to the view
-                print(_newsreel)
-                time.sleep(self.cycle_time)
+        for _ in range(len(_rss_model_object.newsreel)):
+            _newsreel = _rss_model_object.get_next()
+            # TODO get the correct method to call
+            # _rss_view_object.build_window()
+            print(_newsreel.title, ':', _newsreel.link)
+            time.sleep(self.cycle_time)
 
-        return list_feeds
+        return True
+
+    def reset_url_index(self):
+        self.url_index_pos = 0
+
+    def next_index(self):
+        self.url_index_pos = self.url_index_pos + 1
+
+    def save_settings(self, settings):
+        self.config.update(settings)
+        self.settings_model.save_settings(self.config)
+
+    def run(self):
+        # for _url in self.list_urls:
+        # while True:
+        # TODO make custom exceptions, one for the feed model _out of news_ and another for the view
+        for _ in range(10):
+            if self.url_index_pos == len(self.list_urls):
+                self.reset_url_index()
+            # print(self.url_index_pos)
+            # print(self.list_urls[self.url_index_pos])
+            # print(len(self.list_urls))
+            try:
+                self.next_feed(self.list_urls[self.url_index_pos])
+            except Exception as e:
+                print(e)
+            finally:
+                self.next_index()
 
     def main(self):
-        _feeds = []
-        self.list_urls = self.load_urls()
+        try:
+            self.list_urls = self.load_urls()
+        except Exception:
+            self.list_urls = None
 
-        if len(self.list_urls) == 0:
+        if not self.list_urls or len(self.list_urls) == 0:
+            # FIXME send a message to the view that we have no Feeds to display NOT an exception.
             raise Exception("No URL's given")
+        else:
+            self.run()  # We can leverage the loop here and code coverage might get better.
 
-        for _ in self.list_urls:
-            # self.rss_model._newsreel_index_pos = 0
-            _url = self.next_url()  # This gets the first url
-            if not _feeds:
-                _feeds = self.next_feed(_url)
-            else:
-                _feeds = _feeds + self.next_feed(_url)
-                # Thread attempt where print is a stand in for the views method
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            executor.submit(print, _feeds)
 
 if __name__ == "__main__":
     RssController().main()
