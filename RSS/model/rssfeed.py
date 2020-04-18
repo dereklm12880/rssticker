@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # method for rss links
 import feedparser
 
@@ -39,4 +37,3 @@ class RssModel:
             return self.newsreel[self._newsreel_index_pos]
         except IndexError:
             raise Exception("There is no more news! Try parsing a new RSS feed.")
->>>>>>> feature/eesha
