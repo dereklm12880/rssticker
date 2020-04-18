@@ -5,9 +5,10 @@ import os
 import tkinter as tk
 from tkinter import ttk
 
+
 class RSSticker(tk.Frame):
 
-    def __init__(self,master=None):
+    def __init__(self, master=None):
         super().__init__(master)
         self.master = master
         self.popup_window = ttk.Label(master)
@@ -15,7 +16,7 @@ class RSSticker(tk.Frame):
         self.build_window()
         self.build_menu()
         self.pack()
-    
+
     def start(self):
         self.master.mainloop()
 
@@ -43,6 +44,7 @@ class RSSticker(tk.Frame):
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
+        root.config(menu=menu_bar)
 
     def background_color(self, arg0):
         self.popup_window.configure(background=arg0)
@@ -52,3 +54,10 @@ class RSSticker(tk.Frame):
 
     def window_placment():
         pass
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("RSSticker")
+    app = RSSticker(master=root)
+    app.mainloop()
