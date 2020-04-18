@@ -15,6 +15,7 @@ class RssController:
 
     def __init__(self):
         self.settings_model = SettingsModel()
+        self.config = self.settings_model.load_settings().settings
 
     def load_urls(self):
         try:
