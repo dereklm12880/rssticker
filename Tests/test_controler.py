@@ -6,6 +6,11 @@ from RSS.model.rssfeed import RssModel
 
 
 class TestRssModel(unittest.TestCase):
+    _return_value = {"feeds": ["http://fakefeed.com", "http://anotherfakefeed.com"]}
+    _mock_open = mock.mock_open(read_data='')
+    _dummy_yaml_file_settings_no_feeds = {'color': ['#000']}
+    _dummy_yaml_file_settings_with_feeds = {'feeds': ['http://preexisting.com']}
+    _dummy_yaml_file_settings_with_feeds_and_others = {'color': ['#000'], 'feeds': ['http://preexisting.com']}
 
     def setUp(self):
         self.rss = RssModel()
@@ -29,12 +34,6 @@ class TestRssModel(unittest.TestCase):
         _rss_model = RssModel().parse(_url)
         _newsreel = _rss_model.get_current()
         self.assertTrue(_newsreel, self.ctr.next_feed(_url))
-
-    def test_main(self):
-        self.ctr.filename = "../list_urls.csv"
-        _url = self.load_feed_url[0]
-        _feed = self.ctr.next_feed(_url)
-        self.assertTrue(_feed, self.ctr.main())
 
     def test_next_url_fail(self):
         self.ctr.list_urls = []
@@ -61,3 +60,61 @@ class TestRssModel(unittest.TestCase):
         self.ctr.filename = '../testing_urls.csv'
         list_urls = self.ctr.load_urls()
         self.assertIs(type(list_urls), list)
+
+    def _dump(self, settings):
+        self.ctr.settings_model.settings = settings
+
+    def test_save_settings_no_settings(self):
+        with patch.object(SettingsModel, 'load_settings', return_value={}) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                assert self.ctr.settings_model.settings == settings
+
+    def test_save_settings_with_settings_no_feeds(self):
+        with patch.object(SettingsModel, 'load_settings',
+                          return_value=self._dummy_yaml_file_settings_no_feeds) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                settings.update(self._dummy_yaml_file_settings_no_feeds)
+                assert self.ctr.settings_model.settings == settings
+
+    def test_save_settings_with_settings_with_feeds(self):
+        with patch.object(SettingsModel, 'load_settings',
+                          return_value=self._dummy_yaml_file_settings_with_feeds) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                settings.update(self._dummy_yaml_file_settings_with_feeds)
+                assert self.ctr.settings_model.settings == {'feeds': ['https://fake.com', 'http://preexisting.com']}
+                assert self.ctr.settings_model.settings == settings
+
+    def test_save_settings_with_settings_with_feeds_with_other(self):
+        self.ctr.settings_model.filename = 'dummy.yaml'
+        with patch.object(SettingsModel, 'load_settings',
+                          return_value=self._dummy_yaml_file_settings_with_feeds_and_others) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                settings.update(self._dummy_yaml_file_settings_with_feeds_and_others)
+                assert self.ctr.settings_model.settings == {'color': ['#000'],
+                                                            'feeds': ['https://fake.com', 'http://preexisting.com']}
+                assert self.ctr.settings_model.settings == settings
+
+    def test_save_settings_with_settings_feeds(self):
+        self.ctr.settings_model.filename = 'dummy.yaml'
+        with patch.object(SettingsModel, 'load_settings',
+                          return_value=self._dummy_yaml_file_settings_with_feeds_and_others) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                settings.update(self._dummy_yaml_file_settings_with_feeds_and_others)
+                assert self.ctr.settings_model.settings == {'color': ['#000'],
+                                                            'feeds': ['https://fake.com', 'http://preexisting.com']}
+                assert self.ctr.settings_model.settings == settings

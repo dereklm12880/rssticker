@@ -5,7 +5,7 @@ from os import path
 
 class SettingsModel:
     filename = str(Path(__file__).parents[2]) + '/settings.yaml'
-    settings = None
+    settings = {}
 
     def load_settings(self):
         if not path.exists(self.filename):

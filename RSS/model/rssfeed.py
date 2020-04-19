@@ -3,9 +3,8 @@ import feedparser
 
 
 class RssModel:
-    _newsreel_index_pos = -1
-    _raw_feed = ''
-
+    newsreel_index_pos = -1
+    raw_feed = ''
     given_url = ''
     title = ''
     subtitle = ''
