@@ -53,3 +53,23 @@ class TestRssSettings(unittest.TestCase):
         _settings.filename = 'dummy_.yaml'
         with self.assertRaises(Exception):
             _settings.save_settings(12345)
+
+    def test_next_url(self):
+        with patch.object(yaml, 'load', return_value=self._return_value) as mock_method:
+            _settings = SettingsModel()
+            _settings.filename = 'dummy.yaml'
+            _settings.load_settings()
+            _url = _settings.next_url()
+            assert _url == 'http://fakefeed.com'
+            _url = _settings.next_url()
+            assert _url == 'http://anotherfakefeed.com'
+            _url = _settings.next_url()
+            assert _url == 'http://fakefeed.com'
+
+    def test_next_url_with_exception(self):
+        with patch.object(yaml, 'load', return_value={}) as mock_method:
+            _settings = SettingsModel()
+            _settings.filename = 'dummy.yaml'
+            _settings.load_settings()
+            with self.assertRaises(Exception):
+                _url = _settings.next_url()

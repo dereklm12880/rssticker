@@ -1,8 +1,10 @@
 # https://ongspxm.github.io/blog/2016/11/assertraises-testing-for-errors-in-unittest/
 import unittest
+from unittest import mock
 from unittest.mock import patch, Mock
 from RSS.controller.rssfeed import RssController
 from RSS.model.rssfeed import RssModel
+from RSS.model.settings import SettingsModel
 
 
 class TestRssModel(unittest.TestCase):
@@ -23,43 +25,16 @@ class TestRssModel(unittest.TestCase):
         self.test_feed = self.loaded_feed.get_current()
         pass
 
-    def test_next_url(self):
-        self.ctr.list_urls = self.loaded_urls
-        _url = self.ctr.next_url()
-        assert _url == 'http://anotherfake.com'
-        with self.assertRaises(Exception): self.ctr.next_url()
+    def test_next_feed(self):
+        _next = self.ctr.next_feed()
+        assert isinstance(_next, RssModel)
 
-    def test_feed(self):
-        _url = self.load_feed_url[0]
-        _rss_model = RssModel().parse(_url)
-        _newsreel = _rss_model.get_current()
-        self.assertTrue(_newsreel, self.ctr.next_feed(_url))
+    def test_next_feed_fail_invalid_url(self):
+        with self.assertRaises(Exception): _next = self.ctr.next_feed('abc')
 
-    def test_next_url_fail(self):
-        self.ctr.list_urls = []
-        with self.assertRaises(Exception): self.ctr.next_url()
-
-    def test_reset_url_index(self):
-        self.ctr.reset_url_index()
-        assert self.ctr.url_index_pos == 0
-
-    def test_next_index(self):
-        self.ctr.next_index()
-        assert self.ctr.url_index_pos == 1
-
-    """This exception should be passed to the view, the view then should display the exception in a user friendly 
-    manner. """
-
-    def test_load_file_fail(self):
-        self.ctr.filename = 'NotRealFile.txt'
-        with self.assertRaises(Exception): self.ctr.load_urls()
-        self.ctr.filename = '../testing_urls.csv'
-        with self.assertRaises(Exception): self.ctr.main()
-
-    def test_load_urls(self):
-        self.ctr.filename = '../testing_urls.csv'
-        list_urls = self.ctr.load_urls()
-        self.assertIs(type(list_urls), list)
+    def test_next_feed_fail_no_feeds(self):
+        self.ctr.settings_model.settings = {}
+        with self.assertRaises(Exception): self.ctr.next_feed(self.load_feed_url)
 
     def _dump(self, settings):
         self.ctr.settings_model.settings = settings
@@ -90,8 +65,7 @@ class TestRssModel(unittest.TestCase):
                 settings = {'feeds': ['https://fake.com']}
                 self.ctr.save_settings(settings)
                 settings.update(self._dummy_yaml_file_settings_with_feeds)
-                assert self.ctr.settings_model.settings == {'feeds': ['https://fake.com', 'http://preexisting.com']}
-                assert self.ctr.settings_model.settings == settings
+                assert self.ctr.settings_model.settings == {'feeds': ['https://fake.com']}
 
     def test_save_settings_with_settings_with_feeds_with_other(self):
         self.ctr.settings_model.filename = 'dummy.yaml'
@@ -103,8 +77,7 @@ class TestRssModel(unittest.TestCase):
                 self.ctr.save_settings(settings)
                 settings.update(self._dummy_yaml_file_settings_with_feeds_and_others)
                 assert self.ctr.settings_model.settings == {'color': ['#000'],
-                                                            'feeds': ['https://fake.com', 'http://preexisting.com']}
-                assert self.ctr.settings_model.settings == settings
+                                                            'feeds': ['https://fake.com']}
 
     def test_save_settings_with_settings_feeds(self):
         self.ctr.settings_model.filename = 'dummy.yaml'
@@ -114,7 +87,5 @@ class TestRssModel(unittest.TestCase):
                 self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
                 settings = {'feeds': ['https://fake.com']}
                 self.ctr.save_settings(settings)
-                settings.update(self._dummy_yaml_file_settings_with_feeds_and_others)
                 assert self.ctr.settings_model.settings == {'color': ['#000'],
-                                                            'feeds': ['https://fake.com', 'http://preexisting.com']}
-                assert self.ctr.settings_model.settings == settings
+                                                            'feeds': ['https://fake.com']}
