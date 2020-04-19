@@ -2,7 +2,6 @@ import tkinter
 import feedparser
 import webbrowser
 import os
-from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 
@@ -37,30 +36,38 @@ class RSSticker(tk.Frame):
         list_colors = ["powder blue", "gray", "light green", "white"]
         list_placement = ["top left", "bottom left", "top right", "bottom right"]
         for color in list_colors:
-            color_menu.add_checkbutton(label=color, command=lambda arg0=color: RSSticker.background_color(arg0))
+            color_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.background_color(arg0))
         cycle_options = [5, 10, 15, 20, 25, 30]
         for time in cycle_options:
-            cycle_time_menu.add_checkbutton(label=time, command=lambda arg0=time: RSSticker.cycle_time(arg0))
+            cycle_time_menu.add_radiobutton(label=time, command=lambda arg0=time: RSSticker.cycle_time(arg0))
         for place in list_placement:
-            placement_menu.add_checkbutton(label=place, command=lambda arg0=place: RSSticker.window_placment(arg0))
+            placement_menu.add_radiobutton(label=place, command=lambda arg0=place: RSSticker.window_placement(arg0))
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Window Placement", menu=placement_menu)
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
+        root.config(menu=menu_bar)
 
-    def background_color(self, arg0):
-        self.popup_window.configure(background=arg0)
+    def background_color(self):
+        root.configure(background=self)
 
-    def cycle_time(self, arg0):
+    def cycle_time(self):
         pass
 
-    def window_placment(self, arg0):
-        if arg0 == "top left":
-            self.popup_window.geometry("200x100 +0 + 0")
-        elif arg0 == "bottom left":
-            self.popup_window.geometry("")
-        elif arg0 == "top right":
-            self.popup_window.geometry("0X100")
-        elif arg0 == "bottom right":
-            self.popup_window.geometry("0X100")
+    def window_placement(self):
+        if self == "top left":
+            root.geometry("+0+0")
+        elif self == "bottom left":
+            root.geometry("+0+750")
+        elif self == "top right":
+            root.geometry("+1000+0")
+        elif self == "bottom right":
+            root.geometry("+1000+750")
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("RSSticker")
+    app = RSSticker(master=root)
+    app.mainloop()
