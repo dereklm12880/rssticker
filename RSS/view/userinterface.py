@@ -6,7 +6,13 @@ import tkinter as tk
 from tkinter import ttk
 
 
+
+
+
 class RSSticker(tk.Frame):
+    time = None
+    place = None
+    color = None
 
     def __init__(self, master=None):
         super().__init__(master)
@@ -36,27 +42,34 @@ class RSSticker(tk.Frame):
         list_colors = ["powder blue", "gray", "light green", "white"]
         list_placement = ["top left", "bottom left", "top right", "bottom right"]
         for color in list_colors:
+            RSSticker.color = color
             color_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.background_color(self, arg0))
         cycle_options = [5, 10, 15, 20, 25, 30]
         for time in cycle_options:
+            RSSticker.time = time
             cycle_time_menu.add_radiobutton(label=time, command=lambda arg0=time: RSSticker.cycle_time(self, arg0))
         for place in list_placement:
-            placement_menu.add_radiobutton(label=place,
-                                           command=lambda arg0=place: RSSticker.window_placement(self, arg0))
+            RSSticker.place = place
+            placement_menu.add_radiobutton(label=place, command=lambda arg0=place: RSSticker.window_placement(self, arg0))
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Window Placement", menu=placement_menu)
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
-        dropdown_menu.add_command(label="Save Settings", command=RSSticker.save())
+        dropdown_menu.add_radiobutton(label="Save Settings",
+                                      command=RSSticker.save(self, RSSticker.color, RSSticker.place, RSSticker.time))
         # self.master.config(menu=menu_bar)
 
     def background_color(self, arg0):
+        RSSticker.color = arg0
         self.master.configure(background=arg0)
 
     def cycle_time(self, arg0):
+        RSSticker.time = arg0
+        self.time = arg0
         pass
 
     def window_placement(self, arg0):
+        RSSticker.place = arg0
         if arg0 == "top left":
             self.master.geometry("+0+0")
         elif arg0 == "bottom left":
@@ -66,7 +79,10 @@ class RSSticker(tk.Frame):
         elif arg0 == "bottom right":
             self.master.geometry("+1000+750")
 
-    def save():
+    def save(self, color, place, time):
+        print(time)
+        print(place)
+        print(color)
         pass
 
 
