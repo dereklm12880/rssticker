@@ -41,11 +41,17 @@ class TestUI(unittest.TestCase):
             mock_window.assert_has_calls(mock_window.configure('Google'),
                 mock_window.bind("<Button-1", lambda e: webbrowser.open_new('www.google.com')))
 
-    #def test_background(self):
-        #"""Customization of the popup window background"""
-        #with patch('RSS.view.userinterface.tk.Label', new_callable=PropertyMock) as mock_window:
+    def test_build_menu(self):
+        with patch('RSS.view.userinterface.tk.Menu', new_callable=PropertyMock) as mock_window:
+            root = tk.Tk()
+            app = ui.RSSticker(master=root)
+            app.build_menu()
 
-    def test_backgroundcolor(self):
+            mock_window.assert_has_calls([
+              # dropdown menus have "powder blue", "gray", "light green", "white" options
+            ])
+
+    def test_background_color(self):
         arg0 = "red"
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             mock_window.assert_has_calls(mock_window.config(arg0))
