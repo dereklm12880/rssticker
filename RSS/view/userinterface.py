@@ -36,18 +36,19 @@ class RSSticker(tk.Frame):
         list_colors = ["powder blue", "gray", "light green", "white"]
         list_placement = ["top left", "bottom left", "top right", "bottom right"]
         for color in list_colors:
-            color_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.background_color(arg0))
+            color_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.background_color(self, arg0))
         cycle_options = [5, 10, 15, 20, 25, 30]
         for time in cycle_options:
-            cycle_time_menu.add_radiobutton(label=time, command=lambda arg0=time: RSSticker.cycle_time(arg0))
+            cycle_time_menu.add_radiobutton(label=time, command=lambda arg0=time: RSSticker.cycle_time(self, arg0))
         for place in list_placement:
-            placement_menu.add_radiobutton(label=place, command=lambda arg0=place: RSSticker.window_placement(arg0))
+            placement_menu.add_radiobutton(label=place,
+                                           command=lambda arg0=place: RSSticker.window_placement(self, arg0))
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Window Placement", menu=placement_menu)
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
         dropdown_menu.add_command(label="Save Settings", command=RSSticker.save())
-        self.master.config(menu=menu_bar)
+        # self.master.config(menu=menu_bar)
 
     def background_color(self, arg0):
         self.master.configure(background=arg0)

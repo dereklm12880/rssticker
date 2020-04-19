@@ -18,7 +18,6 @@ class TestUI(unittest.TestCase):
             root = tk.Tk()
             app = ui.RSSticker(master=root)
             app.build_window()
-
             mock_window.assert_has_calls([
                 call().pack(side='top'),
             ], any_order=True)
@@ -36,5 +35,24 @@ class TestUI(unittest.TestCase):
 
     def test_backgroundcolor(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = tk.Tk()
+            app = ui.RSSticker(master=root)
             arg0 = "red"
-            mock_window.assert_has_calls(mock_window.config(background=arg0))
+            app.background_color(arg0)
+            mock_window.assert_has_calls(mock_window.configure(background=arg0))
+
+    def test_window_placment(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = tk.Tk()
+            app = ui.RSSticker(master=root)
+            list_placement = ["top left", "bottom left", "top right", "bottom right"]
+            for place in list_placement:
+                app.window_placement(place)
+                if place == 'top left':
+                    mock_window.assert_has_calls(root.geometry("+0+0"))
+                elif place == "bottom left":
+                    mock_window.assert_has_calls(root.geometry("+0+750"))
+                elif place == "top right":
+                    mock_window.assert_has_calls(root.geometry("+1000+0"))
+                elif place == "bottom right":
+                    mock_window.assert_has_calls(root.geometry("+1000+750"))
