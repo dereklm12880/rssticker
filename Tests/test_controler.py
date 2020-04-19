@@ -2,9 +2,6 @@
 import unittest
 from unittest import mock
 from unittest.mock import patch, Mock
-
-import yaml
-
 from RSS.controller.rssfeed import RssController
 from RSS.model.rssfeed import RssModel
 from RSS.model.settings import SettingsModel
@@ -13,6 +10,9 @@ from RSS.model.settings import SettingsModel
 class TestRssModel(unittest.TestCase):
     _return_value = {"feeds": ["http://fakefeed.com", "http://anotherfakefeed.com"]}
     _mock_open = mock.mock_open(read_data='')
+    _dummy_yaml_file_settings_no_feeds = {'color': ['#000']}
+    _dummy_yaml_file_settings_with_feeds = {'feeds': ['http://preexisting.com']}
+    _dummy_yaml_file_settings_with_feeds_and_others = {'color': ['#000'], 'feeds': ['http://preexisting.com']}
 
     def setUp(self):
         self.rss = RssModel()
@@ -25,55 +25,67 @@ class TestRssModel(unittest.TestCase):
         self.test_feed = self.loaded_feed.get_current()
         pass
 
-    def test_next_url(self):
-        self.ctr.list_urls = self.loaded_urls
-        _url = self.ctr.next_url()
-        assert _url == 'http://anotherfake.com'
-        with self.assertRaises(Exception): self.ctr.next_url()
+    def test_next_feed(self):
+        _next = self.ctr.next_feed()
+        assert isinstance(_next, RssModel)
 
-    def test_feed(self):
-        _url = self.load_feed_url[0]
-        _rss_model = RssModel().parse(_url)
-        _newsreel = _rss_model.get_current()
-        self.assertTrue(_newsreel, self.ctr.next_feed(_url))
+    def test_next_feed_fail_invalid_url(self):
+        with self.assertRaises(Exception): _next = self.ctr.next_feed('abc')
 
-    def test_main_fail(self):
-        with patch.object(yaml, 'load', return_value={}) as mock_method:
-            with mock.patch('builtins.open', self._mock_open):
-                with self.assertRaises(Exception): self.ctr.main()
-                assert self.ctr.list_urls is None
+    def test_next_feed_fail_no_feeds(self):
+        self.ctr.settings_model.settings = {}
+        with self.assertRaises(Exception): self.ctr.next_feed(self.load_feed_url)
 
-    def test_run(self):
-        with patch.object(RssController, 'next_feed', return_value={}) as mock_method:
-            self.ctr.list_urls = ['http://fake.com', 'http://fakeagain.com']
-            self.ctr.run()
-            assert self.ctr.url_index_pos == len(self.ctr.list_urls)
-            self.ctr.list_urls = ['http://fake.com', 'http://fakeagain.com', 'http://superfake.com']
-            self.ctr.run()
-            assert self.ctr.url_index_pos == len(self.ctr.list_urls)
+    def _dump(self, settings):
+        self.ctr.settings_model.settings = settings
 
-    def test_next_url_fail(self):
-        self.ctr.list_urls = []
-        with self.assertRaises(Exception): self.ctr.next_url()
+    def test_save_settings_no_settings(self):
+        with patch.object(SettingsModel, 'load_settings', return_value={}) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                assert self.ctr.settings_model.settings == settings
 
-    def test_reset_url_index(self):
-        self.ctr.reset_url_index()
-        assert self.ctr.url_index_pos == 0
+    def test_save_settings_with_settings_no_feeds(self):
+        with patch.object(SettingsModel, 'load_settings',
+                          return_value=self._dummy_yaml_file_settings_no_feeds) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                settings.update(self._dummy_yaml_file_settings_no_feeds)
+                assert self.ctr.settings_model.settings == settings
 
-    def test_next_index(self):
-        self.ctr.next_index()
-        assert self.ctr.url_index_pos == 1
+    def test_save_settings_with_settings_with_feeds(self):
+        with patch.object(SettingsModel, 'load_settings',
+                          return_value=self._dummy_yaml_file_settings_with_feeds) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                settings.update(self._dummy_yaml_file_settings_with_feeds)
+                assert self.ctr.settings_model.settings == {'feeds': ['https://fake.com']}
 
-    """This exception should be passed to the view, the view then should display the exception in a user friendly 
-    manner. """
+    def test_save_settings_with_settings_with_feeds_with_other(self):
+        self.ctr.settings_model.filename = 'dummy.yaml'
+        with patch.object(SettingsModel, 'load_settings',
+                          return_value=self._dummy_yaml_file_settings_with_feeds_and_others) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                settings.update(self._dummy_yaml_file_settings_with_feeds_and_others)
+                assert self.ctr.settings_model.settings == {'color': ['#000'],
+                                                            'feeds': ['https://fake.com']}
 
-    def test_load_urls(self):
-        with patch.object(yaml, 'load', return_value=self._return_value) as mock_method:
-            with mock.patch('builtins.open', self._mock_open):
-                _settings = SettingsModel()
-                _settings.filename = 'dummy.yaml'
-                _loaded_settings = _settings.load_settings().settings
-                assert _loaded_settings['feeds'] == self._return_value['feeds']
-                list_urls = self.ctr.load_urls()
-                self.assertIs(type(list_urls), list)
-                assert list_urls == self._return_value['feeds']
+    def test_save_settings_with_settings_feeds(self):
+        self.ctr.settings_model.filename = 'dummy.yaml'
+        with patch.object(SettingsModel, 'load_settings',
+                          return_value=self._dummy_yaml_file_settings_with_feeds_and_others) as mock_method:
+            with patch.object(SettingsModel, 'save_settings', new=self._dump) as mock_method:
+                self.ctr.settings_model.settings = self.ctr.settings_model.load_settings()
+                settings = {'feeds': ['https://fake.com']}
+                self.ctr.save_settings(settings)
+                assert self.ctr.settings_model.settings == {'color': ['#000'],
+                                                            'feeds': ['https://fake.com']}
