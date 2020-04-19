@@ -13,6 +13,8 @@ class RssModel:
     newsreel = []
 
     def parse(self, feed_url):
+        if not isinstance(feed_url, str):
+            raise Exception('Expects string {} given' .format(type(feed_url)))
         self._raw_feed = feedparser.parse(feed_url)
         if len(self._raw_feed) == 0:
             raise Exception("No feed with the url {} found.".format(feed_url))
