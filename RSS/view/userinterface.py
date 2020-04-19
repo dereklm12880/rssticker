@@ -44,26 +44,29 @@ class RSSticker(tk.Frame):
             placement_menu.add_radiobutton(label=place, command=lambda arg0=place: RSSticker.window_placement(arg0))
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Window Placement", menu=placement_menu)
-        dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
-        root.config(menu=menu_bar)
+        dropdown_menu.add_command(label="Save Settings", command=RSSticker.save())
+        self.master.config(menu=menu_bar)
 
-    def background_color(self):
-        root.configure(background=self)
+    def background_color(self, arg0):
+        self.master.configure(background=arg0)
 
-    def cycle_time(self):
+    def cycle_time(self, arg0):
         pass
 
-    def window_placement(self):
-        if self == "top left":
-            root.geometry("+0+0")
-        elif self == "bottom left":
-            root.geometry("+0+750")
-        elif self == "top right":
-            root.geometry("+1000+0")
-        elif self == "bottom right":
-            root.geometry("+1000+750")
+    def window_placement(self, arg0):
+        if arg0 == "top left":
+            self.master.geometry("+0+0")
+        elif arg0 == "bottom left":
+            self.master.geometry("+0+750")
+        elif arg0 == "top right":
+            self.master.geometry("+1000+0")
+        elif arg0 == "bottom right":
+            self.master.geometry("+1000+750")
+
+    def save():
+        pass
 
 
 if __name__ == "__main__":
