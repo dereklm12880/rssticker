@@ -4,6 +4,7 @@ import webbrowser
 import os
 import tkinter as tk
 from tkinter import ttk
+from RSS.controller.rssfeed import RssController
 
 
 class RSSticker(tk.Frame):
@@ -51,8 +52,9 @@ class RSSticker(tk.Frame):
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
         dropdown_menu.add_radiobutton(label="Save Settings",
-                                      command=lambda: RSSticker.save(self, RSSticker.color, RSSticker.place,
-                                                                     RSSticker.time))
+                                      command=lambda: RSSticker.save(self, {'color': RSSticker.color},
+                                                                     {'place': RSSticker.place},
+                                                                     {'time': RSSticker.time}))
         self.master.config(menu=menu_bar)
 
     def background_color(self, arg0):
@@ -76,6 +78,7 @@ class RSSticker(tk.Frame):
             self.master.geometry("+1000+750")
 
     def save(self, color, place, time):
+        # RssController.save_settings(self, {'color':[color]})
         print(time)
         print(place)
         print(color)
