@@ -57,7 +57,7 @@ class RSSticker(tk.Frame):
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
         dropdown_menu.add_radiobutton(label="Save Settings",
                                       command=RSSticker.save(self, RSSticker.color, RSSticker.place, RSSticker.time))
-        # self.master.config(menu=menu_bar)
+        self.master.config(menu=menu_bar)
 
     def background_color(self, arg0):
         RSSticker.color = arg0

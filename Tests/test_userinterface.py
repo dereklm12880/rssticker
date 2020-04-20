@@ -15,7 +15,7 @@ class TestUI(unittest.TestCase):
     def test_build_window(self):
         """Builds the window on the top left"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-            root = tk.Tk()
+            root = mock_window.Tk()
             app = ui.RSSticker(master=root)
             app.build_window()
             mock_window.assert_has_calls([
@@ -25,7 +25,7 @@ class TestUI(unittest.TestCase):
     def test_refresh(self):
         """Refreshes the cycled headlines and URLs, and opens in a new browser window"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-            root = tk.Tk()
+            root = mock_window.Tk()
             app = ui.RSSticker(master=root)
             headline = 'Google'
             link = 'www.google.com'
@@ -35,7 +35,7 @@ class TestUI(unittest.TestCase):
 
     def test_backgroundcolor(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-            root = tk.Tk()
+            root = mock_window.Tk()
             app = ui.RSSticker(master=root)
             arg0 = "red"
             app.background_color(arg0)
@@ -43,7 +43,7 @@ class TestUI(unittest.TestCase):
 
     def test_window_placment(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-            root = tk.Tk()
+            root = mock_window.Tk()
             app = ui.RSSticker(master=root)
             list_placement = ["top left", "bottom left", "top right", "bottom right"]
             for place in list_placement:
