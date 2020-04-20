@@ -3,14 +3,10 @@ import argparse
 class ProcessCommandLine:
     def help(self):
         locationsDict = {
-            'top': 'top',
-            'topright':'topright',
-            'right':'right',
-            'bottomright':'bottomright',
-            'bottom':'bottom',
-            'bottomleft':'bottomleft',
-            'left':'left',
-            'topleft':'topleft',
+            'top left': 'top left',
+            'top right': 'top right',
+            'bottom left': 'bottom left',
+            'bottom right': 'bottom right'
         }
 
         print('move_window <location>: Specify window location', 
@@ -20,4 +16,11 @@ class ProcessCommandLine:
             print('\t', l, '\n')
 
     def move_window(self, location):
-        
+        if location == 'top left'
+            window_placement('top left')
+        elif location == 'top right'
+            window_placement('top right')
+        elif location == 'bottom left'
+            window_placement('bottom left')
+        elif location == 'bottom right'
+            window_placement('bottom right')  
