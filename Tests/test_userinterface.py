@@ -36,9 +36,9 @@ class TestUI(unittest.TestCase):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
             app = ui.RSSticker(master=root)
-            arg0 = "red"
-            app.background_color(arg0)
-            mock_window.assert_has_calls(mock_window.configure(background=arg0))
+            arg0 = 5
+            app.cycle_time(arg0)
+            self.assertIsNotNone(app.time)
 
 
     def test_backgroundcolor(self):
