@@ -5,7 +5,9 @@ import os
 import tkinter as tk
 from tkinter import ttk
 from RSS.controller.rssfeed import RssController
+from RSS.view.userinterface import RSSticker
 
+class CommandLineInputs:
     def help(self):
         locationsDict = {
             'top left': 'top left',
@@ -19,17 +21,6 @@ from RSS.controller.rssfeed import RssController
         
         for l in locationsDict:
             print('\t', l, '\n')
-
-    def window_placement(self, arg0):
-        RSSticker.place = arg0
-        if arg0 == "top left":
-            self.master.geometry("+0+0")
-        elif arg0 == "bottom left":
-            self.master.geometry("+0+750")
-        elif arg0 == "top right":
-            self.master.geometry("+1000+0")
-        elif arg0 == "bottom right":
-            self.master.geometry("+1000+750")
 
     def move_window(self, location):
         if location == 'top left':
