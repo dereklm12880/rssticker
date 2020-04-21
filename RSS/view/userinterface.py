@@ -78,7 +78,7 @@ class RSSticker(tk.Frame):
 
     def save(self, color, place, time):
         settings = [color, place, time]
-        # RssController.save_settings(settings)
+        RssController.save_settings(settings)
         print(time)
         print(place)
         print(color)
