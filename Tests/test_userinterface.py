@@ -32,6 +32,14 @@ class TestUI(unittest.TestCase):
             app.refresh(headline, link)
             mock_window.assert_has_calls(mock_window.configure('Google'),
                                          mock_window.bind("<Button-1", lambda e: webbrowser.open_new('www.google.com')))
+    def test_cycle_time(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = mock_window.Tk()
+            app = ui.RSSticker(master=root)
+            arg0 = "red"
+            app.background_color(arg0)
+            mock_window.assert_has_calls(mock_window.configure(background=arg0))
+
 
     def test_backgroundcolor(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:

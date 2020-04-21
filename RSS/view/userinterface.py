@@ -63,7 +63,6 @@ class RSSticker(tk.Frame):
 
     def cycle_time(self, arg0):
         RSSticker.time = arg0
-        self.time = arg0
         pass
 
     def window_placement(self, arg0):
@@ -78,7 +77,8 @@ class RSSticker(tk.Frame):
             self.master.geometry("+1000+750")
 
     def save(self, color, place, time):
-        # RssController.save_settings(self, {'color':[color]})
+        settings = [color, place, time]
+        # RssController.save_settings(settings)
         print(time)
         print(place)
         print(color)

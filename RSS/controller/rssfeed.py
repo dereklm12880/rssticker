@@ -1,4 +1,3 @@
-# Reference: https://www.youtube.com/watch?v=3Q8mquTM8gA
 from RSS.model.rssfeed import RssModel
 from RSS.model.settings import SettingsModel
 
