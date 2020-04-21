@@ -1,11 +1,8 @@
-import tkinter
-import feedparser
-import webbrowser
-import os
-import tkinter as tk
-from tkinter import ttk
+import sys
+sys.path.append("../")
 from RSS.controller.controler import RssController
 from RSS.view.userinterface import RSSticker
+
 
 class CommandLineInputs:
     def help(self):
