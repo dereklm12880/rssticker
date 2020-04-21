@@ -24,10 +24,10 @@ class CommandLineInputs:
 
     def move_window(self, location):
         if location == 'top left':
-            window_placement('top left')
+            view.window_placement('top left')
         elif location == 'top right':
-            window_placement('top right')
+            view.window_placement('top right')
         elif location == 'bottom left':
-            window_placement('bottom left')
+            view.window_placement('bottom left')
         elif location == 'bottom right':
-            window_placement('bottom right')
+            view.window_placement('bottom right')
