@@ -1,10 +1,11 @@
 import tkinter
 import feedparser
 import webbrowser
-import os
 import tkinter as tk
 from tkinter import ttk
-from RSS.controller.rssfeed import RssController
+import os, sys
+sys.path.append("../")
+from RSS.controller import rssfeed as controller
 
 
 class RSSticker(tk.Frame):
@@ -19,9 +20,6 @@ class RSSticker(tk.Frame):
         self.build_window()
         self.build_menu()
         self.pack()
-
-    def start(self):
-        self.master.mainloop()
 
     def build_window(self):
         self.popup_window.pack(side="top")
@@ -78,15 +76,15 @@ class RSSticker(tk.Frame):
 
     def save(self, color, place, time):
         settings = [color, place, time]
-        RssController.save_settings(settings)
+        controller.RssController.save_settings(settings)
         print(time)
         print(place)
         print(color)
         pass
 
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("RSSticker")
-    app = RSSticker(master=root)
-    app.mainloop()
+#if __name__ == "__main__":
+    #root = tk.Tk()
+    #root.title("RSSticker")
+    #app = RSSticker(master=root)
+    #app.mainloop()
