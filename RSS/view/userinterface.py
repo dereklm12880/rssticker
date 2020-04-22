@@ -81,10 +81,3 @@ class RSSticker(tk.Frame):
         print(place)
         print(color)
         pass
-
-
-#if __name__ == "__main__":
-    #root = tk.Tk()
-    #root.title("RSSticker")
-    #app = RSSticker(master=root)
-    #app.mainloop()

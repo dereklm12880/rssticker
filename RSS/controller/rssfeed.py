@@ -33,5 +33,7 @@ class RssController:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.title("RSSticker")
+    root.geometry("150x20")
     window = ui.RSSticker(master=root)
     window.mainloop()
