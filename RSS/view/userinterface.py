@@ -1,3 +1,4 @@
+# references: https://www.youtube.com/watch?v=HxU_5LvkVrw
 import tkinter
 import feedparser
 import webbrowser
@@ -11,9 +12,14 @@ class RSSticker(tk.Frame):
     time = None
     place = None
     color = None
+    font_type = None
+    font_size = None
+    font_color = None
 
     def __init__(self, master=None):
         super().__init__(master)
+        self.settings = {}
+        self.T = tk.Text(self, font=("bold", 32,))
         self.master = master
         self.popup_window = ttk.Label(master)
         self.build_window()
@@ -37,11 +43,17 @@ class RSSticker(tk.Frame):
         color_menu = tk.Menu(dropdown_menu)
         placement_menu = tk.Menu(dropdown_menu)
         cycle_time_menu = tk.Menu(dropdown_menu)
+        font_menu = tk.Menu(dropdown_menu)
         list_colors = ["powder blue", "gray", "light green", "white"]
         list_placement = ["top left", "bottom left", "top right", "bottom right"]
+        cycle_options = [5, 10, 15, 20, 25, 30]
+        font_colors = ['blue', 'black', 'gold2', 'purple1']
+        font_types = ['Times', 'Helvetica', 'Arial']
+        font_sizes = [11, 12, 14, 16, 18, 20, 22, 24]
+        for color in font_colors:
+            font_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.font_color(self, arg0))
         for color in list_colors:
             color_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.background_color(self, arg0))
-        cycle_options = [5, 10, 15, 20, 25, 30]
         for time in cycle_options:
             cycle_time_menu.add_radiobutton(label=time, command=lambda arg0=time: RSSticker.cycle_time(self, arg0))
         for place in list_placement:
@@ -50,11 +62,12 @@ class RSSticker(tk.Frame):
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Window Placement", menu=placement_menu)
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
+        dropdown_menu.add_cascade(label="Change Font", menu=font_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
         dropdown_menu.add_radiobutton(label="Save Settings",
-                                      command=lambda: RSSticker.save(self, {'color': RSSticker.color},
-                                                                     {'place': RSSticker.place},
-                                                                     {'time': RSSticker.time}))
+                                      command=lambda: RSSticker.save(self, RSSticker.color,
+                                                                     RSSticker.place,
+                                                                     RSSticker.time))
         self.master.config(menu=menu_bar)
 
     def background_color(self, arg0):
@@ -76,13 +89,13 @@ class RSSticker(tk.Frame):
         elif arg0 == "bottom right":
             self.master.geometry("+1000+750")
 
-    def save(self, color, place, time):
-        settings = [color, place, time]
-        RssController.save_settings(settings)
-        print(time)
-        print(place)
-        print(color)
+    def font_color(self, color):
         pass
+
+    def save(self, color, place, time):
+        self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time}
+        _rss = RssController()
+        _rss.save_settings(self.settings)
 
 
 if __name__ == "__main__":

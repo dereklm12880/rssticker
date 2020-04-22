@@ -1,12 +1,13 @@
+background_color: powder blue
+cycle_time: 30
 feeds:
-  - https://www.techrepublic.com/rssfeeds/articles/
-  - https://xkcd.com/rss.xml
-  - http://newsrss.bbc.co.uk/rss/newsonline_world_edition/americas/rss.xml
-cycle_time:
-  - 0
+- https://www.techrepublic.com/rssfeeds/articles/
+- https://xkcd.com/rss.xml
+- http://newsrss.bbc.co.uk/rss/newsonline_world_edition/americas/rss.xml
 font_color:
-  - '#FFFFFF'
+- '#FFFFFF'
 font_size:
-  - '12pt'
-background_color:
-  - '#000000'
+- 12pt
+font_type:
+- Times New Roman
+window placement: top right
