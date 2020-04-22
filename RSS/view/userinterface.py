@@ -92,27 +92,27 @@ class RSSticker(tk.Frame):
             self.master.geometry("+1000+0")
         elif arg0 == "bottom right":
             self.master.geometry("+1000+750")
-
-    def font_color(self, color):
-        pass
+    #
+    # def font_color(self, color):
+    #     pass
 
     def save(self, color, place, time):
         self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time}
         _rss = RssController()
         _rss.save_settings(self.settings)
 
-    def show_feeds(self, feeds):
-        for feed in feeds:
-            field = feed[0]
-            text = feed[1].get()
-            print(field, text)
+    # def show_feeds(self, feeds):
+    #     for feed in feeds:
+    #         field = feed[0]
+    #         text = feed[1].get()
+    #         print(field, text)
+    #
+    # def add_feed(self):
+    #     pass
 
-    def add_feed(self):
-        pass
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("RSSticker")
-    app = RSSticker(master=root)
-    app.mainloop()
+#
+# if __name__ == "__main__":
+#     root = tk.Tk()
+#     root.title("RSSticker")
+#     app = RSSticker(master=root)
+#     app.mainloop()
