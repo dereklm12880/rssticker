@@ -1,3 +1,4 @@
+PyYAML
 mock
 feedparser
 astroid==2.3.3
