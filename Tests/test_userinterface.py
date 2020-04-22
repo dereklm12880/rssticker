@@ -51,7 +51,6 @@ class TestUI(unittest.TestCase):
             app.save(color, place, time)
             self.assertIsNotNone(app.settings)
 
-
     def test_backgroundcolor(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
