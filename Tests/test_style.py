@@ -1,12 +1,16 @@
 # https://pythonprogramming.altervista.org/a-simple-test-maker-with-python-and-tkinter/?doing_wp_cron=1587583767.8565831184387207031250
-from rssticker.Tests import test_model
+
+from tkinter import *
 import tkinter as tk
- 
-quest = [
-		("what is 1+1?","2"),
-		("What is 50*2?","100"),
-		("What is the capital of Italy?", "Rome")
-]
+# import feedparser
+
+root = tk.Tk()
+label = tk.Label(root, text="Coronavirus: UK deaths double in 24 hours", bg="gold", fg="blue", font="Arial 24")
+label.pack()
+text = tk.Text(root)
+text.pack()
+root.mainloop()
+
 numdom = len(quest)
 score = 0
 num = 0
@@ -22,7 +26,7 @@ def d1():
  
 	if num == 0:
 		answer_widget()
-	root.geometry("400x200+100+200")
+	root.geometry("200x200+100+200")
 	text['height'] = 1
 	text['bg'] = 'cyan'
 	text['width'] = 50
@@ -52,7 +56,7 @@ def check():
 	d1()
  
 root = tk.Tk()
-label = tk.Label(root, text="Coronavirus: UK deaths double in 24 hours", bg="gold", fg="blue", font="Arial 24")
+label = tk.Label(root, text = """Test""", bg="coral", font="Arial 48")
 label.pack()
 rules = """Answer to the Following questions
  
@@ -63,8 +67,40 @@ Write your answer and press Enter
 text = tk.Text(root, height=12,font="Arial 20")
 text.insert("1.0", rules)
 text.pack()
-button = tk.Button(root, text="Press Next", bg="black", fg="white", command=d1, font="Arial 20")
+button = tk.Button(root, text="Click To Start", bg="black", fg="white", command=d1, font="Arial 20")
 button.pack()
 solution = tk.StringVar()
  
 root.mainloop()
+
+# def helloWorld(args):
+#     if args.url is not None:
+#         feed = feedparser(args.url[0])
+#     elif args.file is not None:
+#         feed = feedparser(args.file)
+#     else:
+#         feed = feedparser("http://feeds.feedburner.com/ign/all")
+
+#     root = Tk()
+#     var = StringVar()
+#     label = Message(root, textvariable=var)  # relief=RAISED
+#     var.set(feed)
+#     window_text = var.get()
+    
+#     root.geometry("1000x500")
+
+#     button = tk.Button(text="Click and Quit", command=root.quit)
+#     button.pack()
+
+#     label.pack()
+#     root.mainloop()
+#     return window_text
+
+"""
+while display is not quitting:
+    while list is not finished:
+        iterate through the list
+    if the list does end:
+        update the list
+"""
+
