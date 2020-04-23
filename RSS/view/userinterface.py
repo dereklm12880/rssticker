@@ -1,26 +1,11 @@
-<<<<<<< HEAD
-=======
+
 # references: https://www.youtube.com/watch?v=HxU_5LvkVrw
->>>>>>> feature/alanis
 import tkinter
 import feedparser
 import webbrowser
 import os
 import tkinter as tk
 from tkinter import ttk
-<<<<<<< HEAD
-
-
-class RSSticker(tk.Frame):
-    headline = "[insert headline here]"
-
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
-        self.popup_window = ttk.Label(self.master)
-        self.pack()
-        self.build_window()
-=======
 from RSS.controller.rssfeed import RssController
 
 
@@ -41,7 +26,7 @@ class RSSticker(tk.Frame):
         self.build_window()
         self.build_menu()
         self.pack()
->>>>>>> feature/alanis
+
 
     def start(self):
         self.master.mainloop()
@@ -50,13 +35,8 @@ class RSSticker(tk.Frame):
         self.popup_window.pack(side="top")
 
     def refresh(self, headline, link):
-<<<<<<< HEAD
-        self.popup_window.configure(text=headline)
-        self.popup_window.configure("<Button-1>", lambda e: webbrowser.open_new(link))
 
-    # def fonts(self):
-    # will show styled window
-=======
+
         print("headline:", headline, "\nlink:", link)
         self.popup_window.configure(text=headline)
         self.popup_window.configure("<Button-1>", lambda e: webbrowser.open_new(link))
@@ -120,15 +100,17 @@ class RSSticker(tk.Frame):
         self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time}
         _rss = RssController()
         _rss.save_settings(self.settings)
->>>>>>> feature/alanis
+
+   # def style(self)
+
+
+
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("RSSticker")
     app = RSSticker(master=root)
-<<<<<<< HEAD
+
     app.mainloop()
-=======
-    app.mainloop()
->>>>>>> feature/alanis
+
