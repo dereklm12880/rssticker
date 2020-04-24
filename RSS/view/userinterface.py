@@ -5,6 +5,8 @@ import webbrowser
 import os
 import tkinter as tk
 from tkinter import ttk
+from tkinter import simpledialog
+from tkinter import messagebox
 from RSS.controller.rssfeed import RssController
 
 
@@ -18,6 +20,7 @@ class RSSticker(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
+        self.feeds = []
         self.settings = {}
         self.T = tk.Text(self, font=("bold", 32,))
         self.master = master
@@ -51,7 +54,8 @@ class RSSticker(tk.Frame):
         font_colors = ['blue', 'black', 'gold2', 'purple1']
         font_types = ['Times', 'Helvetica', 'Arial']
         font_sizes = [11, 12, 14, 16, 18, 20, 22, 24]
-        feed_menu.add_radiobutton(label="show feeds", command= lambda: RSSticker.show_feeds())
+        feed_menu.add_radiobutton(label="show feeds", command=lambda: RSSticker.show_feeds(self, self.feeds))
+        feed_menu.add_command(label="add feeds", command= lambda: RSSticker.add_feeds(self))
         for color in font_colors:
             font_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.font_color(self, arg0))
         for color in list_colors:
@@ -67,7 +71,7 @@ class RSSticker(tk.Frame):
         dropdown_menu.add_cascade(label="Change Font", menu=font_menu)
         dropdown_menu.add_cascade(label="Feeds", menu=feed_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
-        dropdown_menu.add_radiobutton(label="Save Settings",
+        dropdown_menu.add_radiobutton(label="Save Settings and Feeds",
                                       command=lambda: RSSticker.save(self, RSSticker.color,
                                                                      RSSticker.place,
                                                                      RSSticker.time))
@@ -100,25 +104,21 @@ class RSSticker(tk.Frame):
         _rss = RssController()
         _rss.save_settings(self.settings)
 
-#     def show_feeds(self, feeds):
-#         for feed in feeds:
-#             field = feed[0]
-#             text = feed[1].get()
-#             print(field, text)
-#
-#     def add_feed(self):
-#         feeds = []
-#         row = tk.Frame(self.master)
-#         add_feed_lab = tk.Label(row, width = 15, text='add Feed', anchor='w')
-#         entry = tk.Entry(row)
-#         row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
-#         add_feed_lab.pack(side=tk.LEFT)
-#         entry.pack(side=tk.RIGHT, expand=tk.YES,fill=tk.X)
-#         feeds.append("add feed", entry)
-#         return feeds
-#
-# if __name__ == "__main__":
-#     root = tk.Tk()
-#     root.title("RSSticker")
-#     app = RSSticker(master=root)
-#     app.mainloop()
+    def add_feeds(self):
+        user_input = simpledialog.askstring("input", "Please insert a news feed")
+        if user_input != "":
+            self.feeds.append(user_input)
+
+    def show_feeds(self, feeds):
+        popup = tk.Tk()
+        popup.geometry("200x50")
+        popup.wm_title("Feeds")
+        label = ttk.Label(popup, text = feeds)
+        label.pack(side="top", fill= "x", pady=10)
+        popup.mainloop()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("RSSticker")
+    app = RSSticker(master=root)
+    app.mainloop()
