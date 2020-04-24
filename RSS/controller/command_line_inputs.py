@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import sys
 sys.path.append("../")
 from RSS.controller.controler import RssController
+=======
+import os, sys
+sys.path.append("../")
+>>>>>>> 1d7cd30ebea70d392de626394f54166dacff12a4
 from RSS.view.userinterface import RSSticker
 
 
