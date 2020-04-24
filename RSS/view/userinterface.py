@@ -52,7 +52,6 @@ class RSSticker(tk.Frame):
         font_types = ['Times', 'Helvetica', 'Arial']
         font_sizes = [11, 12, 14, 16, 18, 20, 22, 24]
         feed_menu.add_radiobutton(label="show feeds", command= lambda: RSSticker.show_feeds())
-
         for color in font_colors:
             font_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.font_color(self, arg0))
         for color in list_colors:
@@ -92,7 +91,7 @@ class RSSticker(tk.Frame):
             self.master.geometry("+1000+0")
         elif arg0 == "bottom right":
             self.master.geometry("+1000+750")
-    #
+
     # def font_color(self, color):
     #     pass
 
@@ -101,15 +100,22 @@ class RSSticker(tk.Frame):
         _rss = RssController()
         _rss.save_settings(self.settings)
 
-    # def show_feeds(self, feeds):
-    #     for feed in feeds:
-    #         field = feed[0]
-    #         text = feed[1].get()
-    #         print(field, text)
-    #
-    # def add_feed(self):
-    #     pass
-
+#     def show_feeds(self, feeds):
+#         for feed in feeds:
+#             field = feed[0]
+#             text = feed[1].get()
+#             print(field, text)
+#
+#     def add_feed(self):
+#         feeds = []
+#         row = tk.Frame(self.master)
+#         add_feed_lab = tk.Label(row, width = 15, text='add Feed', anchor='w')
+#         entry = tk.Entry(row)
+#         row.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+#         add_feed_lab.pack(side=tk.LEFT)
+#         entry.pack(side=tk.RIGHT, expand=tk.YES,fill=tk.X)
+#         feeds.append("add feed", entry)
+#         return feeds
 #
 # if __name__ == "__main__":
 #     root = tk.Tk()
