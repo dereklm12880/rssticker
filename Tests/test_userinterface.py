@@ -74,3 +74,20 @@ class TestUI(unittest.TestCase):
                     mock_window.assert_has_calls(root.geometry("+1000+0"))
                 elif place == "bottom right":
                     mock_window.assert_has_calls(root.geometry("+1000+750"))
+
+    # def test_add_feeds(self):
+    #     with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+    #         with patch('RSS.view.userinterface.input', return_value= 'randomfeed'):
+    #             feed = ['randomfeed']
+    #             root = mock_window.Tk()
+    #             app = ui.RSSticker(master=root)
+    #             app.add_feeds()
+    #             self.assertEqual(ui.RSSticker.input, 'randomfeed')
+
+    def test_show_feeds(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = mock_window.Tk()
+            feeds = ['afeed?where']
+            app = ui.RSSticker(master=root)
+            app.show_feeds(feeds)
+            mock_window.assert_has_calls([call().pack(side='top')], any_order=True)

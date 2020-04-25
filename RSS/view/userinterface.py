@@ -17,6 +17,7 @@ class RSSticker(tk.Frame):
     font_type = None
     font_size = None
     font_color = None
+    input = ""
 
     def __init__(self, master=None):
         super().__init__(master)
@@ -105,9 +106,9 @@ class RSSticker(tk.Frame):
         _rss.save_settings(self.settings)
 
     def add_feeds(self):
-        user_input = simpledialog.askstring("input", "Please insert a news feed")
-        if user_input != "":
-            self.feeds.append(user_input)
+        self.input = simpledialog.askstring("input", "Please insert a news feed")
+        if self.input != "":
+            self.feeds.append(self.input)
 
     def show_feeds(self, feeds):
         popup = tk.Tk()
