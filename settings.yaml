@@ -4,10 +4,7 @@ feeds:
 - https://www.techrepublic.com/rssfeeds/articles/
 - https://xkcd.com/rss.xml
 - http://newsrss.bbc.co.uk/rss/newsonline_world_edition/americas/rss.xml
-font_color:
-- '#FFFFFF'
-font_size:
-- 12pt
-font_type:
-- Times New Roman
+font_color: black
+font_size: 12
+font_type: Times
 window placement: top right

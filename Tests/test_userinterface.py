@@ -22,6 +22,14 @@ class TestUI(unittest.TestCase):
                 call().pack(side='top'),
             ], any_order=True)
 
+    def test_show_feeds(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = mock_window.Tk()
+            feeds = ['afeed?where']
+            app = ui.RSSticker(master=root)
+            app.show_feeds(feeds)
+            mock_window.assert_has_calls([call().pack(side='top')], any_order=True)
+
     def test_refresh(self):
         """Refreshes the cycled headlines and URLs, and opens in a new browser window"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
@@ -41,14 +49,41 @@ class TestUI(unittest.TestCase):
             app.cycle_time(arg0)
             self.assertIsNotNone(app.time)
 
+    def test_user_font_color(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = mock_window.Tk()
+            app = ui.RSSticker(master=root)
+            arg0 = 'blue'
+            app.user_font_color(arg0)
+            self.assertIsNotNone(app.time)
+
+    def test_user_font_style(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = mock_window.Tk()
+            app = ui.RSSticker(master=root)
+            arg0 = 'Times'
+            app.user_font_style(arg0)
+            self.assertIsNotNone(app.time)
+
+    def test_user_font_size(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = mock_window.Tk()
+            app = ui.RSSticker(master=root)
+            arg0 = 12
+            app.user_font_size(arg0)
+            self.assertIsNotNone(app.time)
+
     def test_save(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
             app = ui.RSSticker(master=root)
             color = 'powder blue'
             place = 'top right'
+            font_color = 'black'
+            font_type = 'Times'
+            font_size = 12
             time = 30
-            app.save(color, place, time)
+            app.save(color, place, time, font_color,font_size,font_type)
             self.assertIsNotNone(app.settings)
 
     def test_backgroundcolor(self):
@@ -83,11 +118,3 @@ class TestUI(unittest.TestCase):
     #             app = ui.RSSticker(master=root)
     #             app.add_feeds()
     #             self.assertEqual(ui.RSSticker.input, 'randomfeed')
-
-    def test_show_feeds(self):
-        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-            root = mock_window.Tk()
-            feeds = ['afeed?where']
-            app = ui.RSSticker(master=root)
-            app.show_feeds(feeds)
-            mock_window.assert_has_calls([call().pack(side='top')], any_order=True)
