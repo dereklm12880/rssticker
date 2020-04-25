@@ -81,3 +81,5 @@ class RSSticker(tk.Frame):
         print(place)
         print(color)
         pass
+
+#this is a test
