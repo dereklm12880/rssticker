@@ -82,8 +82,9 @@ class TestUI(unittest.TestCase):
             font_color = 'black'
             font_type = 'Times'
             font_size = 12
+            feeds = ["AReallyFakeFeed", "AnEvenFakerFeed"]
             time = 30
-            app.save(color, place, time, font_color,font_size,font_type)
+            app.save(color, place, time, font_color,font_size,font_type, feeds)
             self.assertIsNotNone(app.settings)
 
     def test_backgroundcolor(self):
@@ -110,11 +111,4 @@ class TestUI(unittest.TestCase):
                 elif place == "bottom right":
                     mock_window.assert_has_calls(root.geometry("+1000+750"))
 
-    # def test_add_feeds(self):
-    #     with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-    #         with patch('RSS.view.userinterface.input', return_value= 'randomfeed'):
-    #             feed = ['randomfeed']
-    #             root = mock_window.Tk()
-    #             app = ui.RSSticker(master=root)
-    #             app.add_feeds()
-    #             self.assertEqual(ui.RSSticker.input, 'randomfeed')
+
