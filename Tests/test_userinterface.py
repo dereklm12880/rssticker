@@ -4,6 +4,7 @@ import webbrowser
 import tkinter as tk
 from tkinter import ttk
 import os, sys
+from tkinter import font
 
 sys.path.append("../")
 from RSS.view import userinterface as ui
@@ -73,6 +74,17 @@ class TestUI(unittest.TestCase):
             app.user_font_size(arg0)
             self.assertIsNotNone(app.time)
 
+    # def test_set_font(self):
+    #     with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+    #         root = mock_window.Tk()
+    #         app = ui.RSSticker(master=root)
+    #         font_color = 'black'
+    #         font_type = 'Times'
+    #         font_size = 12
+    #         app.set_font()
+    #         user_font = font.Font(family=font_type, size=font_size)
+    #         self.assertIsNotNone(app.user_font_size())
+
     def test_save(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
@@ -84,7 +96,7 @@ class TestUI(unittest.TestCase):
             font_size = 12
             feeds = ["AReallyFakeFeed", "AnEvenFakerFeed"]
             time = 30
-            app.save(color, place, time, font_color,font_size,font_type, feeds)
+            app.save(color, place, time, font_color, font_size, font_type, feeds)
             self.assertIsNotNone(app.settings)
 
     def test_backgroundcolor(self):
@@ -110,5 +122,3 @@ class TestUI(unittest.TestCase):
                     mock_window.assert_has_calls(root.geometry("+1000+0"))
                 elif place == "bottom right":
                     mock_window.assert_has_calls(root.geometry("+1000+750"))
-
-

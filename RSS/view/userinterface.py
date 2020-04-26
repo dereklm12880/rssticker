@@ -1,4 +1,5 @@
 # references: https://www.youtube.com/watch?v=HxU_5LvkVrw
+# references: https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html
 import tkinter
 import feedparser
 import webbrowser
@@ -6,10 +7,7 @@ import os
 import tkinter as tk
 from tkinter import ttk
 from tkinter import simpledialog
-from tkinter import messagebox
 from tkinter import font
-import pygame
-from pygame.locals import *
 from RSS.controller.rssfeed import RssController
 
 
@@ -88,8 +86,7 @@ class RSSticker(tk.Frame):
         font_menu.add_cascade(label="font type", menu=font_families_menu)
         font_menu.add_cascade(label="font size", menu=font_size_menu)
         font_menu.add_radiobutton(label="Set font",
-                                  command=lambda: RSSticker.set_font(self, RSSticker.font_type, RSSticker.font_size,
-                                                                     RSSticker.font_color))
+                                  command=lambda: RSSticker.set_font(self))
         dropdown_menu.add_cascade(label="Feeds", menu=feed_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
         dropdown_menu.add_radiobutton(label="Save Settings and Feeds",
@@ -126,7 +123,7 @@ class RSSticker(tk.Frame):
     def user_font_size(self, size):
         RSSticker.font_size = size
 
-    def set_font(self, font_color, font_type, font_size):
+    def set_font(self):
         font_color = RSSticker.font_color
         font_type = RSSticker.font_type
         font_size = RSSticker.font_size
@@ -151,6 +148,7 @@ class RSSticker(tk.Frame):
         label = ttk.Label(popup, text=feeds)
         label.pack(side="top", fill="x", pady=10)
         popup.mainloop()
+
 
 if __name__ == "__main__":
     root = tk.Tk()
