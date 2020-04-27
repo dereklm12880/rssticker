@@ -1,11 +1,14 @@
+from RSS.model.style import style_default
 
-# references: https://www.youtube.com/watch?v=HxU_5LvkVrw
+2  # references: https://www.youtube.com/watch?v=HxU_5LvkVrw
 import tkinter
 import feedparser
 import webbrowser
-import os
+import os, sys
 import tkinter as tk
 from tkinter import ttk
+
+sys.path.append("../../")
 from RSS.controller.rssfeed import RssController
 
 
@@ -27,7 +30,6 @@ class RSSticker(tk.Frame):
         self.build_menu()
         self.pack()
 
-
     def start(self):
         self.master.mainloop()
 
@@ -35,7 +37,6 @@ class RSSticker(tk.Frame):
         self.popup_window.pack(side="top")
 
     def refresh(self, headline, link):
-
 
         print("headline:", headline, "\nlink:", link)
         self.popup_window.configure(text=headline)
@@ -101,10 +102,9 @@ class RSSticker(tk.Frame):
         _rss = RssController()
         _rss.save_settings(self.settings)
 
-   # def style(self)
-
-
-
+    def style(self):
+        "Default settings, if load settings are empty, Should be set to degaut cicle, time,color, and window placement"
+        style_default().check_style()
 
 
 if __name__ == "__main__":
@@ -113,4 +113,3 @@ if __name__ == "__main__":
     app = RSSticker(master=root)
 
     app.mainloop()
-

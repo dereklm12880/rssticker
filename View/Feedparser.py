@@ -1,6 +1,6 @@
 import feedparser
 import tkinter as tk
-System.path.append('../')
+
 from View import settings
 
 feed = feedparser.parse('http://www.repubblica.it/rss/homepage/rss2.0.xml')
