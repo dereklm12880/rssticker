@@ -22,10 +22,8 @@ class RSSticker(tk.Frame):
     color = None
     feeds = []
     input = ""
-    _model = RssModel()
-    var = _model.get_next()
-    headline = var['title']
-    link = var['link']
+    _rss = None
+
     #headline = "some article"
     #link = "https://www.bbc.co.uk/news/world-us-canada-52428994"
 
@@ -37,10 +35,18 @@ class RSSticker(tk.Frame):
         self.popup_window = ttk.Label(master)
         self.build_window()
         self.build_menu()
-        self.refresh(RSSticker.headline, RSSticker.link)
         self.pack()
 
     def start(self):
+        try:
+            self._rss = RssController()
+        except Exception as e:
+            """Let user know"""
+            print(e)
+    
+    def get_feed(self):
+        _next_feed = self._rss.next_feed()
+        self.refresh(_next_feed.headline, _next_feed.link)
         self.master.mainloop()
 
     def build_window(self):
@@ -146,7 +152,10 @@ class RSSticker(tk.Frame):
     def add_feeds(self):  # pragma: no cover
         self.input = simpledialog.askstring("input", "Please insert a news feed")
         if self.input != "":
-            RSSticker.feeds.append(self.input)
+            try:
+                RSSticker.feeds.append(self.input)
+            except Exception as e:
+                print(e)
 
     def show_feeds(self, feeds):
         popup = tk.Tk()
@@ -158,6 +167,7 @@ class RSSticker(tk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.geometry("200x50")
     root.title("RSSticker")
     app = RSSticker(master=root)
     app.mainloop()
