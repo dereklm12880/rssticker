@@ -74,16 +74,16 @@ class TestUI(unittest.TestCase):
             app.user_font_size(arg0)
             self.assertIsNotNone(app.time)
 
-    # def test_set_font(self):
-    #     with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-    #         root = mock_window.Tk()
-    #         app = ui.RSSticker(master=root)
-    #         font_color = 'black'
-    #         font_type = 'Times'
-    #         font_size = 12
-    #         app.set_font()
-    #         user_font = font.Font(family=font_type, size=font_size)
-    #         self.assertIsNotNone(app.user_font_size())
+    def test_set_font(self):
+        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+            root = mock_window.Tk()
+            app = ui.RSSticker(master=root)
+            font_color = 'black'
+            font_type = 'Times'
+            font_size = 12
+            app.set_font()
+            user_font = font.Font(family=font_type, size=font_size)
+            self.assertIsNotNone(app.font_size)
 
     def test_save(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
