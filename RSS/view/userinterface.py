@@ -12,12 +12,12 @@ from RSS.controller.rssfeed import RssController
 
 
 class RSSticker(tk.Frame):
-    font_color = None
-    font_size = None
-    font_type = None
-    time = None
-    place = None
-    color = None
+    font_color = 'black'
+    font_size = 12
+    font_type = 'Times'
+    time = 5
+    place = 'top Left'
+    color = 'white'
     feeds = []
     input = ""
     headline = "some article"
@@ -26,6 +26,7 @@ class RSSticker(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.settings = {}
+        self.user_font = None
         self.T = tk.Text(self, font=("bold", 32,))
         self.master = master
         self.popup_window = ttk.Label(master)
@@ -60,7 +61,7 @@ class RSSticker(tk.Frame):
         list_placement = ["top left", "bottom left", "top right", "bottom right"]
         cycle_options = [5, 10, 15, 20, 25, 30]
         font_colors = ['blue', 'black', 'red', 'magenta']
-        font_types = ['Times', 'Helvetica', 'Arial']
+        font_types = ['Times', 'Helvetica', 'Arial', 'Candara', 'Futara', 'Courier']
         font_sizes = [11, 12, 14, 16, 18, 20, 22, 24]
         feed_menu.add_radiobutton(label="show feeds", command=lambda: RSSticker.show_feeds(self, self.feeds))
         feed_menu.add_command(label="add feeds", command=lambda: RSSticker.add_feeds(self))
@@ -125,10 +126,10 @@ class RSSticker(tk.Frame):
 
     def set_font(self):
         font_color = RSSticker.font_color
-        font_type = RSSticker.font_type
-        font_size = RSSticker.font_size
-        user_font = font.Font(family=font_type, size=font_size)
-        self.popup_window.configure(font=user_font, foreground=font_color)
+        size = RSSticker.font_size
+        style = RSSticker.font_type
+        self.user_font = font.Font(size=size, family=style)
+        self.popup_window.configure(font=self.user_font, foreground=font_color)
 
     def save(self, color, place, time, font_color, font_size, font_type, feeds):
         self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time,
@@ -149,7 +150,7 @@ class RSSticker(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
         popup.mainloop()
 
-
+# Just temporary,for viewing purposes
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("RSSticker")

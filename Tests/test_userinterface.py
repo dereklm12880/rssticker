@@ -1,3 +1,4 @@
+import tkinter
 import unittest
 from unittest.mock import call, patch, PropertyMock
 import webbrowser
@@ -7,7 +8,7 @@ import os, sys
 from tkinter import font
 
 sys.path.append("../")
-from RSS.view import userinterface as ui
+from RSS.view.userinterface import RSSticker as ui
 
 
 class TestUI(unittest.TestCase):
@@ -17,7 +18,7 @@ class TestUI(unittest.TestCase):
         """Builds the window on the top left"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             app.build_window()
             mock_window.assert_has_calls([
                 call().pack(side='top'),
@@ -27,7 +28,7 @@ class TestUI(unittest.TestCase):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
             feeds = ['afeed?where']
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             app.show_feeds(feeds)
             mock_window.assert_has_calls([call().pack(side='top')], any_order=True)
 
@@ -35,7 +36,7 @@ class TestUI(unittest.TestCase):
         """Refreshes the cycled headlines and URLs, and opens in a new browser window"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             headline = 'Google'
             link = 'www.google.com'
             app.refresh(headline, link)
@@ -45,7 +46,7 @@ class TestUI(unittest.TestCase):
     def test_cycle_time(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             arg0 = 5
             app.cycle_time(arg0)
             self.assertIsNotNone(app.time)
@@ -53,7 +54,7 @@ class TestUI(unittest.TestCase):
     def test_user_font_color(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             arg0 = 'blue'
             app.user_font_color(arg0)
             self.assertIsNotNone(app.time)
@@ -61,7 +62,7 @@ class TestUI(unittest.TestCase):
     def test_user_font_style(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             arg0 = 'Times'
             app.user_font_style(arg0)
             self.assertIsNotNone(app.time)
@@ -69,26 +70,27 @@ class TestUI(unittest.TestCase):
     def test_user_font_size(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             arg0 = 12
             app.user_font_size(arg0)
             self.assertIsNotNone(app.time)
 
     def test_set_font(self):
-        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-            root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
-            font_color = 'black'
-            font_type = 'Times'
-            font_size = 12
-            app.set_font()
-            user_font = font.Font(family=font_type, size=font_size)
-            self.assertIsNotNone(app.font_size)
+        with patch('tkinter.ttk.Label', new_callable=PropertyMock) as mock_window:
+            with patch('tkinter.font', new_callable=PropertyMock) as mock_font:
+                root = mock_window.Tk()
+                app = ui(master=root)
+                color = app.font_color
+                size = app.font_size
+                style = app.font_type
+                app.set_font()
+                mock_font.assert_has_calls(mock_font.configure(size=size, family=style))
+                mock_window.assert_has_calls(mock_window.configure(font=app.user_font, foreground=color))
 
     def test_save(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             color = 'powder blue'
             place = 'top right'
             font_color = 'black'
@@ -102,7 +104,7 @@ class TestUI(unittest.TestCase):
     def test_backgroundcolor(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             arg0 = "red"
             app.background_color(arg0)
             mock_window.assert_has_calls(mock_window.configure(background=arg0))
@@ -110,7 +112,7 @@ class TestUI(unittest.TestCase):
     def test_window_placment(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
+            app = ui(master=root)
             list_placement = ["top left", "bottom left", "top right", "bottom right"]
             for place in list_placement:
                 app.window_placement(place)
