@@ -77,7 +77,7 @@ class TestUI(unittest.TestCase):
 
     def test_set_font(self):
         with patch('tkinter.ttk.Label', new_callable=PropertyMock) as mock_window:
-            with patch('tkinter.font', new_callable=PropertyMock) as mock_font:
+            with patch('tkinter.font.Font', new_callable=PropertyMock) as mock_font:
                 root = mock_window.Tk()
                 app = ui(master=root)
                 color = app.font_color
