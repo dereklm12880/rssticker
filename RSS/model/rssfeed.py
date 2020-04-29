@@ -3,8 +3,11 @@ import feedparser
 
 
 class RssModel:
+<<<<<<< HEAD
     _newsreel_index_pos = 0
     _raw_feed = ''
+=======
+>>>>>>> befdda75fb9cfed6664e478d758253f5792550a0
 
     _newsreel_index_pos = -1
     _raw_feed = ''
@@ -15,9 +18,12 @@ class RssModel:
     newsreel = []
 
     def parse(self, feed_url):
+<<<<<<< HEAD
         self._raw_feed = feedparser.parse(feed_url)
         if len(self._raw_feed) == 0:
             raise Exception("No feed with the url {} found.".format(feed_url))
+=======
+>>>>>>> befdda75fb9cfed6664e478d758253f5792550a0
         if not isinstance(feed_url, str): raise Exception('Expects string {} given'.format(type(feed_url)))
         self._raw_feed = feedparser.parse(feed_url)
         if len(self._raw_feed) == 0: raise Exception("No feed with the url {} found.".format(feed_url))
@@ -31,6 +37,7 @@ class RssModel:
 
     def get_current(self):
         try:
+<<<<<<< HEAD
             return self.newsreel[self._newsreel_index_pos]
         except IndexError:
             raise Exception("There is no news loaded! Try parsing a new RSS feed.")
@@ -41,6 +48,8 @@ class RssModel:
             return self.newsreel[self._newsreel_index_pos]
         except IndexError:
             raise Exception("There is no more news! Try parsing a new RSS feed.")
+=======
+>>>>>>> befdda75fb9cfed6664e478d758253f5792550a0
             _tmp = None
             if self._newsreel_index_pos < 0:
                 _tmp = self._newsreel_index_pos

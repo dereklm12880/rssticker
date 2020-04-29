@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+PyYAML
 mock
 >>>>>>> feature/alanis
 feedparser
