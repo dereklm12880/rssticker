@@ -7,7 +7,6 @@ import os, sys
 sys.path.append("../")
 from RSS.view import userinterface as ui
 
-
 class TestUI(unittest.TestCase):
 
     def test_start(self):
@@ -30,7 +29,7 @@ class TestUI(unittest.TestCase):
             mock_window.assert_has_calls([
                 call().pack(side='top'),
             ], any_order=True)
-
+    
     def test_refresh(self):
         """Refreshes the cycled headlines and URLs, and opens in a new browser window"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:

@@ -20,7 +20,7 @@ class RSSticker(tk.Frame):
     font_size = None
     font_color = None
 
-    def __init__(self, master=None):
+    def __init__(self,master=None):
         super().__init__(master)
         self.settings = {}
         self.T = tk.Text(self, font=("bold", 32,))
@@ -29,6 +29,10 @@ class RSSticker(tk.Frame):
         self.build_window()
         self.build_menu()
         self.pack()
+        self.build_window()
+    
+    def start(self):
+        self.master.mainloop()
 
     def start(self):
         self.master.mainloop()

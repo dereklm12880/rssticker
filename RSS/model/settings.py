@@ -8,6 +8,7 @@ class SettingsModel:
     settings = {}
     _index = 0
 
+
     def load_settings(self):
         if not path.exists(self.filename):
             raise Exception('No file exists {}'.format(self.filename))

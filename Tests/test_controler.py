@@ -2,54 +2,11 @@
 <<<<<<< HEAD
 
 import unittest
-from unittest.mock import patch
-import sys
-sys.path.append("../")
-from RSS.model.rssfeed import RssModel
-import feedparser
-
-class TestRssModel(unittest.TestCase):
-    def setUp(self):
-        self.rss=Mock()
-        self.view=Mock()
-        self.ctr=RssController()
-        self.rss_url_list=None
-        self.loaded_urls=['http://fake.com', 'http://anotherfake.com']
-        pass
-
-    def test_next_url(self):
-        self.ctr.list_urls = self.loaded_urls
-        _url = self.ctr.next_url()
-        assert _url == 'http://fake.com'
-        _url = self.ctr.next_url()
-        assert _url == 'http://anotherfake.com'
-        with self.assertRaises(Exception): self.ctr.next_url()
-
-    # def test_feed_cycle(self):
-    #     self.ctr.list_urls = self.load_feed_url
-    #     _url = self.load_feed_url
-    #     _rss_model = self.ctr.rss_model.parse(_url[0])
-    #     _newsreel = _rss_model.get_current()
-    #     assert _newsreel == self.ctr.main()
-
-    def test_next_url_fail(self):
-        self.ctr.urls = []
-        with self.assertRaises(Exception): self.ctr.next_url()
-
-    """This exception should be passed to the view, the view then should display the exception in a user friendly 
-    manner. """
-
-    def test_load_file_fail(self):
-        self.ctr.filename = 'NotRealFile.txt'
-        with self.assertRaises(Exception): self.ctr.load_urls()
-=======
-import unittest
 from unittest import mock
 from unittest.mock import patch, Mock
 from RSS.controller.rssfeed import RssController
 from RSS.model.rssfeed import RssModel
 from RSS.model.settings import SettingsModel
-
 
 class TestRssModel(unittest.TestCase):
     _return_value = {"feeds": ["http://fakefeed.com", "http://anotherfakefeed.com"]}
@@ -59,14 +16,11 @@ class TestRssModel(unittest.TestCase):
     _dummy_yaml_file_settings_with_feeds_and_others = {'color': ['#000'], 'feeds': ['http://preexisting.com']}
 
     def setUp(self):
-        self.rss = RssModel()
-        self.view = Mock()
-        self.ctr = RssController()
-        self.rss_url_list = None
-        self.loaded_urls = ['http://fake.com', 'http://anotherfake.com']
-        self.load_feed_url = ['https://www.techrepublic.com/rssfeeds/articles/']
-        self.loaded_feed = self.rss.parse(self.load_feed_url[0])
-        self.test_feed = self.loaded_feed.get_current()
+        self.rss=Mock()
+        self.view=Mock()
+        self.ctr=RssController()
+        self.rss_url_list=None
+        self.loaded_urls=['http://fake.com', 'http://anotherfake.com']
         pass
 
     def test_next_feed(self):
@@ -133,4 +87,3 @@ class TestRssModel(unittest.TestCase):
                 self.ctr.save_settings(settings)
                 assert self.ctr.settings_model.settings == {'color': ['#000'],
                                                             'feeds': ['https://fake.com']}
->>>>>>> feature/alanis
