@@ -8,6 +8,7 @@ from RSS.model.style import style_default
 
 
 class test_style(unittest.Testcase):
+
     input_value = {'background_color': None, 'cycle_time': None,
                    'feeds': ['https://www.techrepublic.com/rssfeeds/articles/', 'https://xkcd.com/rss.xml',
                              'http://newsrss.bbc.co.uk/rss/newsonline_world_edition/americas/rss.xml'],
