@@ -104,6 +104,8 @@ class RSSticker(tk.Frame):
 
     def style(self):
         "Default settings, if load settings are empty, Should be set to degaut cicle, time,color, and window placement"
+        # Method= style.check_style()
+        self.popup_window.geometry("200×100")
         style_default().check_style()
 
 
