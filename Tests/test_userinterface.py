@@ -18,11 +18,7 @@ class TestUI(unittest.TestCase):
         """Builds the window on the top left"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-<<<<<<< HEAD
             app = ui(master=root)
-=======
-            app = ui.RSSticker(master=root)
->>>>>>> feature/eesha
             app.build_window()
             mock_window.assert_has_calls([
                 call().pack(side='top'),
@@ -40,24 +36,12 @@ class TestUI(unittest.TestCase):
         """Refreshes the cycled headlines and URLs, and opens in a new browser window"""
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-<<<<<<< HEAD
             app = ui(master=root)
-=======
-            app = ui.RSSticker(master=root)
->>>>>>> feature/eesha
             headline = 'Google'
             link = 'www.google.com'
             app.refresh(headline, link)
             mock_window.assert_has_calls(mock_window.configure('Google'),
                                          mock_window.bind("<Button-1", lambda e: webbrowser.open_new('www.google.com')))
-    def test_cycle_time(self):
-        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-            root = mock_window.Tk()
-            app = ui.RSSticker(master=root)
-            arg0 = 5
-            app.cycle_time(arg0)
-            self.assertIsNotNone(app.time)
-
 
     def test_cycle_time(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
@@ -120,11 +104,7 @@ class TestUI(unittest.TestCase):
     def test_backgroundcolor(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-<<<<<<< HEAD
             app = ui(master=root)
-=======
-            app = ui.RSSticker(master=root)
->>>>>>> feature/eesha
             arg0 = "red"
             app.background_color(arg0)
             mock_window.assert_has_calls(mock_window.configure(background=arg0))
@@ -132,11 +112,7 @@ class TestUI(unittest.TestCase):
     def test_window_placment(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
-<<<<<<< HEAD
             app = ui(master=root)
-=======
-            app = ui.RSSticker(master=root)
->>>>>>> feature/eesha
             list_placement = ["top left", "bottom left", "top right", "bottom right"]
             for place in list_placement:
                 app.window_placement(place)
