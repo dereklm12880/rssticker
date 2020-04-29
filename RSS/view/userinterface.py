@@ -3,9 +3,9 @@
 import tkinter
 import feedparser
 import webbrowser
-import os
 import tkinter as tk
 from tkinter import ttk
+<<<<<<< HEAD
 from tkinter import simpledialog
 from tkinter import font
 from RSS.controller.rssfeed import RssController
@@ -22,6 +22,17 @@ class RSSticker(tk.Frame):
     input = ""
     headline = "some article"
     link = "https://www.bbc.co.uk/news/world-us-canada-52428994"
+=======
+import os, sys
+sys.path.append("../")
+from RSS.controller import rssfeed as controller
+
+
+class RSSticker(tk.Frame):
+    time = None
+    place = None
+    color = None
+>>>>>>> feature/eesha
 
     def __init__(self, master=None):
         super().__init__(master)
@@ -34,9 +45,6 @@ class RSSticker(tk.Frame):
         self.build_menu()
         self.refresh(RSSticker.headline, RSSticker.link)
         self.pack()
-
-    def start(self):
-        self.master.mainloop()
 
     def build_window(self):
         self.popup_window.pack(side="top")
@@ -90,11 +98,18 @@ class RSSticker(tk.Frame):
                                   command=lambda: RSSticker.set_font(self))
         dropdown_menu.add_cascade(label="Feeds", menu=feed_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
+<<<<<<< HEAD
         dropdown_menu.add_radiobutton(label="Save Settings and Feeds",
                                       command=lambda: RSSticker.save(self, RSSticker.color,
                                                                      RSSticker.place, RSSticker.time,
                                                                      RSSticker.font_size, RSSticker.font_color,
                                                                      RSSticker.font_type, RSSticker.feeds))
+=======
+        dropdown_menu.add_radiobutton(label="Save Settings",
+                                      command=lambda: RSSticker.save(self, {'color': RSSticker.color},
+                                                                     {'place': RSSticker.place},
+                                                                     {'time': RSSticker.time}))
+>>>>>>> feature/eesha
         self.master.config(menu=menu_bar)
 
     def background_color(self, arg0):
@@ -103,6 +118,10 @@ class RSSticker(tk.Frame):
 
     def cycle_time(self, arg0):
         RSSticker.time = arg0
+<<<<<<< HEAD
+=======
+        pass
+>>>>>>> feature/eesha
 
     def window_placement(self, arg0):
         RSSticker.place = arg0
@@ -115,6 +134,7 @@ class RSSticker(tk.Frame):
         elif arg0 == "bottom right":
             self.master.geometry("+1000+750")
 
+<<<<<<< HEAD
     def user_font_color(self, color):
         RSSticker.font_color = color
 
@@ -156,3 +176,12 @@ if __name__ == "__main__":
     root.title("RSSticker")
     app = RSSticker(master=root)
     app.mainloop()
+=======
+    def save(self, color, place, time):
+        settings = [color, place, time]
+        controller.RssController.save_settings(settings)
+        print(time)
+        print(place)
+        print(color)
+        pass
+>>>>>>> feature/eesha

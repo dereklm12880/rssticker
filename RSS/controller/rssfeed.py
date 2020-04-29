@@ -1,5 +1,11 @@
+import tkinter as tk
+import os, sys
+sys.path.append("../")
+from RSS.controller import rssfeed as controller
+from RSS.view import userinterface as ui
 from RSS.model.rssfeed import RssModel
 from RSS.model.settings import SettingsModel
+
 
 
 class RssController:
@@ -24,3 +30,13 @@ class RssController:
                 self.settings_model.settings[key] = settings[key]
 
         self.settings_model.save_settings(self.settings_model.settings)
+<<<<<<< HEAD
+=======
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("RSSticker")
+    root.geometry("150x20")
+    window = ui.RSSticker(master=root)
+    window.mainloop()
+>>>>>>> feature/eesha
