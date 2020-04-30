@@ -1,0 +1,9 @@
+background_color: powder blue
+cycle_time: 30
+feeds:
+- AReallyFakeFeed
+- AnEvenFakerFeed
+font_color: black
+font_size: 12
+font_type: Times
+window placement: top right
