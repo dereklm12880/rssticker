@@ -3,6 +3,12 @@ from RSS.model.settings import SettingsModel
 
 
 class RssController:
+
+    """ Class controller.rssfeed.RssController.
+    This class customizes the Tkinter root window. It creates, displays, modifies
+    and receives input from the controller.
+    """
+
     settings_model = None
     rssfeed_model = None
 

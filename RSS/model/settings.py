@@ -4,19 +4,40 @@ from os import path
 
 
 class SettingsModel:
+
+    """ Class model.settings.SettingsModel.
+    This class ensures the yaml file is loaded so that the feeds
+    can be collected.
+    """
+
+
     filename = str(Path(__file__).parents[2]) + '/settings.yaml'
     settings = {}
     _index = 0
 
     def load_settings(self):
+
+        """ Function model.settings.SettingsModel.load_settings.
+        This function ensures that the path to the configuration file exists
+        and is correct. If not, it throws an exception, otherwise loading it.
+        """
+
         if not path.exists(self.filename):
             raise Exception('No file exists {}'.format(self.filename))
 
         with open(self.filename) as f:
             self.settings = yaml.load(f, Loader=yaml.FullLoader)
             return self
-
+    ################################################################################################## ASK LUCAS
     def save_settings(self, settings=None):
+
+        """ Function model.settings.SettingsModel.save_settings.
+        This function ensures that the path to the configuration file exists
+        and is correct. If not, it throws an exception, otherwise loading it.
+        Arguments:
+        settings -- 
+        """
+
         _settings = settings if settings else self.settings
 
         if not isinstance(_settings, dict):
@@ -24,8 +45,14 @@ class SettingsModel:
 
         with open(self.filename, 'w') as f:
             return yaml.dump(_settings, f)
-
+    ################################################################################################## ASK LUCAS
     def next_url(self):
+
+        """ Function model.settings.SettingsModel.next_url.
+        This function checks for feeds in the yaml file. If there are feeds, it loads them.
+        If not, an exception is thrown.
+        """     
+           
         if 'feeds' in self.settings:
             if self._index not in range(0, len(self.settings['feeds'])):
                 self._index = 0
