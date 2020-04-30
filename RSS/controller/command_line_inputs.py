@@ -3,7 +3,9 @@ sys.path.append("../")
 from RSS.controller.controler import RssController
 
 import os, sys
+print(sys.path)
 sys.path.append("../")
+print(sys.path)
 from RSS.view.userinterface import RSSticker
 
 
