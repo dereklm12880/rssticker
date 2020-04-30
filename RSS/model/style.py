@@ -1,8 +1,5 @@
 from pathlib import Path
-
-import null as null
 import yaml
-from os import path
 
 
 class style_default:
@@ -13,10 +10,16 @@ class style_default:
 
     i = 0
 
-    def check_style(self):
+    def load_settings(self):
+        # if not path.exists(self.filename):
+        #     raise Exception('No file exists {}'.format(self.filename))
 
         with open(self.filename) as file:
             settings_list = yaml.full_load(file)
+        return settings_list
+
+    def check_style(self):
+        settings_list = style_default().load_settings()
 
         for item, value in settings_list.items():
             settings_list[item]
@@ -25,11 +28,12 @@ class style_default:
             self.i += 1
         return settings_list
 
+
+
     def check_dump(self, dictionary):
         dictionary = style_default().check_style()
         with open(self.filename, 'w') as file:
             try:
-                # self.settings_list = yaml.dump(settings_list, file)
                 return yaml.dump(dictionary, file)
             except yaml.YAMLError as exc:
                 print(exc)

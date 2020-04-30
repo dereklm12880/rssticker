@@ -1,5 +1,5 @@
 background_color: white
-cycle_time: 30
+cycle_time: 10
 feeds:
 - https://www.techrepublic.com/rssfeeds/articles/
 - https://xkcd.com/rss.xml
