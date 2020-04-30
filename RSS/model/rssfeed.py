@@ -12,12 +12,9 @@ class RssModel:
     newsreel = []
 
     def parse(self, feed_url):
-<<<<<<< HEAD
         if not isinstance(feed_url, str):
             raise Exception('Expects string {} given' .format(type(feed_url)))
-=======
         if not isinstance(feed_url, str): raise Exception('Expects string {} given'.format(type(feed_url)))
->>>>>>> origin/feature/alanis
         self._raw_feed = feedparser.parse(feed_url)
         if len(self._raw_feed) == 0: raise Exception("No feed with the url {} found.".format(feed_url))
         if 'bozo' in self._raw_feed and self._raw_feed['bozo'] == 1: raise Exception("An unexpected issue occurred: {}".format(self._raw_feed['bozo_exception']))
