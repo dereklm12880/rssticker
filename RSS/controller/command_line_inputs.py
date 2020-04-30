@@ -1,5 +1,7 @@
 import os, sys
+print(sys.path)
 sys.path.append("../")
+print(sys.path)
 from RSS.view.userinterface import RSSticker
 
 class CommandLineInputs:
