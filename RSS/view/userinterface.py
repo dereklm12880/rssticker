@@ -7,6 +7,7 @@ import webbrowser
 import os, sys
 import tkinter as tk
 from tkinter import ttk
+from pathlib import Path
 
 sys.path.append("../../")
 from RSS.controller.rssfeed import RssController
@@ -106,17 +107,16 @@ class RSSticker(tk.Frame):
         _rss = RssController()
         _rss.save_settings(self.settings)
 
-    def style(self):
-        "Default settings, if load settings are empty, Should be set to degaut cicle, time,color, and window placement"
-        # Method= style.check_style()
-        self.popup_window.geometry("200×100")
-        style_default().check_style()
-
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("RSSticker")
     app = RSSticker(master=root)
-
     app.mainloop()
+    style_default().check_dump(style_default().check_style())
+
+
+
+
+

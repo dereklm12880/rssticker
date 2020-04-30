@@ -25,3 +25,4 @@ class RssController:
                 self.settings_model.settings[key] = settings[key]
 
         self.settings_model.save_settings(self.settings_model.settings)
+
