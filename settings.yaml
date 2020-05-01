@@ -1,5 +1,5 @@
-background_color: white
-cycle_time: 10
+background_color: powder blue
+cycle_time: 30
 feeds:
 - https://www.techrepublic.com/rssfeeds/articles/
 - https://xkcd.com/rss.xml
@@ -10,4 +10,4 @@ font_size:
 - 12pt
 font_type:
 - Times New Roman
-window placement: top left
+window placement: top right

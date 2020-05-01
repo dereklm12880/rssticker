@@ -1,5 +1,4 @@
 # https://ongspxm.github.io/blog/2016/11/assertraises-testing-for-errors-in-unittest/
-<<<<<<< HEAD
 
 import unittest
 from unittest import mock
