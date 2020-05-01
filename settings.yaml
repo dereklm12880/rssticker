@@ -1,8 +1,7 @@
 background_color: powder blue
-cycle_time: 30
+cycle_time: 200
 feeds:
-- AReallyFakeFeed
-- AnEvenFakerFeed
+- https://www.reddit.com/r/worldnews/.rss
 font_color: black
 font_size: 12
 font_type: Times
