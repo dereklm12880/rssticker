@@ -8,10 +8,16 @@ import builtins
 
 
 class TestRssSettings(unittest.TestCase):
+
+    """Test class for RSS.model.settings.SettingsModel."""
+
     _return_value = {"feeds": ["http://fakefeed.com", "http://anotherfakefeed.com"]}
     _mock_open = mock.mock_open(read_data='')
 
     def test_load_settings_no_file(self):
+        """ Unit test for RSSmodel.model.settings.SettingsModel.load_settings.
+        Tests to make sure that the .yaml file exists.
+        """
         with patch.object(yaml, 'load', return_value=self._return_value) as mock_method:
             with self.assertRaises(Exception):
                 _settings = SettingsModel()
@@ -19,6 +25,9 @@ class TestRssSettings(unittest.TestCase):
                 _settings.load_settings()
 
     def test_load_settings(self):
+        """ Unit test for RSSmodel.model.settings.SettingsModel.next_url.
+        Tests to check feeds in yaml file that can be loaded.
+        """
         with patch.object(yaml, 'load', return_value=self._return_value) as mock_method:
             with mock.patch('builtins.open', self._mock_open):
                 _settings = SettingsModel()
