@@ -1,8 +1,8 @@
-background_color: white
-cycle_time: 25
+background_color: powder blue
+cycle_time: 20
 feeds:
 - https://www.reddit.com/r/worldnews/.rss
 font_color: 12
 font_size: black
 font_type: Times
-window placement: top Left
+window placement: top left

@@ -225,7 +225,7 @@ class RSSticker(tk.Tk):
         self.ctrl.save_settings(self.settings)
 
     def add_feeds(self):  # pragma: no cover
-        self.input = simpledialog.askstring("input", "Please insert a news feed")
+        self.input = simpledialog.askstring("input", "Please insert a news feed", parent=self)
         if self.input != "":
             RSSticker.feeds.append(self.input)
 
