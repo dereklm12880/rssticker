@@ -25,7 +25,7 @@ class TestUI(unittest.TestCase):
             ], any_order=True)
 
     def test_show_feeds(self):
-        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+        with patch('RSS.view.userinterface.tk.Frame', new_callable=PropertyMock) as mock_window:
             root = mock_window.Tk()
             feeds = ['afeed?where']
             app = ui(master=root)

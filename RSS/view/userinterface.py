@@ -1,6 +1,7 @@
 # references: https://www.youtube.com/watch?v=HxU_5LvkVrw
 # references: https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html
 # https://scorython.wordpress.com/2016/06/27/multithreading-with-tkinter/
+import tkinter
 import tkinter as tk
 from tkinter import ttk
 from tkinter import simpledialog
@@ -30,7 +31,8 @@ class RSSticker(tk.Tk):
     _default_cycle_time = 5
     place = 'top Left'
     color = 'white'
-    feeds = []
+    feeds = ["https://www.reddit.com/r/worldnews/.rss"]
+    time = 5
     input = ""
     _rss = None
     app_title = "RSS Ticker"
@@ -44,7 +46,7 @@ class RSSticker(tk.Tk):
 
     def __init__(self, ctrl):
         self.ctrl = ctrl
-        ####### Do something ######
+        ###### Do something ######
         super(RSSticker, self).__init__()
         self.feed_frame = tk.Frame(self)
         self.feed_frame.grid(row=1, column=0, sticky='nswe')
@@ -59,6 +61,7 @@ class RSSticker(tk.Tk):
         self.next.grid(row=0, column=0)
         self.geometry("{}x{}".format(self.width, self.height))
         self.title(self.app_title)
+        self.build_menu()
         # self.soup = BeautifulSoup('html.parser', parse_only=True)
 
     def run_newsreel(self):
@@ -117,16 +120,8 @@ class RSSticker(tk.Tk):
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self._default_cycle_time
 
-    def build_window(self):
-        self.popup_window.pack(side="top")
-
-    def refresh(self, headline, link):
-        print("headline:", headline, "\nlink:", link)
-        self.popup_window.configure(text=headline)
-        self.popup_window.bind("<Button-1>", lambda e: webbrowser.open_new(link))
-
     def build_menu(self):
-        menu_bar = tk.Menu(self.popup_window)
+        menu_bar = tk.Menu(self.feed_frame)
         dropdown_menu = tk.Menu(menu_bar)
         color_menu = tk.Menu(dropdown_menu)
         placement_menu = tk.Menu(dropdown_menu)
@@ -156,7 +151,7 @@ class RSSticker(tk.Tk):
         for time in cycle_options:
             cycle_time_menu.add_radiobutton(
                 label=time,
-                command=lambda arg0=time: RSSticker.cycle_time(self, arg0)
+                command=lambda arg0=time: RSSticker.set_cycle_time(self, arg0)
             )
         for place in list_placement:
             placement_menu.add_radiobutton(
@@ -187,11 +182,12 @@ class RSSticker(tk.Tk):
             )
         )
 
-        self.master.config(menu=menu_bar)
+        self.config(menu=menu_bar)
 
     def background_color(self, arg0):
         RSSticker.color = arg0
-        self.master.configure(background=arg0)
+        self.configure(background=arg0)
+        self.feed_title.configure(background=arg0)
 
     def set_cycle_time(self, time):
         RSSticker.time = time
@@ -199,13 +195,13 @@ class RSSticker(tk.Tk):
     def window_placement(self, arg0):
         RSSticker.place = arg0
         if arg0 == "top left":
-            self.master.geometry("+0+0")
+            self.geometry("+0+0")
         elif arg0 == "bottom left":
-            self.master.geometry("+0+750")
+            self.geometry("+0+750")
         elif arg0 == "top right":
-            self.master.geometry("+1000+0")
+            self.geometry("+1000+0")
         elif arg0 == "bottom right":
-            self.master.geometry("+1000+750")
+            self.geometry("+1000+750")
 
     def user_font_color(self, color):
         RSSticker.font_color = color
@@ -220,8 +216,8 @@ class RSSticker(tk.Tk):
         font_color = RSSticker.font_color
         size = RSSticker.font_size
         style = RSSticker.font_type
-        self.user_font = font.Font(size=size, family=style)
-        self.popup_window.configure(font=self.user_font, foreground=font_color)
+        self.user_font = font.Font(self, size=size, family=style)
+        self.feed_title.configure(font=self.user_font, foreground=font_color)
 
     def save(self, color, place, time, font_color, font_size, font_type, feeds):
         self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time,
@@ -242,7 +238,5 @@ class RSSticker(tk.Tk):
         popup.mainloop()
 
     def run(self):
-        self.build_window()
-        self.build_menu()
         self.pack()
         self.master.mainloop()
