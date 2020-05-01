@@ -3,20 +3,37 @@ from RSS.model.settings import SettingsModel
 
 
 class RssController:
+
+    """ Class controller.rssfeed.RssController.
+    This class customizes the Tkinter root window. It creates, displays, modifies
+    and receives input from the controller.
+    """
+
     settings_model = None
     rssfeed_model = None
 
     def __init__(self):
+        """Constructor for controller.rssfeed.RssController."""
         self.settings_model = SettingsModel().load_settings()
         self.rssfeed_model = RssModel()
 
     def next_feed(self):
+        """ Function controller.rssfeed.RssController.next_feed.
+        This function returns the feeds parsed in the model, otherwise
+        throwing an exception.
+        """
         try:
             return self.rssfeed_model.parse(self.settings_model.next_url())
         except Exception as e:
             raise e
 
     def save_settings(self, settings):
+        """ Function controller.rssfeed.RssController.save_settings.
+        This saves function saves user choices such as font, background
+        color, window placement, etc into the yaml file.
+        Arguments:
+        settings -- an argument that saves the settings.
+        """
         if len(self.settings_model.settings) == 0:
             self.settings_model.settings = settings
         else:
