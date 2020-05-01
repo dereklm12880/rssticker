@@ -28,14 +28,14 @@ class SettingsModel:
         with open(self.filename) as f:
             self.settings = yaml.load(f, Loader=yaml.FullLoader)
             return self
-    ################################################################################################## ASK LUCAS
+
     def save_settings(self, settings=None):
 
         """ Function model.settings.SettingsModel.save_settings.
-        This function ensures that the path to the configuration file exists
-        and is correct. If not, it throws an exception, otherwise loading it.
+        This function checks a dictionary of configurable values to be converted into the yaml file.
+        If it's not possible, an exception is thrown.
         Arguments:
-        settings -- 
+        settings -- an argument that stores the configurable values.
         """
 
         _settings = settings if settings else self.settings
@@ -45,7 +45,7 @@ class SettingsModel:
 
         with open(self.filename, 'w') as f:
             return yaml.dump(_settings, f)
-    ################################################################################################## ASK LUCAS
+
     def next_url(self):
 
         """ Function model.settings.SettingsModel.next_url.
