@@ -1,5 +1,5 @@
 background_color: powder blue
-cycle_time: 200
+cycle_time: 2
 feeds:
 - https://www.reddit.com/r/worldnews/.rss
 font_color: black

@@ -1,31 +1,26 @@
 # references: https://www.youtube.com/watch?v=HxU_5LvkVrw
 # references: https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html
 # https://scorython.wordpress.com/2016/06/27/multithreading-with-tkinter/
-import tkinter
-import feedparser
-import webbrowser
-import os
 import tkinter as tk
 from tkinter import ttk
 from tkinter import simpledialog
 from tkinter import font
-import multiprocessing.dummy as mp
 import threading
 import queue
-import time
 import webbrowser
 
 
-
-def update_feed(thread_queue):
+def update_feed(thread_queue, feed):
     """
     After result is produced put it in queue
     """
-    result = 0
-    for i in range(1000):
-        # Do something with result
-        result = result + 1
-    thread_queue.put(result)
+    for news in feed.newsreel:
+        thread_queue.put(news)
+
+
+"""
+Think of the RSSticker as extending the Tkinter object.
+"""
 
 
 class RSSticker(tk.Tk):
@@ -51,78 +46,76 @@ class RSSticker(tk.Tk):
         self.ctrl = ctrl
         ####### Do something ######
         super(RSSticker, self).__init__()
-        self.myframe = tk.Frame(self)
-        self.myframe.grid(row=0, column=0, sticky='nswe')
-        self.mylabel = tk.Label(self.myframe)  # Element to be updated
-        self.mylabel.config(text='No feeds given', anchor=tk.CENTER)
-        self.mylabel.grid(row=0, column=0)
-        self.desc = tk.Label(self.myframe)
-        self.desc.config(text='', anchor=tk.CENTER)
-        self.desc.grid(row=1, column=0)
-
+        self.feed_frame = tk.Frame(self)
+        self.feed_frame.grid(row=1, column=0, sticky='nswe')
+        self.feed_title = tk.Label(self.feed_frame)  # Element to be updated
+        self.feed_title.config(text='No feeds given', anchor=tk.CENTER)
+        self.feed_title.grid(row=1, column=0)
+        self.thread_queue = queue.Queue()
         self.next = tk.Button(
-            self.myframe,
+            self.feed_frame,
             text='Next Feed',
-            command=lambda: self.get_feed)
-        self.next.grid(row=3, column=0)
-
+            command=self.next_newsreel)
+        self.next.grid(row=0, column=0)
         self.geometry("{}x{}".format(self.width, self.height))
         self.title(self.app_title)
+        # self.soup = BeautifulSoup('html.parser', parse_only=True)
 
     def run_newsreel(self):
-        """
-        Spawn a new thread for running long loops in background
-        """
-        self.mylabel.config(text='Getting next feed')
+        self.feed_title.config(text='Getting next feed')
         print('Getting Next Feed')
 
-        # self.thread_queue = queue.Queue()
         """ 
         TODO Consider using kwargs and queue threads for updating settings at 
         runtime--TODO TODO: see if that is even possible.
         """
-        self.new_thread = threading.Thread(
-            target=self.get_feed
-            # ,kwargs={
-            #     'thread_queue': self.thread_queue
-            # }
-        )
-        self.new_thread.start()
-        # self.after(10000, self.run_newsreel)
+        try:
+            if self.thread_queue.empty():
+                _next_feed = self.ctrl.next_feed()
+                self.new_thread = threading.Thread(
+                    target=update_feed
+                    , kwargs={
+                        'thread_queue': self.thread_queue,
+                        'feed': _next_feed
+                    }
+                )
+                self.new_thread.start()
+            self.after(100, self.listen_for_result)
+        except Exception as e:
+            print(e)
 
     # def get_feed(self, thread_queue):
     """
     This is a threaded method and should not impact the user experience while 
     cycling through feeds.
     """
-    def get_feed(self):
-        while True:
-            try:
-                _next_feed = self.ctrl.next_feed()
-                # thread_queue.put(_next_feed)
-                for feed in _next_feed.newsreel:
-                    self.desc.config(text=self.format_desc(feed), wraplength=self.width)
-                    self.mylabel.config(text=feed.title, fg="blue", cursor="hand2")
-                    self.mylabel.bind("<Button-1>", lambda e: webbrowser.open_new(feed.link))
-                    """ User setting cycle time """
-                    _t = self.ctrl.settings_model.settings['cycle_time'] \
-                        if 'cycle_time' in self.ctrl.settings_model.settings \
-                        else self._default_cycle_time
-                    # self.refresh()
-                    time.sleep(_t)
-            except Exception as e:
-                print(e)
 
-        # self.refresh(_next_feed.headline, _next_feed.link)
-        # self.master.mainloop()
+    def listen_for_result(self):
+        """
+        Check if there is something in the queue
+        """
+        try:
+            _newsreel = self.thread_queue.get()
+            self._update_view(_newsreel.title, _newsreel.link)
+            self.after(1000 * self._cycle_time(), self.listen_for_result)
+        except queue.Empty:
+            self.run_newsreel()
 
-    def format_desc(self, feed):
-        _desc = feed['summary'] if 'summary' in feed else ''
-        if _desc:
-            """ BEAUTIFY IT """
-            pass
+    def next_newsreel(self):
+        try:
+            _newsreel = self.thread_queue.get()
+            self._update_view(_newsreel.title, _newsreel.link)
+        except queue.Empty as e:
+            self.run_newsreel()
 
-        return _desc
+    def _update_view(self, title, link):
+        self.feed_title.config(text=title, wraplength=self.width, cursor="hand2")
+        self.feed_title.bind("<Button-1>", lambda e: webbrowser.open_new(link))
+
+    def _cycle_time(self):
+        return self.ctrl.settings_model.settings['cycle_time'] \
+            if 'cycle_time' in self.ctrl.settings_model.settings \
+            else self._default_cycle_time
 
     def build_window(self):
         self.popup_window.pack(side="top")
