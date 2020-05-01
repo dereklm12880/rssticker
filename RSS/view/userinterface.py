@@ -1,5 +1,6 @@
 # references: https://www.youtube.com/watch?v=HxU_5LvkVrw
 # references: https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html
+# https://scorython.wordpress.com/2016/06/27/multithreading-with-tkinter/
 import tkinter
 import feedparser
 import webbrowser
@@ -8,43 +9,120 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import simpledialog
 from tkinter import font
-from RSS.controller.rssfeed import RssController
+import multiprocessing.dummy as mp
+import threading
+import queue
+import time
+import webbrowser
 
 
-class RSSticker(tk.Frame):
+
+def update_feed(thread_queue):
+    """
+    After result is produced put it in queue
+    """
+    result = 0
+    for i in range(1000):
+        # Do something with result
+        result = result + 1
+    thread_queue.put(result)
+
+
+class RSSticker(tk.Tk):
     font_color = 'black'
     font_size = 12
     font_type = 'Times'
-    time = 5
+    _default_cycle_time = 5
     place = 'top Left'
     color = 'white'
     feeds = []
     input = ""
     _rss = None
-    headline = ""
+    app_title = "RSS Ticker"
+    _tk = None
+    T = None
+    user_font = None
+    settings = {}
+    width = 500
+    height = 300
+    ctrl = None
 
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.settings = {}
-        self.user_font = None
-        self.T = tk.Text(self, font=("bold", 32,))
-        self.master = master
-        self.popup_window = ttk.Label(master)
-        self.build_window()
-        self.build_menu()
-        self.pack()
+    def __init__(self, ctrl):
+        self.ctrl = ctrl
+        ####### Do something ######
+        super(RSSticker, self).__init__()
+        self.myframe = tk.Frame(self)
+        self.myframe.grid(row=0, column=0, sticky='nswe')
+        self.mylabel = tk.Label(self.myframe)  # Element to be updated
+        self.mylabel.config(text='No feeds given', anchor=tk.CENTER)
+        self.mylabel.grid(row=0, column=0)
+        self.desc = tk.Label(self.myframe)
+        self.desc.config(text='', anchor=tk.CENTER)
+        self.desc.grid(row=1, column=0)
 
-    def start(self):
-        try:
-            self._rss = RssController()
-        except Exception as e:
-            """Let user know"""
-            print(e)
+        self.next = tk.Button(
+            self.myframe,
+            text='Next Feed',
+            command=lambda: self.get_feed)
+        self.next.grid(row=3, column=0)
 
+        self.geometry("{}x{}".format(self.width, self.height))
+        self.title(self.app_title)
+
+    def run_newsreel(self):
+        """
+        Spawn a new thread for running long loops in background
+        """
+        self.mylabel.config(text='Getting next feed')
+        print('Getting Next Feed')
+
+        # self.thread_queue = queue.Queue()
+        """ 
+        TODO Consider using kwargs and queue threads for updating settings at 
+        runtime--TODO TODO: see if that is even possible.
+        """
+        self.new_thread = threading.Thread(
+            target=self.get_feed
+            # ,kwargs={
+            #     'thread_queue': self.thread_queue
+            # }
+        )
+        self.new_thread.start()
+        # self.after(10000, self.run_newsreel)
+
+    # def get_feed(self, thread_queue):
+    """
+    This is a threaded method and should not impact the user experience while 
+    cycling through feeds.
+    """
     def get_feed(self):
-        _next_feed = self._rss.next_feed()
-        self.refresh(_next_feed.headline, _next_feed.link)
-        self.master.mainloop()
+        while True:
+            try:
+                _next_feed = self.ctrl.next_feed()
+                # thread_queue.put(_next_feed)
+                for feed in _next_feed.newsreel:
+                    self.desc.config(text=self.format_desc(feed), wraplength=self.width)
+                    self.mylabel.config(text=feed.title, fg="blue", cursor="hand2")
+                    self.mylabel.bind("<Button-1>", lambda e: webbrowser.open_new(feed.link))
+                    """ User setting cycle time """
+                    _t = self.ctrl.settings_model.settings['cycle_time'] \
+                        if 'cycle_time' in self.ctrl.settings_model.settings \
+                        else self._default_cycle_time
+                    self.refresh()
+                    time.sleep(_t)
+            except Exception as e:
+                print(e)
+
+        # self.refresh(_next_feed.headline, _next_feed.link)
+        # self.master.mainloop()
+
+    def format_desc(self, feed):
+        _desc = feed['summary'] if 'summary' in feed else ''
+        if _desc:
+            """ BEAUTIFY IT """
+            pass
+
+        return _desc
 
     def build_window(self):
         self.popup_window.pack(side="top")
@@ -83,10 +161,15 @@ class RSSticker(tk.Frame):
         for color in list_colors:
             color_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.background_color(self, arg0))
         for time in cycle_options:
-            cycle_time_menu.add_radiobutton(label=time, command=lambda arg0=time: RSSticker.cycle_time(self, arg0))
+            cycle_time_menu.add_radiobutton(
+                label=time,
+                command=lambda arg0=time: RSSticker.cycle_time(self, arg0)
+            )
         for place in list_placement:
-            placement_menu.add_radiobutton(label=place,
-                                           command=lambda arg0=place: RSSticker.window_placement(self, arg0))
+            placement_menu.add_radiobutton(
+                label=place,
+                command=lambda arg0=place: RSSticker.window_placement(self, arg0)
+            )
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Window Placement", menu=placement_menu)
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
@@ -94,23 +177,31 @@ class RSSticker(tk.Frame):
         font_menu.add_cascade(label="font color", menu=font_colors_menu)
         font_menu.add_cascade(label="font type", menu=font_families_menu)
         font_menu.add_cascade(label="font size", menu=font_size_menu)
-        font_menu.add_radiobutton(label="Set font",
-                                  command=lambda: RSSticker.set_font(self))
+        font_menu.add_radiobutton(
+            label="Set font",
+            command=lambda: RSSticker.set_font(self)
+        )
         dropdown_menu.add_cascade(label="Feeds", menu=feed_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
-        dropdown_menu.add_radiobutton(label="Save Settings and Feeds",
-                                      command=lambda: RSSticker.save(self, RSSticker.color,
-                                                                     RSSticker.place, RSSticker.time,
-                                                                     RSSticker.font_size, RSSticker.font_color,
-                                                                     RSSticker.font_type, RSSticker.feeds))
+        dropdown_menu.add_radiobutton(
+            label="Save Settings and Feeds",
+            command=lambda: RSSticker.save(
+                self,
+                RSSticker.color,
+                RSSticker.place, RSSticker.time,
+                RSSticker.font_size, RSSticker.font_color,
+                RSSticker.font_type, RSSticker.feeds
+            )
+        )
+
         self.master.config(menu=menu_bar)
 
     def background_color(self, arg0):
         RSSticker.color = arg0
         self.master.configure(background=arg0)
 
-    def cycle_time(self, arg0):
-        RSSticker.time = arg0
+    def set_cycle_time(self, time):
+        RSSticker.time = time
 
     def window_placement(self, arg0):
         RSSticker.place = arg0
@@ -142,8 +233,7 @@ class RSSticker(tk.Frame):
     def save(self, color, place, time, font_color, font_size, font_type, feeds):
         self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time,
                          'font_color': font_color, 'font_size': font_size, 'font_type': font_type, 'feeds': feeds}
-        _rss = RssController()
-        _rss.save_settings(self.settings)
+        self.ctrl.save_settings(self.settings)
 
     def add_feeds(self):  # pragma: no cover
         self.input = simpledialog.askstring("input", "Please insert a news feed")
@@ -157,3 +247,9 @@ class RSSticker(tk.Frame):
         label = ttk.Label(popup, text=feeds)
         label.pack(side="top", fill="x", pady=10)
         popup.mainloop()
+
+    def run(self):
+        self.build_window()
+        self.build_menu()
+        self.pack()
+        self.master.mainloop()
