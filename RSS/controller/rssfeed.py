@@ -7,7 +7,7 @@ from RSS.model.rssfeed import RssModel
 from RSS.model.settings import SettingsModel
 
 
-class RssController(tk.Tk):
+class RssController():
     settings_model = None
     rssfeed_model = None
     userinterface = None
