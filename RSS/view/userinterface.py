@@ -10,6 +10,10 @@ import threading
 import queue
 import webbrowser
 
+"""
+The Threaded method
+"""
+
 
 def update_feed(thread_queue, feed):
     """
@@ -46,10 +50,9 @@ class RSSticker(tk.Tk):
 
     def __init__(self, ctrl):
         self.ctrl = ctrl
-        ###### Do something ######
         super(RSSticker, self).__init__()
         self.feed_frame = tk.Frame(self)
-        self.feed_frame.grid(row=1, column=0, sticky='nswe')
+        self.feed_frame.grid(row=1, column=0, sticky='we')
         self.feed_title = tk.Label(self.feed_frame)  # Element to be updated
         self.feed_title.config(text='No feeds given', anchor=tk.CENTER)
         self.feed_title.grid(row=1, column=0)
@@ -59,14 +62,15 @@ class RSSticker(tk.Tk):
             text='Next Feed',
             command=self.next_newsreel)
         self.next.grid(row=0, column=0)
+        self.grid_columnconfigure(1, weight=1)
         self.geometry("{}x{}".format(self.width, self.height))
         self.title(self.app_title)
         self.build_menu()
-        # self.soup = BeautifulSoup('html.parser', parse_only=True)
+
+        self.background_color(self.ctrl.settings_model.settings['background_color'])
 
     def run_newsreel(self):
         self.feed_title.config(text='Getting next feed')
-        print('Getting Next Feed')
 
         """ 
         TODO Consider using kwargs and queue threads for updating settings at 
@@ -236,7 +240,3 @@ class RSSticker(tk.Tk):
         label = ttk.Label(popup, text=feeds)
         label.pack(side="top", fill="x", pady=10)
         popup.mainloop()
-
-    def run(self):
-        self.pack()
-        self.master.mainloop()
