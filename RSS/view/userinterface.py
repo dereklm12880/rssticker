@@ -66,7 +66,6 @@ class RSSticker(tk.Tk):
         self.geometry("{}x{}".format(self.width, self.height))
         self.title(self.app_title)
         self.build_menu()
-
         self.background_color(self.ctrl.settings_model.settings['background_color'])
 
     def run_newsreel(self):
