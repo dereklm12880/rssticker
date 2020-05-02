@@ -3,11 +3,19 @@ from unittest.mock import call, patch, PropertyMock
 import webbrowser
 import tkinter as tk
 from tkinter import ttk
+from unittest import mock
+import yaml
 import os, sys
 sys.path.append("../")
 from RSS.view import userinterface as ui
+from RSS.model.style import style_default
+
 
 class TestUI(unittest.TestCase):
+
+
+    def test_style(self):
+        pass
 
     def test_start(self):
         """Checks functionality of .mainloop()"""

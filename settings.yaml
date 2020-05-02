@@ -1,4 +1,4 @@
-background_color: white
+background_color: powder blue
 cycle_time: 30
 feeds:
 - https://www.techrepublic.com/rssfeeds/articles/
@@ -10,4 +10,4 @@ font_size:
 - 12pt
 font_type:
 - Times New Roman
-window placement: top left
+window placement: top right

@@ -7,6 +7,7 @@ import webbrowser
 import os, sys
 import tkinter as tk
 from tkinter import ttk
+from RSS.controller.rssfeed import RssController
 from pathlib import Path
 
 sys.path.append("../../")
@@ -29,8 +30,16 @@ class RSSticker(tk.Frame):
         self.popup_window = ttk.Label(master)
         self.build_window()
         self.build_menu()
+        self.style()
         self.pack()
         self.build_window()
+
+    def style(self):
+        ctr = RssController()
+        if 'cycle_time' in ctr.settings_model.settings:
+            RSSticker.time = ctr.settings_model.settings['cycle_time']
+        else:
+            RSSticker.time = 5 # or whatever default value
 
     def start(self):
         self.master.mainloop()
