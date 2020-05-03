@@ -26,11 +26,11 @@ class TestUI(unittest.TestCase):
     #         ], any_order=True)
 
     def test_show_feeds(self):
-        with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
+        with patch('RSS.view.userinterface.tk.Frame', new_callable=PropertyMock) as mock_window:
             _ctr = RssController()
             root = mock_window.Tk()
+            app = ui(_ctr, master=root)
             feeds = ['afeed?where']
-            app = ui(ctrl=_ctr)
             app.show_feeds(feeds)
             mock_window.assert_has_calls([call().pack(side='top')], any_order=True)
 
