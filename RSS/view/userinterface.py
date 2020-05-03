@@ -101,7 +101,7 @@ class RSSticker(tk.Tk):
     cycling through feeds.
     """
 
-    def listen_for_result(self):
+    def listen_for_result(self):   # pragma: no cover
         """
         Check if there is something in the queue
         """
@@ -112,7 +112,7 @@ class RSSticker(tk.Tk):
         except queue.Empty:
             self.run_newsreel()
 
-    def next_newsreel(self):
+    def next_newsreel(self):  # pragma: no cover
         try:
             _newsreel = self.thread_queue.get()
             self._update_view(_newsreel.title, _newsreel.link)
