@@ -6,9 +6,15 @@ import feedparser
 
 
 class TestRssModel(unittest.TestCase):
+
+    """Test class for RSS.model.rssfeed.RssModel."""
+
     _return_value_null = {}
 
     def setUp(self):
+
+        """Function that sets up the unittest for the RssModel"""
+
         self.rss = RssModel()
         _list = []
         _feed_one = {
@@ -76,6 +82,9 @@ class TestRssModel(unittest.TestCase):
         pass
 
     def test_parse(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.parse.
+        Test to parse feed titles, subtitles, and links.
+        """
         with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             rss = self.rss.parse('http://fakeurl.com')
             assert rss.title == 'BBC'
@@ -86,6 +95,9 @@ class TestRssModel(unittest.TestCase):
             assert rss.newsreel[1]['title'] is not None
 
     def test_get_current(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.get_current.
+        Test to retrieve the current article from the feed.
+        """
         with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             self.rss.parse('http://fakeurl.com')
             value = self.rss.get_current()
@@ -98,6 +110,9 @@ class TestRssModel(unittest.TestCase):
             assert value['link'] == 'https://www.bbc.co.uk/news/uk-51889957'
 
     def test_get_next(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.get_next.
+        Test to retrieve the next article from the feed.
+        """
         with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             self.rss.parse('http://fakeurl.com')
             value = self.rss.get_next()
@@ -115,29 +130,47 @@ class TestRssModel(unittest.TestCase):
             assert value['link'] == 'https://www.bbc.co.uk/news/business-51883440'
 
     def test_parse_fail(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.parse.
+        Test for exception for when feed is not parsed.
+        """
         with patch.object(feedparser, 'parse', return_value={}) as mock_method:
             with self.assertRaises(Exception): self.rss.parse('http://givemeanexception.com')
 
     def test_get_current_no_news_loaded_fail(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.get_current.
+        Test for exception for when no current article is loaded.
+        """
         with patch.object(feedparser, 'parse', return_value={}) as mock_method:
             with self.assertRaises(Exception): self.rss.get_current()
 
     def test_get_next_no_news_loaded_fail(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.get_next.
+        Test for exception for when no next article is loaded.
+        """
         with patch.object(feedparser, 'parse', return_value={}) as mock_method:
             with self.assertRaises(Exception): self.rss.get_next()
 
     def test_get_current_no_newsreel_fail(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.get_current.
+        Test for exception for when newsreel is empty.
+        """
         with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             self.rss.parse('http://fakeurl.com')
             self.rss.newsreel = []
             with self.assertRaises(Exception): self.rss.get_current()
 
     def test_get_next_out_of_bounds_fail(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.get_current.
+        Test for exception for when there is an out of bounds error.
+        """
         with patch.object(feedparser, 'parse', return_value=self._return_value_null) as mock_method:
             self.rss.parse('http://fakeurl.com')
             self.rss._newsreel_index_pos = 42
             with self.assertRaises(Exception): self.rss.get_current()
 
     def test_parse_fail_not_string(self):
+        """ Unit test for RSS.model.rssfeed.RssModel.parse.
+        Test for exception for when what is parsed for the feed is not a string.
+        """
         with patch.object(feedparser, 'parse', return_value={}) as mock_method:
             with self.assertRaises(Exception): self.rss.parse({'http://givemeanexception.com'})

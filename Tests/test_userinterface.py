@@ -7,8 +7,6 @@ from tkinter import ttk
 import os, sys
 from tkinter import font
 import queue
-
-
 sys.path.append("../")
 from RSS.view.userinterface import RSSticker as ui
 from RSS.controller.rssfeed import RssController
@@ -18,6 +16,7 @@ class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
+"""Test class for RSS.view.userinterface.RSSticker."""
 
 class TestUI(unittest.TestCase):
     _dict_newsreel = {'newsreel': [{
@@ -52,17 +51,6 @@ class TestUI(unittest.TestCase):
     def setUp(self):
         self.newsreel = Struct(**self._dict_newsreel)
 
-    # https://github.com/drsjb80/MockingPython/blob/master/mocktk.py
-    # def test_build_window(self):
-    #     """Builds the window on the top left"""
-    #     with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-    #         root = mock_window.Tk()
-    #         app = ui(master=root)
-    #         app.build_window()
-    #         mock_window.assert_has_calls([
-    #             call().pack(side='top'),
-    #         ], any_order=True)
-
     def test_show_feeds(self):
         """Builds the window on the top left"""
         # with patch.object(ui, 'Tk') as mock:
@@ -74,18 +62,6 @@ class TestUI(unittest.TestCase):
                 mock_window.assert_has_calls([
                     call().pack(side='top', fill='x', pady=10),
                 ], any_order=True)
-
-    # def test_refresh(self):
-    #     """Refreshes the cycled headlines and URLs, and opens in a new browser window"""
-    #     with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
-    #         with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
-    #             root = mock_window.Tk()
-    #             app = ui(mock_controller)
-    #         headline = 'Google'
-    #         link = 'www.google.com'
-    #         app.refresh(headline, link)
-    #         mock_window.assert_has_calls(mock_window.configure('Google'),
-    #                                      mock_window.bind("<Button-1", lambda e: webbrowser.open_new('www.google.com')))
 
     def test_cycle_time(self):
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:

@@ -27,6 +27,10 @@ def update_feed(thread_queue, feed):
 Think of the RSSticker as extending the Tkinter object.
 """
 
+  """ Class view.userinterface.RSSticker.
+    This class customizes the Tkinter root window. It creates, displays, modifies
+    and receives input from the controller.
+  """
 
 class RSSticker(tk.Tk):
     font_color = 'black'
@@ -66,10 +70,10 @@ class RSSticker(tk.Tk):
         self.geometry("{}x{}".format(self.width, self.height))
         self.title(self.app_title)
         self._background_color()
+        self._font_color()
         self.build_menu()
         self.feed_frame.pack()
         self.window_placement(self.ctrl.settings_model.settings['window_placement'] or self.place)
-        self.user_font_color(self.ctrl.settings_model.settings['font_color'] or self.font_color)
         self.user_font_size(self.ctrl.settings_model.settings['font_size'] or self.font_size)
         self.user_font_style(self.ctrl.settings_model.settings['font_type'] or self.font_type)
 
@@ -128,17 +132,15 @@ class RSSticker(tk.Tk):
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self._default_cycle_time
 
-<<<<<<< HEAD
     def _background_color(self):
         return self.ctrl.settings_model.settings['background_color'] \
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self.color
 
 
+
     def build_menu(self):
-=======
-    def build_menu(self):  
->>>>>>> 0e07203bc8ce525bf453698b00cbda18ce589132
+      
         menu_bar = tk.Menu(self.feed_frame)
         dropdown_menu = tk.Menu(menu_bar)
         color_menu = tk.Menu(dropdown_menu)
@@ -206,6 +208,11 @@ class RSSticker(tk.Tk):
         RSSticker.color = arg0
         self.configure(background=arg0)
         self.feed_title.configure(background=arg0)
+        
+     def _font_color(self):
+        return self.ctrl.settings_model.settings['font_color'] \
+            if 'font_color' in self.ctrl.settings_model.settings \
+            else self.font_color
 
     def set_cycle_time(self, time):
         RSSticker.time = time
@@ -253,4 +260,4 @@ class RSSticker(tk.Tk):
         popup.wm_title("Feeds")
         label = ttk.Label(popup, text=feeds)
         label.pack(side="top", fill="x", pady=10)
-        popup.mainloop()
+        popup.mainloop()  
