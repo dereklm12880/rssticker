@@ -34,7 +34,7 @@ class RSSticker(tk.Tk):
     font_type = 'Times'
     _default_cycle_time = 5
     place = 'top Left'
-    color = 'white'
+    color = None
     feeds = ["https://www.reddit.com/r/worldnews/.rss"]
     time = 5
     input = ""
@@ -65,8 +65,8 @@ class RSSticker(tk.Tk):
         self.grid_columnconfigure(1, weight=1)
         self.geometry("{}x{}".format(self.width, self.height))
         self.title(self.app_title)
+        self._background_color()
         self.build_menu()
-        self.background_color(self.ctrl.settings_model.settings['background_color'])
         self.feed_frame.pack()
 
     def run_newsreel(self):
@@ -123,6 +123,12 @@ class RSSticker(tk.Tk):
         return self.ctrl.settings_model.settings['cycle_time'] \
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self._default_cycle_time
+
+    def _background_color(self):
+        return self.ctrl.settings_model.settings['background_color'] \
+            if 'cycle_time' in self.ctrl.settings_model.settings \
+            else self.color
+
 
     def build_menu(self):
         menu_bar = tk.Menu(self.feed_frame)
