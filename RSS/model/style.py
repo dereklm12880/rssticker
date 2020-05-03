@@ -42,20 +42,6 @@ class style_default(object):
 
         self.popup_window.geometry("200×100")
 
-    # def save(self, color, place, time):
-    #     self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time}
-    #     default = self.default
-    #     # _rss = RssController()
-    #     # _rss.save_settings(self.settings)
-    #
-    #     _rss = RssController()
-    #     for item, value in self.settings.items():
-    #         self.settings[item]
-    #         if self.settings[item] is None:
-    #             self.settings[item] = self.default[self.i]
-    #         self.i += 1
-    #     _rss.save_settings(self.settings)
-
 
 if __name__ == "__main__":
     # style_default().check_dump(style_default().check_style())

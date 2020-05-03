@@ -23,7 +23,6 @@ class RSSticker(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
-        self.default = {'background_color': '#000000', 'window placement': 'top left', 'cycle_time': 5}
         self.settings = {}
         self.T = tk.Text(self, font=("bold", 32,))
         self.master = master
@@ -33,6 +32,8 @@ class RSSticker(tk.Frame):
         # self.style()
         self.pack()
         self.build_window()
+        self.default = ['white', 'top left', 5]
+        self.i = 0
 
     def start(self):
         self.master.mainloop()
@@ -140,9 +141,6 @@ class RSSticker(tk.Frame):
     def save(self, color, place, time):
         _rss = RssController()
         self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time}
-        self.default = ['white', 'top left', 5]
-
-        self.i = 0
         for item, value in self.settings.items():
             self.settings[item]
             if self.settings[item] is None:
@@ -156,4 +154,3 @@ if __name__ == "__main__":
     root.title("RSSticker")
     app = RSSticker(master=root)
     app.mainloop()
-    # style_default().check_dump(style_default().check_style())
