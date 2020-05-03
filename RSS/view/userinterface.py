@@ -67,7 +67,11 @@ class RSSticker(tk.Tk):
         self.title(self.app_title)
         self.build_menu()
 
-        self.background_color(self.ctrl.settings_model.settings['background_color'])
+        self.background_color(self.ctrl.settings_model.settings['background_color'] or self.color)
+        self.window_placement(self.ctrl.settings_model.settings['window_placement'] or self.place)
+        self.user_font_color(self.ctrl.settings_model.settings['font_color'] or self.font_color)
+        self.user_font_size(self.ctrl.settings_model.settings['font_size'] or self.font_size)
+        self.user_font_style(self.ctrl.settings_model.settings['font_type'] or self.font_type)
 
     def run_newsreel(self):
         self.feed_title.config(text='Getting next feed')
