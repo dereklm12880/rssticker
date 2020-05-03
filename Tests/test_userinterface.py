@@ -6,13 +6,51 @@ import tkinter as tk
 from tkinter import ttk
 import os, sys
 from tkinter import font
+import queue
+
 
 sys.path.append("../")
 from RSS.view.userinterface import RSSticker as ui
 from RSS.controller.rssfeed import RssController
 
 
+class Struct:
+    def __init__(self, **entries):
+        self.__dict__.update(entries)
+
+
 class TestUI(unittest.TestCase):
+    _dict_newsreel = {'newsreel': [{
+        'title': 'Coronavirus: UK deaths double in 24 hours',
+        'title_detail': {
+            'type': 'text/plain',
+            'language': None,
+            'base': 'http://feeds.bbci.co.uk/news/rss.xml',
+            'value': 'Coronavirus: UK deaths double in 24 hours'
+        },
+        'summary': 'Ten more people have died after testing positive for the virus, NHS England says.',
+        'summary_detail': {
+            'type': 'text/html',
+            'language': None,
+            'base': 'http://feeds.bbci.co.uk/news/rss.xml',
+            'value': 'Ten more people have died after testing positive for the virus, NHS England says.'
+        },
+        'links': [
+            {
+                'rel': 'alternate',
+                'type': 'text/html',
+                'href': 'https://www.bbc.co.uk/news/uk-51889957'
+            }
+        ],
+        'link': 'https://www.bbc.co.uk/news/uk-51889957',
+        'id': 'https://www.bbc.co.uk/news/uk-51889957',
+        'guidislink': False,
+        'published': 'Sat, 14 Mar 2020 22:51:15 GMT',
+        'published_parsed': ''
+    }]}
+
+    def setUp(self):
+        self.newsreel = Struct(**self._dict_newsreel)
 
     # https://github.com/drsjb80/MockingPython/blob/master/mocktk.py
     # def test_build_window(self):
@@ -132,3 +170,18 @@ class TestUI(unittest.TestCase):
                     mock_window.assert_has_calls(root.geometry("+1000+0"))
                 elif place == "bottom right":
                     mock_window.assert_has_calls(root.geometry("+1000+750"))
+
+    def listen_for_result_fail(self):
+        with patch.object(RssController, 'next_feed', return_value=self.newsreel) as mock_window:
+            with patch.object(ui, 'config', return_value=None) as mock_ctrl:
+                with self.assertRaises(queue.Empty):
+                    _ui = ui(RssController())
+                    _ui.thread_queue.get()
+                    _ui.listen_for_result()
+
+    def test_run_newsreel(self):
+        with patch.object(RssController, 'next_feed', return_value=self.newsreel) as mock_window:
+            with patch.object(ui, 'config', return_value=None) as mock_ctrl:
+                _ui = ui(RssController())
+                _ui.run_newsreel()
+                assert _ui.thread_queue.not_empty

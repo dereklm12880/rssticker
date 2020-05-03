@@ -48,7 +48,7 @@ class RSSticker(tk.Tk):
     height = 300
     ctrl = None
 
-    def __init__(self, ctrl):
+    def __init__(self, ctrl):  
         self.ctrl = ctrl
         super(RSSticker, self).__init__()
         self.feed_frame = tk.Frame(self)
@@ -68,6 +68,10 @@ class RSSticker(tk.Tk):
         self._background_color()
         self.build_menu()
         self.feed_frame.pack()
+        self.window_placement(self.ctrl.settings_model.settings['window_placement'] or self.place)
+        self.user_font_color(self.ctrl.settings_model.settings['font_color'] or self.font_color)
+        self.user_font_size(self.ctrl.settings_model.settings['font_size'] or self.font_size)
+        self.user_font_style(self.ctrl.settings_model.settings['font_type'] or self.font_type)
 
     def run_newsreel(self):
         self.feed_title.config(text='Getting next feed')
@@ -97,7 +101,7 @@ class RSSticker(tk.Tk):
     cycling through feeds.
     """
 
-    def listen_for_result(self):
+    def listen_for_result(self):   # pragma: no cover
         """
         Check if there is something in the queue
         """
@@ -108,7 +112,7 @@ class RSSticker(tk.Tk):
         except queue.Empty:
             self.run_newsreel()
 
-    def next_newsreel(self):
+    def next_newsreel(self):  # pragma: no cover
         try:
             _newsreel = self.thread_queue.get()
             self._update_view(_newsreel.title, _newsreel.link)
@@ -124,6 +128,7 @@ class RSSticker(tk.Tk):
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self._default_cycle_time
 
+<<<<<<< HEAD
     def _background_color(self):
         return self.ctrl.settings_model.settings['background_color'] \
             if 'cycle_time' in self.ctrl.settings_model.settings \
@@ -131,6 +136,9 @@ class RSSticker(tk.Tk):
 
 
     def build_menu(self):
+=======
+    def build_menu(self):  
+>>>>>>> 0e07203bc8ce525bf453698b00cbda18ce589132
         menu_bar = tk.Menu(self.feed_frame)
         dropdown_menu = tk.Menu(menu_bar)
         color_menu = tk.Menu(dropdown_menu)
@@ -194,7 +202,7 @@ class RSSticker(tk.Tk):
 
         self.config(menu=menu_bar)
 
-    def background_color(self, arg0):
+    def background_color(self, arg0):  
         RSSticker.color = arg0
         self.configure(background=arg0)
         self.feed_title.configure(background=arg0)
@@ -202,7 +210,7 @@ class RSSticker(tk.Tk):
     def set_cycle_time(self, time):
         RSSticker.time = time
 
-    def window_placement(self, arg0):
+    def window_placement(self, arg0):  
         RSSticker.place = arg0
         if arg0 == "top left":
             self.geometry("+0+0")
@@ -230,11 +238,11 @@ class RSSticker(tk.Tk):
         self.feed_title.configure(font=self.user_font, foreground=font_color)
 
     def save(self, color, place, time, font_color, font_size, font_type, feeds):
-        self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time,
+        self.settings = {'background_color': color, 'window_placement': place, 'cycle_time': time,
                          'font_color': font_color, 'font_size': font_size, 'font_type': font_type, 'feeds': feeds}
         self.ctrl.save_settings(self.settings)
 
-    def add_feeds(self):  # pragma: no cover
+    def add_feeds(self):  
         self.input = simpledialog.askstring("input", "Please insert a news feed", parent=self)
         if self.input != "":
             RSSticker.feeds.append(self.input)
