@@ -66,8 +66,8 @@ class RSSticker(tk.Tk):
         self.geometry("{}x{}".format(self.width, self.height))
         self.title(self.app_title)
         self.build_menu()
-
-        self.background_color(self.ctrl.settings_model.settings['background_color'] or self.color)
+        self.background_color(self.ctrl.settings_model.settings['background_color'])
+        self.feed_frame.pack()
         self.window_placement(self.ctrl.settings_model.settings['window_placement'] or self.place)
         self.user_font_color(self.ctrl.settings_model.settings['font_color'] or self.font_color)
         self.user_font_size(self.ctrl.settings_model.settings['font_size'] or self.font_size)
