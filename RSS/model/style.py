@@ -1,5 +1,7 @@
 from pathlib import Path
 import yaml
+# sys.path.append("../../")
+from RSS.controller.rssfeed import RssController
 
 
 class style_default(object):
@@ -7,6 +9,7 @@ class style_default(object):
     default_settings = ['white', 30,
                         'https://www.geeksforgeeks.org/python-check-if-all-elements-in-list-follow-a-condition/',
                         '#000000', '12pt', 'Times New Roman', 'top left']
+    default = ['#000000', 'top left', 5]
 
     i = 0
 
@@ -39,6 +42,21 @@ class style_default(object):
 
         self.popup_window.geometry("200×100")
 
+    # def save(self, color, place, time):
+    #     self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time}
+    #     default = self.default
+    #     # _rss = RssController()
+    #     # _rss.save_settings(self.settings)
+    #
+    #     _rss = RssController()
+    #     for item, value in self.settings.items():
+    #         self.settings[item]
+    #         if self.settings[item] is None:
+    #             self.settings[item] = self.default[self.i]
+    #         self.i += 1
+    #     _rss.save_settings(self.settings)
+
 
 if __name__ == "__main__":
-    style_default().check_dump(style_default().check_style())
+    # style_default().check_dump(style_default().check_style())
+    style_default().save('white', 'top left', 5)

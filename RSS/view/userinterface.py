@@ -7,7 +7,6 @@ import webbrowser
 import os, sys
 import tkinter as tk
 from tkinter import ttk
-from RSS.controller.rssfeed import RssController
 from pathlib import Path
 
 sys.path.append("../../")
@@ -24,28 +23,55 @@ class RSSticker(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
+        self.default = {'background_color': '#000000', 'window placement': 'top left', 'cycle_time': 5}
         self.settings = {}
         self.T = tk.Text(self, font=("bold", 32,))
         self.master = master
         self.popup_window = ttk.Label(master)
         self.build_window()
         self.build_menu()
-        self.style()
+        # self.style()
         self.pack()
         self.build_window()
 
-    def style(self):
-        ctr = RssController()
-        if 'cycle_time' in ctr.settings_model.settings:
-            RSSticker.time = ctr.settings_model.settings['cycle_time']
-        else:
-            RSSticker.time = 5 # or whatever default value
-
     def start(self):
         self.master.mainloop()
 
     def start(self):
         self.master.mainloop()
+
+    # def style(self):
+    #
+    #     ctr = RssController()
+    #     # if 'background_color' in ctr.settings_model.settings:
+    #     #     RSSticker.color = ctr.settings_model.settings['background_color']
+    #     # else:
+    #     #     RSSticker.color = 'white'  # or whatever default value
+    #     #
+    #     if 'cycle_time' in ctr.settings_model.settings:
+    #         RSSticker.time = ctr.settings_model.settings['cycle_time']
+    #     else:
+    #         RSSticker.time = 5  # or whatever default value
+    #     #
+        # if 'font_color' in ctr.settings_model.settings:
+        #     RSSticker.font_color = ctr.settings_model.settings['font_color']
+        # else:
+        #     RSSticker.color = '#000000'  # or whatever default value
+        #
+        # if 'font_size' in ctr.settings_model.settings:
+        #     RSSticker.font_size = ctr.settings_model.settings['font_size']
+        # else:
+        #     RSSticker.font_size = '12pt'  # or whatever default value
+        #
+        # if 'font_type' in ctr.settings_model.settings:
+        #     RSSticker.font_type = ctr.settings_model.settings['font_type']
+        # else:
+        #     RSSticker.font_type = 'Times New Roman'  # or whatever default value
+        #
+        # if 'window placement' in ctr.settings_model.settings:
+        #     RSSticker.window_placement = ctr.settings_model.settings['window placement']
+        # else:
+        #     RSSticker.window_placement = 'top left'  # or whatever default value
 
     def build_window(self):
         self.popup_window.pack(side="top")
@@ -112,10 +138,17 @@ class RSSticker(tk.Frame):
         pass
 
     def save(self, color, place, time):
-        self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time}
         _rss = RssController()
-        _rss.save_settings(self.settings)
+        self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time}
+        self.default = ['white', 'top left', 5]
 
+        self.i = 0
+        for item, value in self.settings.items():
+            self.settings[item]
+            if self.settings[item] is None:
+                self.settings[item] = self.default[self.i]
+            self.i += 1
+        _rss.save_settings(self.settings)
 
 
 if __name__ == "__main__":
@@ -123,9 +156,4 @@ if __name__ == "__main__":
     root.title("RSSticker")
     app = RSSticker(master=root)
     app.mainloop()
-    style_default().check_dump(style_default().check_style())
-
-
-
-
-
+    # style_default().check_dump(style_default().check_style())
