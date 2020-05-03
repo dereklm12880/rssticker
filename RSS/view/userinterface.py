@@ -1,6 +1,7 @@
 # references: https://www.youtube.com/watch?v=HxU_5LvkVrw
 # references: https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html
 # https://scorython.wordpress.com/2016/06/27/multithreading-with-tkinter/
+
 import tkinter
 import tkinter as tk
 from tkinter import ttk
@@ -10,29 +11,26 @@ import threading
 import queue
 import webbrowser
 
-"""
-The Threaded method
-"""
-
-
 def update_feed(thread_queue, feed):
+
+    """ Function view.userinterface.update_feed.
+    This function updates the feed with the threaded queue.
+    Arguments:
+    thread_queue -- an argument for the threaded feeds in the news reel.
+    feed -- an argument for the feeds.
     """
-    After result is produced put it in queue
-    """
+    
     for news in feed.newsreel:
         thread_queue.put(news)
-
-
-"""
-Think of the RSSticker as extending the Tkinter object.
-"""
-
-""" Class view.userinterface.RSSticker.
-    This class customizes the Tkinter root window. It creates, displays, modifies
-    and receives input from the controller.
-  """
+    # Think of the RSSticker as extending the Tkinter object.
 
 class RSSticker(tk.Tk):
+
+    """ Class view.userinterface.RSSticker.
+    This class customizes the Tkinter root window. It creates, displays, modifies
+    and receives input from the controller.
+    """
+
     font_color = 'black'
     font_size = 12
     font_type = 'Times'
@@ -52,7 +50,10 @@ class RSSticker(tk.Tk):
     height = 300
     ctrl = None
 
-    def __init__(self, ctrl):  
+    def __init__(self, ctrl): 
+
+         """Constructor for view.userinterface.RSSticker."""
+
         self.ctrl = ctrl
         super(RSSticker, self).__init__()
         self.feed_frame = tk.Frame(self)
@@ -78,12 +79,19 @@ class RSSticker(tk.Tk):
         self.user_font_style(self.ctrl.settings_model.settings['font_type'] or self.font_type)
 
     def run_newsreel(self):
+
+        """ Function view.userinterface.RSSticker.run_newsreel.
+        This function uses threading to get the get the next feeds.
+        """
+
         self.feed_title.config(text='Getting next feed')
 
         """ 
-        TODO Consider using kwargs and queue threads for updating settings at 
-        runtime--TODO TODO: see if that is even possible.
+        TODO: Consider using kwargs and queue threads for updating settings at 
+        runtime-
+        TODO: see if that is even possible.
         """
+
         try:
             if self.thread_queue.empty():
                 _next_feed = self.ctrl.next_feed()
@@ -106,9 +114,12 @@ class RSSticker(tk.Tk):
     """
 
     def listen_for_result(self):   # pragma: no cover
+
+        """ Function view.userinterface.RSSticker.listen_for_result.
+        This function checks to see if there's something in the queue of
+        _newsreel and runs it once the queue is empty.
         """
-        Check if there is something in the queue
-        """
+
         try:
             _newsreel = self.thread_queue.get()
             self._update_view(_newsreel.title, _newsreel.link)
@@ -117,6 +128,11 @@ class RSSticker(tk.Tk):
             self.run_newsreel()
 
     def next_newsreel(self):  # pragma: no cover
+
+        """ Function view.userinterface.RSSticker.next_newsreel.
+        This function gets the next _newsreel and runs it once the queue is empty.
+        """
+
         try:
             _newsreel = self.thread_queue.get()
             self._update_view(_newsreel.title, _newsreel.link)
@@ -124,23 +140,49 @@ class RSSticker(tk.Tk):
             self.run_newsreel()
 
     def _update_view(self, title, link):
+
+        """ Function view.userinterface.RSSticker._update_view.
+        This function updates what the window with the headline and allows
+        you to open up the link on a new browser window.
+        Arguments:
+        title -- the headline that appears on the window.
+        link -- the clickable link that opens the article in a webbrowser.
+        """
+
         self.feed_title.config(text=title, wraplength=self.width, cursor="hand2")
         self.feed_title.bind("<Button-1>", lambda e: webbrowser.open_new(link))
 
     def _cycle_time(self):
+
+        """ Function view.userinterface.RSSticker._cycle_time.
+        This function returns the cycle time determined in the settings model,
+        or the default cycle time.
+        """
+
         return self.ctrl.settings_model.settings['cycle_time'] \
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self._default_cycle_time
 
     def _background_color(self):
+
+        """ Function view.userinterface.RSSticker._background_color.
+        This function returns the background color determined in the settings model,
+        or the default bacground color.
+        """
+
         return self.ctrl.settings_model.settings['background_color'] \
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self.color
 
-
-
     def build_menu(self):
-      
+
+        """ Function view.userinterface.RSSticker.build_menu.
+        This function adds a drop down menu for the Tkinter root window. When
+        the application is launched, the menu appears inside the window (Windows OS)
+        or on the menu bar (MacOS). It also assigns a lambda function to 
+        each of the dropdown menu's options.
+        """
+
         menu_bar = tk.Menu(self.feed_frame)
         dropdown_menu = tk.Menu(menu_bar)
         color_menu = tk.Menu(dropdown_menu)
@@ -205,19 +247,46 @@ class RSSticker(tk.Tk):
         self.config(menu=menu_bar)
 
     def background_color(self, arg0):  
+
+        """ Function view.userinterface.RSSticker.background_color.
+        This function serves to configure the background of this window.
+        Arguments:
+        arg0 -- an argument the sets the color.
+        """
+
         RSSticker.color = arg0
         self.configure(background=arg0)
         self.feed_title.configure(background=arg0)
         
     def _font_color(self):
+
+        """ Function view.userinterface.RSSticker._font_color.
+        This function returns the font color determined in the settings model,
+        or the default font color.
+        """
+
         return self.ctrl.settings_model.settings['font_color'] \
             if 'font_color' in self.ctrl.settings_model.settings \
             else self.font_color
 
     def set_cycle_time(self, time):
+
+        """ Function view.userinterface.RSSticker.set_cycle_time.
+        This function serves to configure the cycle time for the headlines to refresh.
+        Arguments:
+        time -- an argument the sets the cycle time.
+        """
+
         RSSticker.time = time
 
     def window_placement(self, arg0):  
+
+        """ Function view.userinterface.RSSticker.window_placement.
+        This function serves to configure the placement of this window on the user's screen.
+        Arguments:
+        arg0 -- an argument the sets the placement of the window.
+        """
+
         RSSticker.place = arg0
         if arg0 == "top left":
             self.geometry("+0+0")
@@ -229,15 +298,45 @@ class RSSticker(tk.Tk):
             self.geometry("+1000+750")
 
     def user_font_color(self, color):
+
+        """ Function view.userinterface.RSSticker.user_font_color.
+        This function serves to configure the font color of the text
+        that is passed in this window.
+        Arguments:
+        color -- an argument the sets the color of the font.
+        """
+
         RSSticker.font_color = color
 
     def user_font_style(self, style):
+
+        """ Function view.userinterface.RSSticker.user_font_style.
+        This function serves to configure the font style of the text
+        that is passed in this window.
+        Arguments:
+        style -- an argument the sets the style of the font.
+        """
+
         RSSticker.font_type = style
 
     def user_font_size(self, size):
+
+        """ Function view.userinterface.RSSticker.user_font_size.
+        This function serves to configure the size of the text
+        that is passed in this window.
+        Arguments:
+        size - an argument that sets the font size.
+        """
+
         RSSticker.font_size = size
 
     def set_font(self):
+
+        """ Function view.userinterface.RSSticker.set_font.
+        This function serves to configure the size of the font of
+        the text that is passed in this window.
+        """
+
         font_color = RSSticker.font_color
         size = RSSticker.font_size
         style = RSSticker.font_type
@@ -245,16 +344,43 @@ class RSSticker(tk.Tk):
         self.feed_title.configure(font=self.user_font, foreground=font_color)
 
     def save(self, color, place, time, font_color, font_size, font_type, feeds):
+
+        """ Function view.userinterface.RSSticker.save.
+        This function serves to save the configurations of the window
+        once set.
+        Arguments:
+        color -- argument for setting the background color.
+        place -- argument for setting the window placement.
+        time -- argument for the setting cycle time.
+        font_color -- argument for setting the font color.
+        font_size -- argument for setting the font size.
+        font_type -- argument for setting the font type.
+        feeds -- argument for setting the feeds.
+        """
+    
         self.settings = {'background_color': color, 'window_placement': place, 'cycle_time': time,
                          'font_color': font_color, 'font_size': font_size, 'font_type': font_type, 'feeds': feeds}
         self.ctrl.save_settings(self.settings)
 
     def add_feeds(self):  
+
+        """ Function view.userinterface.RSSticker.add_feeds.
+        This function prompts the user to insert a news feed and if it's not an empyt string, 
+        the feed is appended.
+        """
+
         self.input = simpledialog.askstring("input", "Please insert a news feed", parent=self)
         if self.input != "":
             RSSticker.feeds.append(self.input)
 
     def show_feeds(self, feeds):
+        
+        """ Function view.userinterface.RSSticker.show_feeds.
+        This function shows the user the feeds they have added to the application.
+        Arguments:
+        feeds -- the feeds that are being displayed in the label
+        """
+
         popup = tk.Tk()
         popup.geometry("200x50")
         popup.wm_title("Feeds")
