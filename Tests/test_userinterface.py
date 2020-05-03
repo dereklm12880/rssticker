@@ -16,9 +16,10 @@ class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
-"""Test class for RSS.view.userinterface.RSSticker."""
-
 class TestUI(unittest.TestCase):
+
+    """Test class for RSS.view.userinterface.RSSticker."""
+
     _dict_newsreel = {'newsreel': [{
         'title': 'Coronavirus: UK deaths double in 24 hours',
         'title_detail': {
@@ -49,10 +50,18 @@ class TestUI(unittest.TestCase):
     }]}
 
     def setUp(self):
+
+        """ Initial set up of the the _dict_newsreel dictionary."""
+
         self.newsreel = Struct(**self._dict_newsreel)
 
     def test_show_feeds(self):
-        """Builds the window on the top left"""
+
+        """ Unit test for RSS.view.userinterface.RSSticker.show_feeds.
+        Test to ensure that the function shows the user the feeds they have
+        added to the application.
+        """
+
         # with patch.object(ui, 'Tk') as mock:
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
@@ -64,6 +73,12 @@ class TestUI(unittest.TestCase):
                 ], any_order=True)
 
     def test_cycle_time(self):
+
+        """ Unit test for RSS.view.userinterface.RSSticker._cycle_time.
+        Test to ensure that the window shows headlines are cycled through at least
+        every 5 seconds.
+        """
+
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -72,6 +87,11 @@ class TestUI(unittest.TestCase):
             self.assertIsNotNone(app.time)
 
     def test_user_font_color(self):
+        
+        """ Unit test for RSS.view.userinterface.RSSticker._font_color.
+        Test to ensure that the window shows headlines in the font color chosen.
+        """
+
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -80,6 +100,11 @@ class TestUI(unittest.TestCase):
             self.assertIsNotNone(app.time)
 
     def test_user_font_style(self):
+
+        """ Unit test for RSS.view.userinterface.RSSticker._font_style.
+        Test to ensure that the window shows headlines in the font style chosen.
+        """
+
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -88,6 +113,11 @@ class TestUI(unittest.TestCase):
             self.assertIsNotNone(app.time)
 
     def test_user_font_size(self):
+
+        """ Unit test for RSS.view.userinterface.RSSticker._font_size.
+        Test to ensure that the window shows headlines in the font size chosen.
+        """
+
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -96,6 +126,12 @@ class TestUI(unittest.TestCase):
             self.assertIsNotNone(app.time)
 
     def test_set_font(self):
+
+        """ Unit test for RSS.view.userinterface.RSSticker label font style.
+        Test to ensure that the font if set and that there is a color,
+        style, and size.
+        """
+
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 with patch('tkinter.font.Font', new_callable=PropertyMock) as mock_font:
@@ -108,6 +144,11 @@ class TestUI(unittest.TestCase):
                     mock_window.assert_has_calls(mock_window.configure(font=app.user_font, foreground=color))
 
     def test_save(self):
+
+        """ Unit test for view.userinterface.RSSticker.save.
+        Test to ensure that the configurations of the window are saved.
+        """
+
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -122,6 +163,11 @@ class TestUI(unittest.TestCase):
             self.assertIsNotNone(app.settings)
 
     def test_backgroundcolor(self):
+
+        """ Unit test for RSS.view.userinterface.RSSticker.background_color.
+        Test to ensure that the window backgrond color can be configured.
+        """
+
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -131,6 +177,12 @@ class TestUI(unittest.TestCase):
             mock_window.assert_has_calls(mock_window.configure(background=arg0))
 
     def test_window_placment(self):
+
+        """ Unit test for RSS.view.userinterface.RSSticker.window_placement.
+        Test to ensure that the window can be placed on the top left and right, 
+        and bottom left and right.
+        """
+
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -148,6 +200,9 @@ class TestUI(unittest.TestCase):
                     mock_window.assert_has_calls(root.geometry("+1000+750"))
 
     def listen_for_result_fail(self):
+
+        """ Unit test to ensure that the the controller is trying to get the news reel. """
+
         with patch.object(RssController, 'next_feed', return_value=self.newsreel) as mock_window:
             with patch.object(ui, 'config', return_value=None) as mock_ctrl:
                 with self.assertRaises(queue.Empty):
@@ -156,6 +211,11 @@ class TestUI(unittest.TestCase):
                     _ui.listen_for_result()
 
     def test_run_newsreel(self):
+
+        """ Unit test for RSS.view.userinterface.RSSticker.run_newsreel.
+        Test to ensure that the newsreel is not empty so that the function can be run.
+        """
+
         with patch.object(RssController, 'next_feed', return_value=self.newsreel) as mock_window:
             with patch.object(ui, 'config', return_value=None) as mock_ctrl:
                 _ui = ui(RssController())
