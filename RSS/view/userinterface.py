@@ -66,10 +66,10 @@ class RSSticker(tk.Tk):
         self.geometry("{}x{}".format(self.width, self.height))
         self.title(self.app_title)
         self._background_color()
-        self._font_color()
         self.build_menu()
         self.feed_frame.pack()
         self.window_placement(self.ctrl.settings_model.settings['window_placement'] or self.place)
+        self.user_font_color(self.ctrl.settings_model.settings['font_color'] or self.font_color)
         self.user_font_size(self.ctrl.settings_model.settings['font_size'] or self.font_size)
         self.user_font_style(self.ctrl.settings_model.settings['font_type'] or self.font_type)
 
@@ -128,18 +128,17 @@ class RSSticker(tk.Tk):
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self._default_cycle_time
 
+<<<<<<< HEAD
     def _background_color(self):
         return self.ctrl.settings_model.settings['background_color'] \
-            if 'background_color' in self.ctrl.settings_model.settings \
+            if 'cycle_time' in self.ctrl.settings_model.settings \
             else self.color
-
-    def _font_color(self):
-        return self.ctrl.settings_model.settings['font_color'] \
-            if 'font_color' in self.ctrl.settings_model.settings \
-            else self.font_color
 
 
     def build_menu(self):
+=======
+    def build_menu(self):  
+>>>>>>> 0e07203bc8ce525bf453698b00cbda18ce589132
         menu_bar = tk.Menu(self.feed_frame)
         dropdown_menu = tk.Menu(menu_bar)
         color_menu = tk.Menu(dropdown_menu)
