@@ -88,6 +88,10 @@ class TestUI(unittest.TestCase):
     #                                      mock_window.bind("<Button-1", lambda e: webbrowser.open_new('www.google.com')))
 
     def test_cycle_time(self):
+        """ Unit test for RSS.view.userinterface.RSSticker.cycle_time.
+        Test to ensure that the window shows headlines as they are cycled
+        through instead of showing only one headline.
+        """
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -146,6 +150,9 @@ class TestUI(unittest.TestCase):
             self.assertIsNotNone(app.settings)
 
     def test_backgroundcolor(self):
+        """ Unit test for RSS.view.userinterface.RSSticker.background_color.
+        Test to ensure that the window backgrond color can be configured.
+        """
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)
@@ -155,6 +162,10 @@ class TestUI(unittest.TestCase):
             mock_window.assert_has_calls(mock_window.configure(background=arg0))
 
     def test_window_placment(self):
+        """ Unit test for RSS.view.userinterface.RSSticker.window_placement.
+        Test to ensure that the window can be placed on the top left and right, 
+        and bottom left and right.
+        """
         with patch('RSS.view.userinterface.ttk.Label', new_callable=PropertyMock) as mock_window:
             with patch('RSS.controller.rssfeed', new_callable=PropertyMock) as mock_controller:
                 app = ui(mock_controller)

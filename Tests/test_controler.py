@@ -7,7 +7,12 @@ from RSS.model.rssfeed import RssModel
 from RSS.model.settings import SettingsModel
 
 
+#IS THIS REDUNDANT??? TEST_RSSFEED AND OR TEST_SETTINGS
+
 class TestRssModel(unittest.TestCase):
+
+    """Test class for RSS.model.settings.SettingsModel."""
+
     _return_value = {"feeds": ["http://fakefeed.com", "http://anotherfakefeed.com"]}
     _mock_open = mock.mock_open(read_data='')
     _dummy_yaml_file_settings_no_feeds = {'color': ['#000']}
@@ -15,6 +20,9 @@ class TestRssModel(unittest.TestCase):
     _dummy_yaml_file_settings_with_feeds_and_others = {'color': ['#000'], 'feeds': ['http://preexisting.com']}
 
     def setUp(self):
+
+        """Function that sets up the unittest for the RssModel"""
+
         self.rss = RssModel()
         self.view = Mock()
         self.ctr = RssController()

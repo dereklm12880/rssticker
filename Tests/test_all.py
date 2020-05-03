@@ -10,6 +10,9 @@ from RSS.model.rssfeed import RssModel
 import feedparser
 
 class TestAll(unittest.TestCase):
+
+    """A collection of all the tests in the Tests file"""
+
     _return_value = {"feeds": ["http://fakefeed.com", "http://anotherfakefeed.com"]}
     _mock_open = mock.mock_open(read_data='')
     _dummy_yaml_file_settings_no_feeds = {'color': ['#000']}
