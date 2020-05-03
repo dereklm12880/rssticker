@@ -1,4 +1,8 @@
+background_color: powder blue
+cycle_time: 5
 feeds:
-- https://www.techrepublic.com/rssfeeds/articles/
-- https://xkcd.com/rss.xml
-- http://newsrss.bbc.co.uk/rss/newsonline_world_edition/americas/rss.xml
+- https://www.reddit.com/r/worldnews/.rss
+font_color: 12
+font_size: black
+font_type: Times
+window_placement: top Left

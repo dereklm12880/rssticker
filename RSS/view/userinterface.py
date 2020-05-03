@@ -1,102 +1,147 @@
 # references: https://www.youtube.com/watch?v=HxU_5LvkVrw
+# references: https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html
+# https://scorython.wordpress.com/2016/06/27/multithreading-with-tkinter/
 import tkinter
-import feedparser
-import webbrowser
-import os, sys
 import tkinter as tk
 from tkinter import ttk
 from tkinter import simpledialog
-from tkinter import messagebox
 from tkinter import font
-sys.path.append("../")
-from RSS.model.rssfeed import RssModel
-from RSS.controller.rssfeed import RssController
+import threading
+import queue
+import webbrowser
+
+"""
+The Threaded method
+"""
 
 
-class RSSticker(tk.Frame):
+def update_feed(thread_queue, feed):
+    """
+    After result is produced put it in queue
+    """
+    for news in feed.newsreel:
+        thread_queue.put(news)
 
-    """ Class view.userinterface.RSSticker.
+
+"""
+Think of the RSSticker as extending the Tkinter object.
+"""
+
+  """ Class view.userinterface.RSSticker.
     This class customizes the Tkinter root window. It creates, displays, modifies
     and receives input from the controller.
-    """
+  """
 
-    font_color = None
-    font_size = None
-    font_type = None
-    time = None
-    place = None
+class RSSticker(tk.Tk):
+    font_color = 'black'
+    font_size = 12
+    font_type = 'Times'
+    _default_cycle_time = 5
+    place = 'top Left'
     color = None
-    feeds = []
+    feeds = ["https://www.reddit.com/r/worldnews/.rss"]
+    time = 5
     input = ""
     _rss = None
+    app_title = "RSS Ticker"
+    _tk = None
+    T = None
+    user_font = None
+    settings = {}
+    width = 500
+    height = 300
+    ctrl = None
 
-    def __init__(self, master=None):
-
-        """Constructor for view.userinterface.RSSticker."""
-
-        super().__init__(master)
-        self.settings = {}
-        self.T = tk.Text(self, font=("bold", 32,))
-        self.master = master
-        self.popup_window = ttk.Label(master)
-        self.build_window()
+    def __init__(self, ctrl):  
+        self.ctrl = ctrl
+        super(RSSticker, self).__init__()
+        self.feed_frame = tk.Frame(self)
+        self.feed_frame.grid(row=1, column=0, sticky='we')
+        self.feed_title = tk.Label(self.feed_frame)  # Element to be updated
+        self.feed_title.config(text='No feeds given', anchor=tk.CENTER)
+        self.feed_title.grid(row=1, column=0)
+        self.thread_queue = queue.Queue()
+        self.next = tk.Button(
+            self.feed_frame,
+            text='Next Feed',
+            command=self.next_newsreel)
+        self.next.grid(row=0, column=0)
+        self.grid_columnconfigure(1, weight=1)
+        self.geometry("{}x{}".format(self.width, self.height))
+        self.title(self.app_title)
+        self._background_color()
+        self._font_color()
         self.build_menu()
-        self.pack()
+        self.feed_frame.pack()
+        self.window_placement(self.ctrl.settings_model.settings['window_placement'] or self.place)
+        self.user_font_size(self.ctrl.settings_model.settings['font_size'] or self.font_size)
+        self.user_font_style(self.ctrl.settings_model.settings['font_type'] or self.font_type)
 
-    def start(self):
+    def run_newsreel(self):
+        self.feed_title.config(text='Getting next feed')
 
-        """ Function view.userinterface.RSSticker.start.
-        This function serves to call the controller for later use.
+        """ 
+        TODO Consider using kwargs and queue threads for updating settings at 
+        runtime--TODO TODO: see if that is even possible.
         """
-
         try:
-            self._rss = RssController()
+            if self.thread_queue.empty():
+                _next_feed = self.ctrl.next_feed()
+                self.new_thread = threading.Thread(
+                    target=update_feed
+                    , kwargs={
+                        'thread_queue': self.thread_queue,
+                        'feed': _next_feed
+                    }
+                )
+                self.new_thread.start()
+            self.after(100, self.listen_for_result)
         except Exception as e:
             print(e)
-    
-    def get_feed(self):
 
-        """ Function view.userinterface.RSSticker.get_feed.
-        This function serves to retrieve the headlie and link for the RSS feeds
-        that have been parsed and cycled through in the controller.
+    # def get_feed(self, thread_queue):
+    """
+    This is a threaded method and should not impact the user experience while 
+    cycling through feeds.
+    """
+
+    def listen_for_result(self):   # pragma: no cover
         """
-
-        _next_feed = self._rss.next_feed()
-        self.refresh(_next_feed.headline, _next_feed.link)
-        self.master.mainloop()
-
-    def build_window(self):
-
-        """ Function view.userinterface.RSSticker.build_window.
-        This function build the window in the top left of the screen as a default.
+        Check if there is something in the queue
         """
+        try:
+            _newsreel = self.thread_queue.get()
+            self._update_view(_newsreel.title, _newsreel.link)
+            self.after(1000 * self._cycle_time(), self.listen_for_result)
+        except queue.Empty:
+            self.run_newsreel()
 
-        self.popup_window.pack(side="top")
+    def next_newsreel(self):  # pragma: no cover
+        try:
+            _newsreel = self.thread_queue.get()
+            self._update_view(_newsreel.title, _newsreel.link)
+        except queue.Empty as e:
+            self.run_newsreel()
 
-    def refresh(self, headline, link):
+    def _update_view(self, title, link):
+        self.feed_title.config(text=title, wraplength=self.width, cursor="hand2")
+        self.feed_title.bind("<Button-1>", lambda e: webbrowser.open_new(link))
 
-        """ Function view.userinterface.RSSticker.refresh.
-        This function serves to configure the size of the font of
-        the text that is passed in this window.
-        Arguments:
-        headline -- the headline that appears on the window.
-        link -- the clickable link that opens the article in a webbrowser.
-        """
+    def _cycle_time(self):
+        return self.ctrl.settings_model.settings['cycle_time'] \
+            if 'cycle_time' in self.ctrl.settings_model.settings \
+            else self._default_cycle_time
 
-        print("headline:", headline, "\nlink:", link)
-        self.popup_window.configure(text=headline)
-        self.popup_window.bind("<Button-1>", lambda e: webbrowser.open_new(link))
+    def _background_color(self):
+        return self.ctrl.settings_model.settings['background_color'] \
+            if 'cycle_time' in self.ctrl.settings_model.settings \
+            else self.color
+
+
 
     def build_menu(self):
-
-        """ Function view.userinterface.RSSticker.build_menu.
-        This function adds a drop down menu for the Tkinter root window. When
-        the application is launched, the menu appears inside the window (Windows OS)
-        or on the menu bar (MacOS). It also assigns a lambda function to 
-        each of the dropdown menu's options.
-        """
-
-        menu_bar = tk.Menu(self.popup_window)
+      
+        menu_bar = tk.Menu(self.feed_frame)
         dropdown_menu = tk.Menu(menu_bar)
         color_menu = tk.Menu(dropdown_menu)
         placement_menu = tk.Menu(dropdown_menu)
@@ -110,7 +155,7 @@ class RSSticker(tk.Frame):
         list_placement = ["top left", "bottom left", "top right", "bottom right"]
         cycle_options = [5, 10, 15, 20, 25, 30]
         font_colors = ['blue', 'black', 'red', 'magenta']
-        font_types = ['Times', 'Helvetica', 'Arial']
+        font_types = ['Times', 'Helvetica', 'Arial', 'Candara', 'Futara', 'Courier']
         font_sizes = [11, 12, 14, 16, 18, 20, 22, 24]
         feed_menu.add_radiobutton(label="show feeds", command=lambda: RSSticker.show_feeds(self, self.feeds))
         feed_menu.add_command(label="add feeds", command=lambda: RSSticker.add_feeds(self))
@@ -124,10 +169,15 @@ class RSSticker(tk.Frame):
         for color in list_colors:
             color_menu.add_radiobutton(label=color, command=lambda arg0=color: RSSticker.background_color(self, arg0))
         for time in cycle_options:
-            cycle_time_menu.add_radiobutton(label=time, command=lambda arg0=time: RSSticker.cycle_time(self, arg0))
+            cycle_time_menu.add_radiobutton(
+                label=time,
+                command=lambda arg0=time: RSSticker.set_cycle_time(self, arg0)
+            )
         for place in list_placement:
-            placement_menu.add_radiobutton(label=place,
-                                           command=lambda arg0=place: RSSticker.window_placement(self, arg0))
+            placement_menu.add_radiobutton(
+                label=place,
+                command=lambda arg0=place: RSSticker.window_placement(self, arg0)
+            )
         dropdown_menu.add_cascade(label="Cycle Time", menu=cycle_time_menu)
         dropdown_menu.add_cascade(label="Window Placement", menu=placement_menu)
         dropdown_menu.add_cascade(label="Change Background Color", menu=color_menu)
@@ -135,156 +185,79 @@ class RSSticker(tk.Frame):
         font_menu.add_cascade(label="font color", menu=font_colors_menu)
         font_menu.add_cascade(label="font type", menu=font_families_menu)
         font_menu.add_cascade(label="font size", menu=font_size_menu)
-        font_menu.add_radiobutton(label="Set font",
-                                  command=lambda: RSSticker.set_font(self, RSSticker.font_type, RSSticker.font_size,
-                                                                     RSSticker.font_color))
+        font_menu.add_radiobutton(
+            label="Set font",
+            command=lambda: RSSticker.set_font(self)
+        )
         dropdown_menu.add_cascade(label="Feeds", menu=feed_menu)
         menu_bar.add_cascade(label="Settings", menu=dropdown_menu)
-        dropdown_menu.add_radiobutton(label="Save Settings and Feeds",
-                                      command=lambda: RSSticker.save(self, RSSticker.color,
-                                                                     RSSticker.place, RSSticker.time,
-                                                                     RSSticker.font_size, RSSticker.font_color,
-                                                                     RSSticker.font_type, RSSticker.feeds))
-        self.master.config(menu=menu_bar)
+        dropdown_menu.add_radiobutton(
+            label="Save Settings and Feeds",
+            command=lambda: RSSticker.save(
+                self,
+                RSSticker.color,
+                RSSticker.place, RSSticker.time,
+                RSSticker.font_size, RSSticker.font_color,
+                RSSticker.font_type, RSSticker.feeds
+            )
+        )
 
-    def background_color(self, arg0):
+        self.config(menu=menu_bar)
 
-        """ Function view.userinterface.RSSticker.background_color.
-        This function serves to configure the background of this window.
-        Arguments:
-        arg0 -- an argument the sets the color.
-        """
-
+    def background_color(self, arg0):  
         RSSticker.color = arg0
-        self.master.configure(background=arg0)
+        self.configure(background=arg0)
+        self.feed_title.configure(background=arg0)
+        
+     def _font_color(self):
+        return self.ctrl.settings_model.settings['font_color'] \
+            if 'font_color' in self.ctrl.settings_model.settings \
+            else self.font_color
 
-    def cycle_time(self, arg0):
+    def set_cycle_time(self, time):
+        RSSticker.time = time
 
-        """ Function view.userinterface.RSSticker.cycle_time.
-        This function serves to configure the cycle time of the headlines
-        that are passed through this window.
-        Arguments:
-        arg0 -- an argument the sets the cycle time.
-        """
-
-        RSSticker.time = arg0
-
-    def window_placement(self, arg0):
-
-        """ Function view.userinterface.RSSticker.window_placement.
-        This function serves to configure the placement of this window on the user's screen.
-        Arguments:
-        arg0 -- an argument the sets the placement of the window.
-        """
-
+    def window_placement(self, arg0):  
         RSSticker.place = arg0
         if arg0 == "top left":
-            self.master.geometry("+0+0")
+            self.geometry("+0+0")
         elif arg0 == "bottom left":
-            self.master.geometry("+0+750")
+            self.geometry("+0+750")
         elif arg0 == "top right":
-            self.master.geometry("+1000+0")
+            self.geometry("+1000+0")
         elif arg0 == "bottom right":
-            self.master.geometry("+1000+750")
+            self.geometry("+1000+750")
 
     def user_font_color(self, color):
-
-        """ Function view.userinterface.RSSticker.user_font_color.
-        This function serves to configure the font color of the text
-        that is passed in this window.
-        Arguments:
-        color -- an argument the sets the color of the font.
-        """
-
         RSSticker.font_color = color
 
     def user_font_style(self, style):
-        """ Function view.userinterface.RSSticker.user_font_style.
-        This function serves to configure the font style of the text
-        that is passed in this window.
-        Arguments:
-        style -- an argument the sets the style of the font.
-        """
         RSSticker.font_type = style
 
     def user_font_size(self, size):
-
-        """ Function view.userinterface.RSSticker.user_font_size.
-        This function serves to configure the size of the text
-        that is passed in this window.
-        Arguments:
-        size -- an argument the sets the font size.
-        """
-
         RSSticker.font_size = size
 
-    def set_font(self, font_color, font_type, font_size):
-
-        """ Function view.userinterface.RSSticker.set_font.
-        This function serves to configure the size of the font of
-        the text that is passed in this window.
-        Arguments:
-        font_color -- an argument the sets the font color.
-        font_type -- an argument the sets the font type.
-        font_size -- an argument the sets the font size.
-        """
-
+    def set_font(self):
         font_color = RSSticker.font_color
-        font_type = RSSticker.font_type
-        font_size = RSSticker.font_size
-        user_font = font.Font(family=font_type, size=font_size)
-        self.popup_window.configure(font=user_font, foreground=font_color)
+        size = RSSticker.font_size
+        style = RSSticker.font_type
+        self.user_font = font.Font(self, size=size, family=style)
+        self.feed_title.configure(font=self.user_font, foreground=font_color)
 
     def save(self, color, place, time, font_color, font_size, font_type, feeds):
-
-        """ Function view.userinterface.RSSticker.save.
-        This function serves to save the configurations of the window
-        once set.
-        Arguments:
-        color -- argument for storing the background color.
-        place -- argument for storing the window placement.
-        time -- argument for the storing cycle time.
-        font_color -- argument for storing the font color.
-        font_size -- argument for storing the font size.
-        font_type -- argument for storing the font type.
-        feeds -- argument for storing the feeds.
-        """
-
-        self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time,
+        self.settings = {'background_color': color, 'window_placement': place, 'cycle_time': time,
                          'font_color': font_color, 'font_size': font_size, 'font_type': font_type, 'feeds': feeds}
-        _rss = RssController()
-        _rss.save_settings(self.settings)
+        self.ctrl.save_settings(self.settings)
 
-    def add_feeds(self):  # pragma: no cover
-
-        """ Function view.userinterface.RSSticker.add_feeds.
-        This function prompts the user to insert a news feed and apped it. If they
-        haven't, an exception will be thrown.
-        """
-
-        self.input = simpledialog.askstring("input", "Please insert a news feed")
+    def add_feeds(self):  
+        self.input = simpledialog.askstring("input", "Please insert a news feed", parent=self)
         if self.input != "":
-            try:
-                RSSticker.feeds.append(self.input)
-            except Exception as e:
-                print(e)
+            RSSticker.feeds.append(self.input)
 
     def show_feeds(self, feeds):
-
-        """ Function view.userinterface.RSSticker.show_feeds.
-        This function shows the user the feeds they have added to the application.
-        """
-        
         popup = tk.Tk()
         popup.geometry("200x50")
         popup.wm_title("Feeds")
         label = ttk.Label(popup, text=feeds)
         label.pack(side="top", fill="x", pady=10)
-        popup.mainloop()
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.geometry("200x50")
-    root.title("RSSticker")
-    app = RSSticker(master=root)
-    app.mainloop()
+        popup.mainloop()  

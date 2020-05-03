@@ -38,7 +38,10 @@ class TestRssModel(unittest.TestCase):
         assert isinstance(_next, RssModel)
 
     def test_next_feed_fail_invalid_url(self):
-        with self.assertRaises(Exception): _next = self.ctr.next_feed('abc')
+        with patch.object(SettingsModel, 'next_url', return_value="abc"):
+            _ctr = RssController()
+            with self.assertRaises(Exception):
+                _ctr.next_feed()
 
     def test_next_feed_fail_no_feeds(self):
         self.ctr.settings_model.settings = {}
