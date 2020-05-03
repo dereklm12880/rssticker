@@ -48,7 +48,7 @@ class RSSticker(tk.Tk):
     height = 300
     ctrl = None
 
-    def __init__(self, ctrl):
+    def __init__(self, ctrl):  
         self.ctrl = ctrl
         super(RSSticker, self).__init__()
         self.feed_frame = tk.Frame(self)
@@ -128,7 +128,7 @@ class RSSticker(tk.Tk):
             if 'cycle_time' in self.ctrl.settings_model.settings \
             else self._default_cycle_time
 
-    def build_menu(self):
+    def build_menu(self):  
         menu_bar = tk.Menu(self.feed_frame)
         dropdown_menu = tk.Menu(menu_bar)
         color_menu = tk.Menu(dropdown_menu)
@@ -192,7 +192,7 @@ class RSSticker(tk.Tk):
 
         self.config(menu=menu_bar)
 
-    def background_color(self, arg0):
+    def background_color(self, arg0):  
         RSSticker.color = arg0
         self.configure(background=arg0)
         self.feed_title.configure(background=arg0)
@@ -200,7 +200,7 @@ class RSSticker(tk.Tk):
     def set_cycle_time(self, time):
         RSSticker.time = time
 
-    def window_placement(self, arg0):
+    def window_placement(self, arg0):  
         RSSticker.place = arg0
         if arg0 == "top left":
             self.geometry("+0+0")
@@ -228,11 +228,11 @@ class RSSticker(tk.Tk):
         self.feed_title.configure(font=self.user_font, foreground=font_color)
 
     def save(self, color, place, time, font_color, font_size, font_type, feeds):
-        self.settings = {'background_color': color, 'window placement': place, 'cycle_time': time,
+        self.settings = {'background_color': color, 'window_placement': place, 'cycle_time': time,
                          'font_color': font_color, 'font_size': font_size, 'font_type': font_type, 'feeds': feeds}
         self.ctrl.save_settings(self.settings)
 
-    def add_feeds(self):  # pragma: no cover
+    def add_feeds(self):  
         self.input = simpledialog.askstring("input", "Please insert a news feed", parent=self)
         if self.input != "":
             RSSticker.feeds.append(self.input)
