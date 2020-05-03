@@ -1,8 +1,8 @@
-background_color: powder blue
+background_color: null
 cycle_time: 5
 feeds:
 - https://www.reddit.com/r/worldnews/.rss
-font_color: 12
+font_color: black
 font_size: black
 font_type: Times
 window_placement: top Left

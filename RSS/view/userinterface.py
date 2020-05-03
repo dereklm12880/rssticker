@@ -27,7 +27,7 @@ def update_feed(thread_queue, feed):
 Think of the RSSticker as extending the Tkinter object.
 """
 
-  """ Class view.userinterface.RSSticker.
+""" Class view.userinterface.RSSticker.
     This class customizes the Tkinter root window. It creates, displays, modifies
     and receives input from the controller.
   """
@@ -209,7 +209,7 @@ class RSSticker(tk.Tk):
         self.configure(background=arg0)
         self.feed_title.configure(background=arg0)
         
-     def _font_color(self):
+    def _font_color(self):
         return self.ctrl.settings_model.settings['font_color'] \
             if 'font_color' in self.ctrl.settings_model.settings \
             else self.font_color
