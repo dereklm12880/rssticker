@@ -52,7 +52,7 @@ class RSSticker(tk.Tk):
 
     def __init__(self, ctrl): 
 
-         """Constructor for view.userinterface.RSSticker."""
+        """Constructor for view.userinterface.RSSticker."""
 
         self.ctrl = ctrl
         super(RSSticker, self).__init__()

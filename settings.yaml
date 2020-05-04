@@ -3,6 +3,6 @@ cycle_time: 5
 feeds:
 - https://www.reddit.com/r/worldnews/.rss
 font_color: black
-font_size: black
+font_size: 12
 font_type: Times
 window_placement: top Left
